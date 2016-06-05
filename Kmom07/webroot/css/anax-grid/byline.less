@@ -1,0 +1,27 @@
+footer.byline
+{
+	.clearfix();
+	margin-top: 2em;
+	font-style: italic;
+	padding: 5px;
+}
+
+footer.byline img
+{
+	float: left;
+	margin: 5px 5px 0px;
+	border: 0px solid #275886;
+	.border-radius(@radius:35px);
+}
+ 
+footer.byline p 
+{
+	float: left;
+	display: inline;
+	margin-top: 25px;
+	margin-left: 15px;
+}
+
+footer.byline p { quotes: '\201c' '\201d'; }
+footer.byline p:before { content: open-quote; }
+footer.byline p:after  { content: close-quote; }

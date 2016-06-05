@@ -1,0 +1,214 @@
+/**
+ * General elements
+ */
+ 
+/*------------------------------------*
+  RESET
+*------------------------------------*/
+body, div, dl, dt, dd, ul, ol, li,
+h1, h2, h3, h4, h5, h6,
+pre, form, fieldset, input, textarea,
+p, blockquote, th, td 
+{ 
+	margin: 0;
+	padding: 0;
+}
+table 
+{
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+fieldset, img 
+{
+	border: 0;
+}
+address, caption, cite, dfn, th, var 
+{
+	font-style: normal;
+	font-weight: normal;
+}
+caption, th 
+{
+	text-align: left;
+}
+h1, h2, h3, h4, h5, h6 
+{
+	font-size: 100%;
+	font-weight: normal;
+}
+q:before, q:after 
+{
+	content: '';
+}
+abbr, acronym 
+{
+	border: 0;
+}
+
+/*------------------------------------*
+  STYLE
+*------------------------------------*/
+html, body
+{
+	margin: 0 auto;
+	padding: 0px;
+	background-color: #aaaaaa;
+}
+
+html
+{
+	font-family: 'Roboto Condensed', sans-serif;
+	font-size: 20px;
+	color: black;
+	overflow-y: scroll;
+}
+
+body
+{
+	background: url(../img/background.jpg) no-repeat center center fixed;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+	margin-bottom: 0.5em;
+	font-weight: bold;
+}
+
+h1
+{
+	font-size: 46px;
+	font-weight: bold;
+}
+
+h2
+{
+	font-size: 30px;
+}
+
+h3
+{
+	font-size: 24px;
+}
+
+h4
+{
+	font-size: 20px;
+}
+
+h5
+{
+	font-size: 18px;
+}
+
+h6
+{
+	font-size: 16px;
+}
+
+section
+{
+	margin-top: 200px;
+}
+
+p
+{
+	padding: 0 20px;
+	margin-bottom: 1em;
+}
+
+/**
+ * Layout of the main page elements 
+ */ 
+#wrapper
+{
+	margin: auto;
+	width: 70%;
+	opacity: 0.9;
+}
+
+#content
+{
+	border: 10px solid #0D6EA4;
+	background: #ddd;
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	padding: 20px;
+}
+
+/**
+ * Layout for content
+ */
+#header 
+{
+	position: relative;
+	margin-bottom: 40px;
+}
+
+#footer 
+{
+  margin-top: 40px;
+  border-top: 10px solid #0D6EA4;
+  padding-top: 22px;
+  padding-bottom: 22px;
+  background: #ddd;
+  opacity: 0.9;
+  text-align: center;
+}
+
+.extend
+{
+	padding-bottom: 260px;
+}
+
+.extend130
+{
+	padding-bottom: 130px;
+}
+
+.sitetitle 
+{
+	position: absolute;
+	top: 6px;
+	font-size: 48px;
+	color: white;
+	margin-left: 10px;
+	font: century gothic bold;
+	background: grey;
+	opacity: 0.9;
+	padding: 5px;
+}
+
+.siteslogan
+{
+	position: absolute;
+	top: 80px;
+	margin-left: 10px;
+	opacity: 0.9;
+	background: grey;
+	color: white;
+	padding: 5px;
+}
+
+footer.byline
+{
+	border: 2px solid black;
+	margin-top: 2em;
+	font-size: smaller;
+	font-style: italic;
+	padding: 5px;
+	background-color: #fff;
+}
+
+footer.byline img
+{
+	border: 3px solid #0D6EA4;
+}
+ 
+footer.byline p 
+{
+	display: inline;
+	position: absolute;
+	margin-top: 20px;
+	margin-left: 15px;
+}

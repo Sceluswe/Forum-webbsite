@@ -1,0 +1,118 @@
+#wrap-featured,
+#wrap-main,
+#wrap-triptych,
+#wrap-footer-col {
+    .clearfix();
+}
+
+#header,
+#footer,
+#navbar,
+#content
+{
+	.clearfix();
+}
+#content {
+	margin-bottom: @magicNumber;
+}
+
+#flash
+{
+    .column(@columns);
+	margin-bottom: @magicNumber;
+	background: @bgFlash;
+	color: @colorFlash;
+}
+
+#featured-1 {
+	background: @bgFeatured1;
+	color: @colorFeatured1;
+}
+
+#featured-2 {
+	background: @bgFeatured2;
+	color: @colorFeatured2;
+}
+
+#featured-3 {
+	background: @bgFeatured3;
+	color: @colorFeatured3;
+}
+ 
+#main {
+    .column(@columns);
+	margin-bottom: @magicNumber;
+	background: @bgMain;
+	color: @colorMain;
+}
+
+#triptych-1 {
+	background: @bgTriptych1;
+	color: @colorTriptych1;
+}
+
+#triptych-2 {
+	background: @bgTriptych2;
+	color: @colorTriptych2;
+}
+
+#triptych-3 {
+	background: @bgTriptych3;
+	color: @colorTriptych3;
+}
+
+
+#footer-col-1 {
+	background: @bgFooter1;
+	color: @colorFooter1;
+}
+
+#footer-col-2 {
+	background: @bgFooter2;
+	color: @colorFooter2;
+}
+
+#footer-col-3 {
+	background: @bgFooter3;
+	color: @colorFooter3;
+}
+
+#footer-col-4 {
+	background: @bgFooter4;
+	color: @colorFooter4;
+}
+
+#featured-1,
+#featured-2,
+#featured-3,
+#triptych-1,
+#triptych-2,
+#triptych-3 {
+    .column(@columns / 3);
+	margin-bottom: @magicNumber;
+}
+
+#featured-1 p,
+#featured-2 p,
+#featured-3 p,
+#triptych-1 p,
+#triptych-2 p,
+#triptych-3 p {
+	padding-right: 10px;
+}
+
+#footer-col-1,
+#footer-col-2,
+#footer-col-3, 
+#footer-col-4 {
+    .column(@columns / 4);
+	margin-bottom: @magicNumber;
+}
+
+#footer-col-1 p,
+#footer-col-2 p,
+#footer-col-3 p, 
+#footer-col-4 p {
+	padding-right: 10px;
+}
+
