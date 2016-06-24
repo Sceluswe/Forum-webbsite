@@ -10,7 +10,7 @@ before_script:
  
 script:
     #- phpunit --bootstrap test/config.php test
-    - phpunit --bootstrap Kmom07/test/config.php --coverage-clover coverage.clover test
+    - phpunit --bootstrap Kmom07/vendor/mos/cdatabase/test/config.php --coverage-clover coverage.clover test
  
 after_script:
     - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
