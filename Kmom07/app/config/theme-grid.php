@@ -26,8 +26,8 @@ return [
 		'template' => 'me/header',
 		'data' => 
 		[
-			'siteTitle' => "PHPMVC",
-			'siteTagline' => "Ett stort steg framåt.",
+			'siteTitle' => "Smiteology",
+			'siteTagline' => "A fan-made SMITE forum.",
 		],
 		'sort' => -1
 	],
@@ -36,7 +36,7 @@ return [
 	'template' => 'me/footer', 
 	'data' => 
 	[
-		'copyright' => "&copy; Scelus",
+		'copyright' => "&copy; Emil Mattsson",
 	], 'sort' => -1],
 	
 	['region' => 'navbar', 'template' => 
@@ -64,7 +64,7 @@ return [
         'title_append' => ' | Anax a web template',
 
         // Stylesheets
-        'stylesheets' => ['css/anax-grid/style.php'],
+        'stylesheets' => ['css/anax-grid/style.css'],
 
         // Inline style
         'style' => null,

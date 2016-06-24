@@ -18,24 +18,21 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function initialize()
 	{
-		$obj = new \Anax\Forum\Question();
-		$this->questions = $obj;
+		$this->questions = new \Anax\Forum\Question();
 		$this->questions->setDI($this->di);
-		$this->questions->setSource('question');
 		
-		$obj = new \Anax\Forum\Answer();
-		$this->answers = $obj;
+		$this->answers = new \Anax\Forum\Answer();
 		$this->answers->setDI($this->di);
-		$this->answers->setSource('answer');
 		
-		$obj = new \Anax\Forum\Comment();
-		$this->comments = $obj;
+		$this->comments = new \Anax\Forum\Comment();
 		$this->comments->setDI($this->di);
-		$this->comments->setSource('comment');
 		
 		$this->users = new \Anax\Users\User();
 		$this->users->setDI($this->di);
 		$this->di->session();
+		
+		$this->tags = new \Anax\Forum\Tag();
+		$this->tags->setDI($this->di);
 	}
 	
 	/**
@@ -46,46 +43,103 @@ class ForumController implements \Anax\DI\IInjectionAware
 	public function redirects()
 	{
 		return $values = [
-		'Forum/removeAll', 
-		'Forum/setup', 
-		'Forum/update/', 
-		'Forum/delete/',
-		'Forum/add',
-		'user' => 'Users/id/',
-		'question' => 'Forum/id/'
+			'menu'			=> 'Forum/menu/',
+			'addQuestion' 	=> 'Forum/addQuestion/',
+			'addAnswer'	  	=> 'Forum/addAnswer/',
+			'addQComment' 	=> 'Forum/addQComment/',
+			'addAComment' 	=> 'Forum/addAComment/',
+			'rateQuestion'	=> 'Forum/upvote/Q/',
+			'rateAnswer'	=> 'Forum/upvote/A/',
+			'rateComment'	=> 'Forum/upvote/C/',
+			'derateQuestion'=> 'Forum/downvote/Q/',
+			'derateAnswer'	=> 'Forum/downvote/A/',
+			'derateComment'	=> 'Forum/downvote/C/',
+			'user' 			=> 'Users/id/',
+			'question' 		=> 'Forum/id/',
+			'accepted'		=> 'Forum/accepted/',
+			'tagButton'		=> 'Forum/tag/',
+			'tagCreate'		=> 'Forum/tagCreate/',
 		];
 	}
 	
-	/**
-	* Function that displays all questions on the database.
-	*
-	*/
-	public function menuAction()
+	public function userStatusAction()
 	{
-		// Get all questions.
-		$result = $this->questions->findAll();
-		
-		foreach($result as $item)
-		{
-			// Format timestamp
-			$item->timestamp = $this->time_elapsed($item->timestamp);
-		}
-		
 		$userlink = "You are currently not logged in. <a href='" . $this->url->create("Users/Login") . "'>Login</a>";
+		
 		if($this->users->isUserLoggedIn())
 		{
 			$user = $this->users->findByColumn('acronym', $this->users->currentUser());
+			// Create a link to the currently logged in user.
 			$userlink = "You are currently logged in as: <a href='" 
 				. $this->url->create("Users/id/{$user[0]->id}") 
 				. "'>" . ucfirst($user[0]->acronym) . "</a>";
+			
+			// Save the currently logged in user as a valid condition.
+			$conditions[] = $user[0]->acronym;
 		}
 		
+		// Render form.
+		$this->theme->setTitle("Create Question");
+		$this->views->add('default/page', [
+			'content' => $userlink,
+		]);
+	}
+
+	
+	
+//---------------- Menu actions ----------------
+	/**
+	* Function that displays all questions on the database or by sorted value.
+	*
+	* @param, string, sorts by the paramaterized value.
+	*/
+	public function menuAction($sort=null)
+	{
+		$result = array();
+		if(!empty($sort))
+		{
+			$res = $this->tags->findByColumn('tag', $sort);
+
+			// Check if there are any questions with this tag.
+			if(!empty($res))
+			{
+				foreach($res as $key => $item)
+				{
+					$this->questions->query()->where('id = ?');
+					$result[] = $this->questions->execute([$item->questionid])[0];
+				}
+			}
+		}
+		
+		// If no sorting was done.
+		if(empty($result))
+		{	// Get all questions.
+			$result = $this->questions->findAll();
+		}
+		
+		foreach($result as $item)
+		{	// Format timestamp
+			$item->timestamp = $this->time_elapsed($item->timestamp);
+		}
+		
+		$conditions = ['admin', $this->users->currentUser()];
+		
+		$this->dispatcher->forward([
+			'controller' => 'Forum',
+			'action' 	 => 'userStatus'
+		]);
+		
+		$this->dispatcher->forward([
+			'controller' => 'Forum',
+			'action'	 => 'tagMenu',
+		]);
+
 		$this->theme->setTitle("All Questions");
 		$this->views->add('forum/forum-menu', [
+			'admin'		=> $this->users->isUserAdmin($this->users->currentUser(), $conditions),
 			'questions' => $result,
 			'title' 	=> "All questions",
 			'redirect' 	=> $this->redirects(),
-			'user'		=> $userlink,
 		]);
 	}
 	
@@ -97,7 +151,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function userQuestionsAction($id)
 	{
-		$result = $this->questions->findByColumn('userid', $id);
+		$result = $this->questions->findByColumn('userid', htmlentities($id));
 		
 		if(!empty($result))
 		{
@@ -115,10 +169,18 @@ class ForumController implements \Anax\DI\IInjectionAware
 		}
 	}
 	
-	public function idAction($id)
+	/**
+	* Function that displays one question and all answers and comments that belong to it.
+	*
+	*/
+	public function idAction($id, $sort=null)
 	{
+		$id = htmlentities($id);
 		// Get question.
 		$question = $this->questions->find($id);
+		// Save the question in session for easy access elsewhere.
+		$this->questions->setQuestion($question->id);
+		
 		// Check if the question did indeed exist.
 		if(!empty($question))
 		{	
@@ -130,8 +192,27 @@ class ForumController implements \Anax\DI\IInjectionAware
 			$questionComments = !empty($questionComments)
 				? $this->formatTimestamp($questionComments) : array();
 			
-			// If question is not empty, get the answers to that question.
-			$answers = $this->answers->findByColumn('questionid', $id);
+			if(!empty($sort))
+			{
+				//$params[] = $order = htmlentities($sort);
+				//$this->answers->query()->where('questionid=?')->orderBy('? DESC');
+				// SELECT * FROM `test_answer` WHERE questionid= 1 ORDER BY timestamp DESC
+				if($sort === 'timestamp')
+				{
+					$this->answers->query()->where('questionid= ?')->orderBy('timestamp DESC');
+				}
+				else if($sort === 'rating')
+				{
+					$this->answers->query()->where('questionid= ?')->orderBy('rating DESC');
+				}
+				
+				$answers = $this->answers->execute([$id]);
+			}
+			else
+			{
+				// If question is not empty, get the answers to that question.
+				$answers = $this->answers->findByColumn('questionid', $id);
+			}
 
 			$answers = !empty($answers)
 				? $this->formatTimestamp($answers) : array();
@@ -153,18 +234,774 @@ class ForumController implements \Anax\DI\IInjectionAware
 				}
 			}
 			
+			$condition = ['admin', $question->user];
 			// Set the title of the browser tab.
 			$this->theme->setTitle($question->title);
 			$this->views->add('forum/forum-question', [
-				'redirect' => $this->redirects(),
+				'admin'				=> $this->users->isUserLoggedIn(),
+				'questionAdmin'		=> $this->users->isUserAdmin($this->users->currentUser(), $condition),
+				'redirect' 			=> $this->redirects(),
 				'question'  		=> $question,
 				'questionComments'  => $questionComments,
 				'answers'		 	=> $answers,
 				'answerComments' 	=> $answerComments
 			]);
 		}
+	}
+	
+	/*
+	*
+	*/
+	public function homeAction()
+	{
+		// Get the recently posted questions.
+		$this->questions->query()->orderBy('timestamp DESC LIMIT 6');
+		$questions = $this->questions->execute();
+		//var_dump($questions);
+		
+		if(!empty($questions))
+		{
+			foreach($questions as $item)
+			{
+				$item->timestamp = $this->time_elapsed($item->timestamp);
+			}
+		}
+		
+		// Get the most popular tags.
+		$this->tags->query('tag, COUNT(1) AS num')->groupBy('tag')->orderBy('num DESC LIMIT 12');
+		$tags = $this->tags->execute();
+		
+		// Get the highest rated users.
+		$this->users->query()->orderBy('score DESC LIMIT 6');
+		$users = $this->users->execute();
+		
+		$this->views->add('forum/forum-home', [
+			'questions' => $questions,
+			'title1' => "Recent Questions",
+			'redirect' => $this->redirects(),
+			'title2' => "Most active users",
+			'users' => $users,
+			'title3' => "Popular tags",
+			'tags' => $tags,
+		]);
+	}
+	
+//---------------- Score ----------------
+	public function scoreAction($id)
+	{
+		//Get id from current user.
+		$userid = htmlentities($id);
+		
+		$questions = $this->questions->findByColumn('userid', $userid);
+		$answers = $this->answers->findByColumn('userid', $userid);
+		$comments = $this->comments->findByColumn('userid', $userid);
+		
+		$qrating = 0;
+		$arating = 0;
+		$crating = 0;
+		foreach($questions as $item)
+		{
+			$qrating += $item->rating;
+		}
+		foreach($answers as $item)
+		{
+			$arating += $item->rating;
+		}
+		foreach($comments as $item)
+		{
+			$crating += $item->rating;
+		}
+		
+		$nrOfQ = count($questions);
+		$nrOfA = count($answers);
+		$nrOfC = count($comments);
+		$sumQ = $qrating + $nrOfQ;
+		$sumA = $arating + $nrOfA;
+		$total = $sumQ + $sumA + $nrOfC;
+		$table = "
+		<table class='width45'>
+			<tr class='menu-table-header'>
+				<th></th>
+				<th>Amount</th>
+				<th>Rating</th>
+				<th>Sum</th>
+			</tr>
+		<tr>
+			<td><b>Q</b></td>
+			<td>{$nrOfQ}</td>
+			<td>{$qrating}</td>
+			<td>{$sumQ}</td>
+		</tr>
+		<tr>
+			<td><b>A</b></td>
+			<td>{$nrOfA}</td>
+			<td>{$arating}</td>
+			<td>{$sumA}</td>
+		</tr>
+		<tr>
+			<td><b>C</b></td>
+			<td>{$nrOfC}</td>
+			<td>-</td>
+			<td>{$nrOfC}</td>
+		</tr></table>
+		<br><br><br><br><br>
+		<p><b>User rating:</b> {$total}</p>";
+		
+		// Update the users score.
+		$this->users->id = $id;
+		$this->users->update([
+			'score'	=> $total
+		]);
+		
+		// Render form.
+		$this->views->add('default/page', [
+			'title'		=> 'Rating',
+			'content' 	=> $table,
+		]);
+	}
+
+//---------------- Tags ----------------
+	/*
+	*	Sorting Menu of all the available tags.
+	*/
+	public function tagMenuAction()
+	{
+		// Get all available tags.
+		$result = $this->tags->query('DISTINCT tag')->execute();
+		
+		$this->views->add('forum/forum-tagMenu', [
+			'title'		=> "Tags",
+			'redirect' 	=> $this->redirects(),
+			'tags'		=> $result,
+		]);
+	}
+	
+	/*
+	* Menu that displays all existing tags that we can add to a question.
+	* Also displays a button for creating a new tag.
+	*/
+	public function tagAction()
+	{
+		// Get the question that we want to add a tag to.
+		$question = $this->questions->getQuestion();
+		
+		// Get all available tags.
+		$result = $this->tags->query('DISTINCT tag')->execute();
+		
+		// Create a menu with all unique tags that can be applied to the question.
+		$this->theme->setTitle("Tag a question");
+		$this->views->add('forum/forum-tagQuestion', [
+			'title'		=> "Tags",
+			'redirect' 	=> $this->redirects(),
+			'tags'		=> $result,
+			'questionid'=> $question,
+		]);
+	}
+	
+	/*
+	* 	Method for creating a new tag and adding it to the question.
+	*/
+	public function tagCreateAction($tag=null)
+	{
+		$values = array();
+		if(!empty($tag))
+		{
+			$values = ['tag' => $tag];
+		}
+		
+		// Render form.
+		$this->theme->setTitle("Create Tag");
+		$this->views->add('default/page', [
+			'title' => "Create Tag",
+			'content' => $this->getTagForm($values)
+		]);
+	}
+	
+	/*
+	* Get a form for creating a tag
+	*
+	* @return the HTML code of the form.
+	*/
+	public function getTagForm($values)
+	{
+		if(is_array($values))
+		{
+			// Initiate object instance.
+			$form = new \Mos\HTMLForm\CForm();
+			
+			// Create form.
+			$form = $form->create([], [
+				'tag' => [
+					'type' 		=> !empty($values) ? 'hidden' : 'text',
+					'required' 	=> true,
+					'validation'=> ['not_empty'],
+					'value' 	=> !empty($values) ? $values['tag'] : '',
+				],
+				// Create the user form here:
+				'submit' => [
+				'type' 		=> 'submit',
+				'class' 	=> 'cform-submit',
+				'callback'  => [$this, 'callbackCreateTag'],
+				'value'		=> !empty($values) ? "Add tag: {$values['tag']}" : "Create tag"
+				]
+			]);
+			
+			// Check the status of the form
+			$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
+		}
+		else
+		{
+			die("ERROR: Form missing arguments.");
+		}
+				
+		return $form->getHTML();
+	}
+	
+	/**
+     * Callback for createTag success.
+     *
+     */
+	public function callbackCreateTag($form)
+    {		
+		$result = false;
+		// Clean the variables.
+		$id = htmlentities($this->questions->getQuestion());
+		$tag = htmlentities($form->Value('tag'));
+		
+		// Check if question exists.
+		$questionCheck = $this->questions->find($id);
+		
+		if(!empty($questionCheck))
+		{	// If question exists, check if tag already exists for that question.
+			$this->tags->query()->where('questionid = ?')->andWhere('tag = ?');
+			$checkTag = $this->tags->execute([$id, $tag]);
+			
+			if(empty($checkTag))
+			{	// If tag does not exist.
+				$form->saveInSession = true;
+				// Create a tag to that question.
+				$this->tags->create([
+					'tag'		=> $tag,
+					'questionid'=> $id,
+				]);
+				
+				$result = true;
+			}
+			
+			// Use the previous questionid to create a redirect link back to that question.
+			$url = $this->url->create("Forum/id/" . $id);
+			$this->response->redirect($url);
+		}
+	
+        return $result;
+    }
+	
+	
+	
+//---------------- Ratings ----------------
+	/**
+	* Function to increase the rating of a question, answer or comment.
+	*
+	* @param string, a 1 letter value to determine which table to use.
+	* @param int, the unique id of the row to use in the table.
+	*/
+	public function upvoteAction($table, $rowid)
+	{
+		if($this->users->isUserLoggedIn())
+		{
+		// Use the two parameters to find the correct database table
+		// and change the rating of the row in that table.
+		if(is_string($table) && is_numeric($rowid))
+		{
+			// Clean parameters.
+			$id = htmlentities($rowid);
+			
+			if($table === 'Q')
+			{
+				// Get the old rating value.
+				$question = $this->questions->find($id);
+				// Update it with an increase of 1.
+				$this->questions->update([
+					'id' 	=> $id,
+					'rating'=> $question->rating + 1,
+				]);
+			}
+			else if($table === 'A')
+			{
+				// Get the old rating value.
+				$answer = $this->answers->find($id);
+				// Update it with an increase of 1.
+				$this->answers->update([
+					'id' 	=> $id,
+					'rating'=> $answer->rating + 1,
+				]);
+			}
+			else if($table === 'C')
+			{
+				// Get the old rating value.
+				$comment = $this->comments->find($id);
+				// Update it with an increase of 1.
+				$this->comments->update([
+					'id' 	=> $id,
+					'rating'=> $comment->rating + 1,
+				]);
+			}
+			
+			$url = $this->url->create("Forum/id/" . $this->questions->getQuestion());
+			$this->response->redirect($url);
+		}
+		else
+		{
+			die("Error, invalid parameters.");
+		}
+		}
+		else
+		{
+			$url = $this->url->create("Users/Login");
+			$this->response->redirect($url);
+		}
+	}
+	
+	/**
+	* Function to increase the rating of a question, answer or comment.
+	*
+	* @param string, a 1 letter value to determine which table to use.
+	* @param int, the unique id of the row to use in the table.
+	*/
+	public function downvoteAction($table, $rowid)
+	{
+		if($this->users->isUserLoggedIn())
+		{
+			// Use the two parameters to find the correct database table
+			// and change the rating of the row in that table.
+			if(is_string($table) && is_numeric($rowid))
+			{
+				// Clean parameters.
+				$id = htmlentities($rowid);
+				
+				if($table === 'Q')
+				{
+					// Get the old rating value.
+					$question = $this->questions->find($id);
+					// Update it with an decrease of 1.
+					$this->questions->update([
+						'rating'=> $question->rating - 1,
+					]);
+				}
+				else if($table === 'A')
+				{
+					// Get the old rating value.
+					$answer = $this->answers->find($id);
+					// Update it with an decrease of 1.
+					$this->answers->update([
+						'id' 	=> $id,
+						'rating'=> $answer->rating - 1,
+					]);
+				}
+				else if($table === 'C')
+				{
+					// Get the old rating value.
+					$comment = $this->comments->find($id);
+					// Update it with an decrease of 1.
+					$this->comments->update([
+						'id' 	=> $id,
+						'rating'=> $comment->rating - 1,
+					]);
+				}
+				
+				$url = $this->url->create("Forum/id/" . $this->questions->getQuestion());
+				$this->response->redirect($url);
+			}
+			else
+			{
+				die("Error, invalid parameters.");
+			}
+		}
+		else
+		{
+			$url = $this->url->create("Users/Login");
+			$this->response->redirect($url);
+		}
+	}
+	
+	
+	
+// ---------------- Accept answer ---------------
+	public function acceptedAction($id)
+	{
+		$answerid = htmlentities($id);
+		if(is_numeric($answerid))
+		{
+			// Save the id in the module Answer.
+			$this->answers->id = $answerid;
+			// Update answer.
+			$this->answers->update([
+				'id' => $answerid,
+				'accepted' => 1
+			]);
+			// Get the questions id.
+			$qid = $this->questions->getQuestion();
+			// Create redirect link using the questions id.
+			$url = $this->url->create("Forum/Id/{$qid}");
+			$this->response->redirect($url);
+		}
+		else
+		{
+			die("Error: Id is not numeric.");
+		}
+	}
+	
+	
+	
+//---------------- Questions, answers and comments actions ----------------
+	/**
+	* Function that adds a new question to the database.
+	*
+	*/
+	public function addQuestionAction()
+	{
+		// Render form.
+		$this->theme->setTitle("Create Question");
+		$this->views->add('default/page', [
+			'title' => "Create Question",
+			'content' => $this->getQuestionForm()
+		]);
 	}	
 	
+	/**
+	* Function that adds a new answer to the database.
+	*
+	* @param, int, ID of the row in the database table.
+	*/
+	public function addAnswerAction($id)
+	{
+		// Render form.
+		$this->theme->setTitle("Create Answer");
+		$this->views->add('default/page', [
+			'title' => "Create Answer",
+			'content' => $this->getAnswerForm(['questionid' => $id,])
+		]);
+	}
+	
+	/**
+	* Function that adds a new question comment to the database.
+	*
+	* @param, int, the ID of the question in the database.
+	*/
+	public function addQCommentAction($questionid, $qaid)
+	{
+		$values = [
+		'questionid'	=>	$questionid,
+		'qaid'			=>	$qaid,
+		'commentparent' => 'Q'
+		];
+		
+		// Render form.
+		$this->theme->setTitle("Create Comment");
+		$this->views->add('default/page', [
+			'title' => "Create Comment",
+			'content' => $this->getCommentForm($values)
+		]);
+	}	
+	
+	/**
+	* Function that adds a new answer  comment to the database.
+	*
+	* @param, int, the ID of the answer in the database.
+	*/
+	public function addACommentAction($questionid, $qaid)
+	{
+		$values = [
+		'questionid'	=>	$questionid,
+		'qaid'			=>	$qaid,
+		'commentparent' => 'A'
+		];
+		
+		// Render form.
+		$this->theme->setTitle("Create Comment");
+		$this->views->add('default/page', [
+			'title' => "Create Comment",
+			'content' => $this->getCommentForm($values)
+		]);
+	}
+	
+	/*
+	* Get a form for creating a answer.
+	*
+	* @return the HTML code of the form.
+	*/
+	public function getAnswerForm($values)
+	{
+		if(is_array($values))
+		{
+			// Initiate object instance.
+			$form = new \Mos\HTMLForm\CForm();
+			
+			// Create form.
+			$form = $form->create([], [
+				'questionid' => [
+					'type' 		=> 'hidden',
+					'required' 	=> true,
+					'validation'=> ['not_empty'],
+					'value' 	=> $values['questionid'],
+				],
+				'content' => [
+					'type'       => 'textarea',
+					'required'   => true,
+					'class' 	 => 'cform-textarea',
+					'validation' => ['not_empty'],
+					'value' 	 => ''
+				],
+				// Create the user form here:
+				'submit' => [
+				'type' 		=> 'submit',
+				'class' 	=> 'cform-submit',
+				'callback'  => [$this, 'callbackCreateAnswer'],
+				'value'		=> 'Post answer'
+				]
+			]);
+			
+			// Check the status of the form
+			$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
+		}
+		else
+		{
+			die("ERROR: Form missing arguments.");
+		}
+				
+		return $form->getHTML();
+	}
+	
+	/**
+     * Callback for createAnswer success.
+     *
+     */
+	public function callbackCreateAnswer($form)
+    {		
+		$result = false;
+		// Get the current user from the database.
+		$user = $this->users->findByColumn('acronym', $this->users->currentUser());
+
+		if(!empty($user))
+		{
+			$time = time();
+			$form->saveInSession = true;
+			// Save form.
+			$this->answers->create([
+				'questionid'=> $form->Value('questionid'),
+				'user' 		=> $user[0]->acronym,
+				'userid' 	=> $user[0]->id,
+				'content' 	=> $form->Value('content'),
+				'timestamp' => $time,
+				'rating'	=> 0,
+				'accepted'	=> 0,
+			]);
+			
+			//Update the question and report that it has received another answer.
+			$question = $this->questions->find($form->Value('questionid'));
+			$this->questions->update([
+				'id' => $question->id,
+				'answered' => $question->answered + 1,
+			]);
+			
+			$result = true;
+			// Use the questionid to create a redirect link back to the question.
+			$url = $this->url->create("Forum/id/" . $form->Value('questionid'));
+			$this->response->redirect($url);
+		}
+		
+        return $result;
+    }
+	
+	/*
+	* Get a form for creating a question
+	*
+	* @return the HTML code of the form.
+	*/
+	public function getCommentForm($values)
+	{
+		if(is_array($values))
+		{
+			// Initiate object instance.
+			$form = new \Mos\HTMLForm\CForm();
+			
+			// Create form.
+			$form = $form->create([], [
+				'questionid' => [
+					'type' 		=> 'hidden',
+					'required' 	=> true,
+					'validation'=> ['not_empty'],
+					'value' 	=> $values['questionid'],
+				],
+				'qaid' => [
+					'type' 		=> 'hidden',
+					'required' 	=> true,
+					'validation'=> ['not_empty'],
+					'value' 	=> $values['qaid'],
+				],
+				'commentparent' => [
+					'type' 		=> 'hidden',
+					'required' 	=> true,
+					'validation'=> ['not_empty'],
+					'value' 	=> $values['commentparent'],
+				],
+				'content' => [
+					'type'       => 'textarea',
+					'required'   => true,
+					'class' 	 => 'cform-textarea',
+					'validation' => ['not_empty'],
+					'value' 	 => ''
+				],
+				// Create the user form here:
+				'submit' => [
+				'type' 		=> 'submit',
+				'class' 	=> 'cform-submit',
+				'callback'  => [$this, 'callbackCreateComment'],
+				'value'		=> 'Post comment'
+				]
+			]);
+			
+			// Check the status of the form
+			$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
+		}
+		else
+		{
+			die("ERROR: Form missing arguments.");
+		}
+				
+		return $form->getHTML();
+	}
+	
+	/**
+     * Callback for createComment success.
+     *
+     */
+	public function callbackCreateComment($form)
+    {		
+		$result = false;
+		// Get the current user from the database.
+		$user = $this->users->findByColumn('acronym', $this->users->currentUser());
+		
+		if(!empty($user))
+		{
+			$time = time();
+			$form->saveInSession = true;
+			// Save form.
+			$this->comments->create([
+				'user' 		=> $user[0]->acronym,
+				'commentparent'	=> $form->Value('commentparent'),
+				'qaid'		=> $form->Value('qaid'),
+				'userid' 	=> $user[0]->id,
+				'content' 	=> $form->Value('content'),
+				'timestamp' => $time,
+				'rating'	=> 0,
+			]);
+			
+			$result = true;
+			$url = $this->url->create("Forum/id/" . $form->Value('questionid'));
+			$this->response->redirect($url);
+		}
+		
+        return $result;
+    }
+	
+	/*
+	* Get a form for creating a question
+	*
+	* @return the HTML code of the form.
+	*/
+	public function getQuestionForm()
+	{
+		// Initiate object instance.
+		$form = new \Mos\HTMLForm\CForm();
+		
+		// Create form.
+		$form = $form->create([], [
+			'title' => [
+				'type' 		=> 'text',
+				'required' 	=> true,
+				'class' 	=> 'cform-textbox',
+				'validation'=> ['not_empty'],
+				'value' 	=> ''
+			],
+			'content' => [
+				'type'       => 'textarea',
+				'required'   => true,
+				'class' 	 => 'cform-textarea',
+				'validation' => ['not_empty'],
+				'value' 	 => ''
+			],
+			// Create the user form here:
+			'submit' => [
+			'type' 		=> 'submit',
+			'class' 	=> 'cform-submit',
+			'callback'  => [$this, 'callbackCreateQuestion'],
+			'value'		=> 'Post question'
+			]
+		]);
+		
+		// Check the status of the form
+		$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
+				
+		return $form->getHTML();
+	}
+	
+	/**
+     * Callback for createQuestion success.
+     *
+     */
+	public function callbackCreateQuestion($form)
+    {		
+		$result = false;
+		// Get the current user from the database.
+		$user = $this->users->findByColumn('acronym', $this->users->currentUser());
+		
+		if(!empty($user))
+		{
+			$time = time();
+			$form->saveInSession = true;
+			// Save form.
+			$this->questions->create([
+				'user' 		=> $user[0]->acronym,
+				'userid' 	=> $user[0]->id,
+				'title' 	=> $form->Value('title'),
+				'content' 	=> $form->Value('content'),
+				'timestamp' => $time,
+				'rating'	=> 0,
+				'answered' 	=> 0,
+			]);
+			
+			$result = true;
+			$url = $this->url->create('Questions');
+			$this->response->redirect($url);
+		}
+		
+        return $result;
+    }
+	
+	/**
+     * Callback for submit-button.
+     *
+     */
+    public function callbackSuccess($form)
+    {
+        $form->AddOutput("<p><i>Posted.</i></p>");
+        return false;
+    }
+
+    /**
+     * Callback for submit-button.
+     *
+     */
+    public function callbackFail($form)
+    {
+        $form->AddOutput("<p><i>DoSubmitFail(): Form was submitted but it failed to process/save/validate it</i></p>");
+        return false;
+    }
+	
+	
+	
+//---------------- Time functions ----------------
 	/*
 	* Function to format the timestamp of question, answer and comments.
 	*
@@ -192,16 +1029,18 @@ class ForumController implements \Anax\DI\IInjectionAware
 	* @param   int     $timestamp,  unix timestamp
 	* @return  string
 	*/
-	public function time_elapsed($secs)
+	public function time_elapsed($timestamp)
 	{
 		$elapsedtime;
+		$ret = array();
+		$secs = time() - $timestamp;
 		if($secs == 0)
 		{
 			$elapsedtime = "Just now.";
 		}
 		else
 		{
-			$secs = time() - $secs;
+			
 			$bit = array(
 				'y' => $secs / 31556926 % 12,
 				'd' => $secs / 86400 % 7,
@@ -211,7 +1050,12 @@ class ForumController implements \Anax\DI\IInjectionAware
 				);
 				
 			foreach($bit as $k => $v)
-				if($v > 0)$ret[] = $v . $k;
+			{
+				if($v > 0)
+				{
+					$ret[] = $v . $k;
+				}
+			}
 			
 			$elapsedtime = join(' ', $ret);
 		}

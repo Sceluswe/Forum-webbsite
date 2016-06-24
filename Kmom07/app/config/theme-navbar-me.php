@@ -26,14 +26,14 @@ return [
         ],
 		// This is a menu item
         'tag'  => [
-			'FA' 	=> 'fa fa-trophy',
+			'FA' 	=> 'fa fa-tag',
             'text'  => 'Tag',
             'url'   => $this->di->get('url')->create('Tag'),
             'title' => 'Tag',
         ],
 		// This is a menu item
         'login'  => [
-			'FA' 	=> 'fa fa-trophy',
+			'FA' 	=> 'fa fa-sign-in',
             'text'  => 'Login/Logout',
             'url'   => $this->di->get('url')->create('Login'),
             'title' => 'Login/Logout',
@@ -47,7 +47,7 @@ return [
         ],
 		// This is a menu item
         'about'  => [
-			'FA'	=> 'fa fa-users',
+			'FA'	=> 'fa fa-info-circle',
             'text'  => 'About',
             'url'   => $this->di->get('url')->create('About'),
             'title' => 'About',

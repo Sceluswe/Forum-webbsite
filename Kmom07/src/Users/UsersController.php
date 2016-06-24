@@ -25,28 +25,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 		$obj = new \Anax\Forum\Question();
 		$this->questions = $obj;
 		$this->questions->setDI($this->di);
-		$this->questions->setSource('question');
-	}
-	
-	public function isUserAdmin($user, $condition)
-	{
-		if(is_array($condition))
-		{
-			$result = false;
-			if($this->users->isUserLoggedIn())
-			{
-				if(in_array($user, $condition))
-				{
-					$result = true;
-				}
-			}
-		}
-		else
-		{
-			die("Error: $condition needs to be array in UsersController::isUserAdmin()");
-		}
-		
-		return $result;
+		//$this->questions->setSource('question');
 	}
 	
 	/**
@@ -113,7 +92,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 	*/
 	public function setupAction()
 	{
-		if($this->isUserAdmin($this->users->currentUser(), ['admin']))
+		if($this->users->isUserAdmin($this->users->currentUser(), ['admin']))
 		{
 			if($this->users->initializeTable('user'))
 			{
@@ -123,7 +102,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 				
 				$this->theme->setTitle("Create Table");
 				$this->views->add('users/list-all', [
-					'admin'	=> $this->isUserAdmin($this->users->currentUser(), ['admin']),
+					'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
 					'users' => $all,
 					'title' => "Table Successfully created!",
 					'redirect' => [
@@ -155,7 +134,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 	 
 		$this->theme->setTitle("List all users");
 		$this->views->add('users/list-all', [
-			'admin'	=> $this->isUserAdmin($this->users->currentUser(), ['admin']),
+			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
 			'users' => $all,
 			'title' => "View all users",
 			'redirect' => [
@@ -186,23 +165,27 @@ class UsersController implements \Anax\DI\IInjectionAware
 			$this->theme->setTitle("View user with id");
 		
 			$this->views->add('users/view', [
-				'admin'	=> $this->isUserAdmin($this->users->currentUser(), ['admin', $user->acronym]),
-				'superadmin' => $this->isUserAdmin($this->users->currentUser(), ['admin']),
+				'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin', $user->acronym]),
+				'superadmin' => $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
 				'user' => $user,
 				'title' => "View user: " . $user->name,
-				'redirect' => [ 
-				"Users/update/", 
-				"Users/softDelete/", 
+				'redirect' => [
+				"Users/update/",
+				"Users/softDelete/",
 				"Users/restore/",
 				"Users/delete/"]
 			]);
 			
 			$this->dispatcher->forward([
+				'controller'=> 'Forum',
+				'action'	=> 'score',
+				'params'	=> ['id' => $id]
+			]);
+			
+			$this->dispatcher->forward([
 				'controller' => 'Forum',
 				'action'	 => 'userQuestions',
-				'params' 	 => [
-					'id' => $id
-				]
+				'params' 	 => ['id' => $id]
 			]);
 		}
 		else
@@ -345,7 +328,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 			
 		$this->theme->setTitle("Users that are active");
 		$this->views->add('users/list-all', [
-			'admin'	=> $this->isUserAdmin($this->users->currentUser(), ['admin']),
+			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
 			'users' => $all,
 			'title' => "View all users",
 			'redirect' => [
@@ -373,7 +356,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 			
 		$this->theme->setTitle("Users that are deleted");
 		$this->views->add('users/list-all', [
-			'admin'	=> $this->isUserAdmin($this->users->currentUser(), ['admin']),
+			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
 			'users' => $all,
 			'title' => "View all users",
 			'redirect' => [
@@ -452,7 +435,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 			
 			if($updated)
 			{	// Save user in session.
-				$this->users->loginUser($form->Value('acronym'));
+				$this->users->loginUser($acronym);
 				$success = true;
 			}
 			
@@ -619,7 +602,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 		$now = gmdate('Y-m-d H:i:s');
 			$this->users->save([
 				'acronym' 	=> strtolower($form->Value('acronym')),
-				'email' 	=>  $form->Value('email'),
+				'email' 	=> $form->Value('email'),
 				'name' 		=> $form->Value('name'),
 				'password' 	=> md5($form->Value('password')),
 				'created' 	=> $this->users->created,
@@ -629,7 +612,6 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 		$url = $this->url->create('Users/id/' . $this->users->id);
 		$this->response->redirect($url);
-
 		
         return true;
     }

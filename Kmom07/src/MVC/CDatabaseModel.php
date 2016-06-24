@@ -42,12 +42,9 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 	*/
 	public function update($values)
 	{
-		var_dump($values);
 		$keys = array_keys($values);
 		$values = array_values($values);
-		var_dump($keys);
-		var_dump($values);
-		
+
 		//remove id from $keys and use it in your WHERE-clause.
 		unset($keys['id']);
 		$values[] = $this->id;
@@ -247,5 +244,24 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 		$this->db->execute([$id]);
 		return $this->db->fetchAll();
 	}
+	
+	public function orderBy($order)
+	{
+		$this->db->orderBy($order);
+		
+		return $this;
+	}
+	
+	public function groupBy($condition)
+    {
+        $this->db->groupBy($condition);
+
+        return $this;
+    }
+	
+	public function executeFetchAll($query, $params) 
+	{
+        return $this->db->executeFetchAll($query, $params);;
+    }
 }
 

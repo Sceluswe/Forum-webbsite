@@ -1,5 +1,6 @@
 <h1><?=$title?></h1>
 <div class='user'>
+	<p><img src="https://www.gravatar.com/avatar/<?=md5(strtolower(trim($user->email)))?>" alt="No image"></p>
 	<h3 style="display: inline; text-transform: uppercase;"> <?=$user->id?>. <?=$user->acronym?></h3>
 	<p><h5 style="display: inline;">Name:</h5> <?=$user->name?></p>
 	<p><h5 style="display: inline;">E-Mail:</h5> <?=$user->email?></p>

@@ -6,7 +6,7 @@ namespace Anax\Forum;
  * 
  * Contains interactions with the database.
  */
-class Comment extends \Anax\MVC\CDatabaseModel
+class Tag extends \Anax\MVC\CDatabaseModel
 {	
 	/*
 	* Set route to redirect to in session.
@@ -28,21 +28,5 @@ class Comment extends \Anax\MVC\CDatabaseModel
 	public function getRedirect()
 	{
 		return $this->session->get('redirectc');
-	}
-
-	public function findQuestionComments($id)
-	{
-		$this->query()->where("commentparent='Q'")->andWhere("qaid = ?");
-
-		$result = $this->execute([$id]);
-		return $result;
-	}
-
-	public function findAnswerComments($id)
-	{
-		$this->query()->where("commentparent='A'")->andWhere("qaid = ?");
-
-		$result = $this->execute([$id]);
-		return $result;
 	}
 }

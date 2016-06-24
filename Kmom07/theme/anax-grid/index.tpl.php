@@ -17,11 +17,13 @@
 	<div id='header'>
 		<?php if(isset($header)) echo $header?>
 		<?php $this->views->render('header')?>
+		
+		<?php if ($this->views->hasContent('navbar')) : ?>
+		<div id='navbar'><?php $this->views->render('navbar')?></div>
+		<?php endif; ?>
 	</div>
 	
-	<?php if ($this->views->hasContent('navbar')) : ?>
-		<div id='navbar'><?php $this->views->render('navbar')?></div>
-	<?php endif; ?>
+
 	
 	<div id='content'>
 	<?php if ($this->views->hasContent('flash')) : ?>

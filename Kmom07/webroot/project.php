@@ -46,29 +46,32 @@ $app->navbar->configure(ANAX_APP_PATH . 'config/theme-navbar-me.php');
 $app->router->add('Home', function () use ($app) {
 	$app->theme->setTitle('Home');
 	
-	$content = $app->fileContent->get('me.md');
-	$content = $app->textFilter->doFilter($content, 'shortcode, markdown');
-	
-	$byline = $app->fileContent->get('byline.md');
-	$byline = $app->textFilter->doFilter($byline, 'shortcode, markdown');
-	
-	$app->views->add('me/me', 
-	[
-		'content' =>$content, 'byline' => $byline
-	]);
-	
 	$app->dispatcher->forward([
-		'controller' => 'Comment',
-		'action'	 => 'view'
+		'controller'=> 'Forum',
+		'action'	=> 'home'
 	]);
 });
 
 $app->router->add('Questions', function() use ($app){
 	$app->theme->setTitle("Questions");
-
+	
 	$app->dispatcher->forward([
 		'controller' => 'Forum',
 		'action' 	 => 'menu'
+	]);
+});
+
+$app->router->add('Tag', function() use ($app){
+	$app->theme->setTitle("Questions");
+	
+	$app->dispatcher->forward([
+		'controller' => 'Forum',
+		'action'	 =>	'userStatus'
+	]);
+	
+	$app->dispatcher->forward([
+		'controller' => 'Forum',
+		'action' 	 => 'tagMenu'
 	]);
 });
 
@@ -94,6 +97,18 @@ $app->router->add('Users', function() use ($app){
 	$app->views->add('me/page',
 	[
 		'content' =>$content
+	]);
+});
+
+$app->router->add('About', function () use ($app) {
+	$app->theme->setTitle('About');
+	
+	$content = $app->fileContent->get('about.md');
+	$content = $app->textFilter->doFilter($content, 'shortcode, markdown');
+	
+	$app->views->add('default/page', 
+	[
+		'content' =>$content,
 	]);
 });
 

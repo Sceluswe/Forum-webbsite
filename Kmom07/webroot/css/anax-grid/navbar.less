@@ -4,21 +4,17 @@
  */
 #navbar 
 {
-	margin-top: @marginTop;
-	border: @border;
-	border-bottom: @borderBottom;
+	position: absolute;
+	margin-top: @marginTopNavbar;
+	margin-left: @marginLeftNavbar;
 	color: @colorNavbar;
 	font-size: @font-sizeNavbar;
-	background: @bgColorNavbar1;
-	/*background: -webkit-linear-gradient(@bgColorNavbar1, @bgColorNavbar2);
-	background: -o-linear-gradient(@bgColorNavbar1, @bgColorNavbar2); 
-	background: -moz-linear-gradient(@bgColorNavbar1, @bgColorNavbar2); 
-	background: linear-gradient(@bgColorNavbar1, @bgColorNavbar2); 
-	*/
+	font-family: @font-familyNavbar;
 }
  
 .navbar ul 
 {
+	font-family: @font-familyNavbar;
 	text-align: center;
 	list-style: none; 
 	margin: 0;
@@ -27,14 +23,16 @@
  
 .navbar li 
 {
+	font-family: @font-familyNavbar;
+	background: @bgLink;
 	display: inline-block;
 	margin: 1px;
 	padding: 12px 15px 12px 15px;
-	border-top: 8px solid @bgColorNavbar1;
 }
  
 .navbar a 
 {
+	font-family: @font-familyNavbar;
 	display:inline-block;
 	text-decoration: none;
 	color: inherit;
@@ -43,19 +41,16 @@
 
 .navbar li:hover
 {
-	background-color: #214B73;
-	border-top: 8px solid #5b93c7;
+	background-color: @bgHover;
 	padding: 12px 15px;
-	margin: 1px;
 } 
  
 .navbar li.selected-parent, 
 .navbar li.selected 
 {
-	background-color: #1C3C5F;
-	border-top: 8px solid #188ffd;
+	background-color: @bgSelected;
 	padding: 11px 15px;
-	margin: 1px;
+	margin: 2px;
 }
 
 .navbar ul ul 

@@ -8,26 +8,20 @@ namespace Anax\Forum;
  */
 class Question extends \Anax\MVC\CDatabaseModel
 {
-	/*
-	* Set table to store question in.
-	*
-	* @param string, table to use in the database. 
-	*
-	* @return string.
+	/**
+	*	Save the previous question in session.
 	*/
-	public function setSource($key)
+	public function setQuestion($question)
 	{
-		$this->session->set('question', strtolower($key));
+		$this->session->set('savedQuestion', htmlentities($question));
 	}
 	
-	/*
-	* Get table to store question in from session.
-	*
-	* @return string.
+	/**
+	*	Get the previous object from session.
 	*/
-	public function getSource()
+	public function getQuestion()
 	{
-		return $this->session->get('question');
+		return $this->session->get('savedQuestion');
 	}
 	
 	/*

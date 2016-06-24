@@ -9,6 +9,35 @@ namespace Anax\Users;
 class User extends \Anax\MVC\CDatabaseModel
 {
 	/*
+	* Function that checks if a user is an admin based on the provided $condition.
+	*
+	* @param $user, string, A string with the current users name.
+	* @param $condition, array, an array of strings containing the allowed users.
+	*
+	* @return boolean, depending on result.
+	*/
+	public function isUserAdmin($currentUser, $condition)
+	{
+		if(is_array($condition))
+		{
+			$result = false;
+			if($this->isUserLoggedIn())
+			{
+				if(in_array($currentUser, $condition))
+				{
+					$result = true;
+				}
+			}
+		}
+		else
+		{
+			die("Error: $condition needs to be array in UsersController::isUserAdmin()");
+		}
+		
+		return $result;
+	}
+	
+	/*
 	* Function that validates a user based on acronym and password.
 	*
 	* $return boolean, false or true depending on result.
@@ -127,9 +156,6 @@ class User extends \Anax\MVC\CDatabaseModel
 				'updated' 	=> ['datetime'],
 				'deleted' 	=> ['datetime'],
 				'active' 	=> ['datetime'],
-				'answers' 	=> ['integer'],
-				'questions'	=> ['integer'],
-				'comments'	=> ['integer'],
 			])->execute();
 			
 			// Make sure database was successfully created.
@@ -150,9 +176,6 @@ class User extends \Anax\MVC\CDatabaseModel
 					md5('admin'),
 					$now,
 					$now,
-					0,
-					0,
-					0
 				]);
 				// Insert user 'doe' with the following values:
 				$insert2 = $this->db->execute([

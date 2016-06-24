@@ -1,4 +1,6 @@
+<?php if(!empty($title)):?>
 <h1><?=$title?></h1>
+<?php endif;?>
 
 <?=$content?>
 

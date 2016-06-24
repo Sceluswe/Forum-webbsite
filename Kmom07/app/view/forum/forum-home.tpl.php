@@ -1,5 +1,6 @@
-<div class="div-menu-questions">
-<h2><?=$title?></h2>
+<!---------------- Questions ----------------->
+<div class="div-menu-questions width60" style="padding-right: 85px;">
+<h2><?=$title1?></h2>
 <?php if(!empty($admin)):?>
 <h3><a href="<?=$this->url->create($redirect['addQuestion'])?>" class="nodecoration">Post Question</a></h3>
 <?php endif;?>
@@ -24,4 +25,34 @@
 	<?php endforeach;?>
 <?php endif; ?>
 </table>
+</div>
+
+<!---------------- Users ----------------->
+<div class="homeUsers">
+<h2><?=$title2?></h2>
+<ul>
+<table>
+<?php foreach($users as $user):?>
+<tr>
+	<td><img width="64" height="64" src="https://www.gravatar.com/avatar/<?=md5(strtolower(trim($user->email)))?>" alt="No image"></td>
+	<td class="homeData">
+	<p class="homeName">
+		<a class="nodecoration" href="<?=$this->url->create($redirect['user'] . $user->id);?>">
+			<h3 class="menu-user"><?=ucfirst($user->name)?></h3>
+		</a>Score:<?=$user->score?>
+	</p>
+	</td>
+</tr>
+<?php endforeach;?>
+</ul>
+</table>
+</div>
+
+<!---------------- Tags ----------------->
+<div class="clear">
+	<h2 class="homeHeader"><?=$title3?></h2>
+	
+	<?php foreach($tags as $tag):?>
+		<p class="tag-list"><?=$tag->tag?> x <?=$tag->num?></p>
+	<?php endforeach;?>
 </div>
