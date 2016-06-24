@@ -12,7 +12,7 @@ before_script:
 
 script: 
     - mkdir -p build/logs
-    - phpunit --bootstrap Kmom07/test/config.php --coverage-clover build/logs/clover.xml test
+    - phpunit --bootstrap Kmom07/test/config.php --coverage-clover build/logs/clover.xml
 
 after_script:
     - php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml
