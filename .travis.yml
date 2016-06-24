@@ -10,7 +10,7 @@ php:
   - 5.4
   - hhvm
 script: 
-  - "phpunit --bootstrap Kmom07/test/config.php --coverage-clover coverage.clover test"
+  - phpunit --bootstrap Kmom07/test/config.php --coverage-clover coverage.clover test
   #- "phpunit --bootstrap Kmom07/mos/cdatabase/vendor/test/config.php --coverage-clover coverage.clover test"
   #- "phpunit --bootstrap Kmom07/mos/cform/vendor/test/config.php --coverage-clover coverage.clover test"
 
