@@ -13,7 +13,7 @@ After that you're good to go!
 # Requirements
 A local environment that supports PHP (at least version 5.6.0)
 
-# Side-note
+# Sidenote
 You may use my code in any way that you want just make sure that you respect the creator of the Anax-frameworks license. It can be found in the readme inside the Kmom07 folder.
 
 
