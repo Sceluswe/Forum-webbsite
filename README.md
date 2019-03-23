@@ -1,5 +1,5 @@
-## Forum-webbsite
-A Forum webbsite created using Anax a HMVC framework. It's a framework developed by Mikael Ros and his readme can be found inside the first folder.
+## Forum-website
+A Forum website created using Anax a HMVC framework. It's a framework developed by Mikael Ros and his readme can be found inside the first folder.
 
 ## Installation
 To get your own version of my Forum website simply download the folder from GitHub and all it's files, make sure you have a development environment
