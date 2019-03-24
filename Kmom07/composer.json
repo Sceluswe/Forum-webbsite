@@ -1,0 +1,23 @@
+{
+    "name": "anax/mvc",
+    "description": "webtemplate to create websites",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mikael Roos",
+            "email": "me@mikaelroos.se",
+            "homepage": "http://mikaelroos.se",
+            "role": "Developer"
+        },
+        {
+            "name": "Emil Mattsson",
+            "email": "emilcbm@ProtonMail.com",
+            "homepage": "https://github.com/Sceluswe",
+            "role": "Developer"
+        }
+    ],
+    "require": { 
+        "mos/cdatabase": "dev-master",
+        "mos/cform": "2.*@dev"
+    }
+}
