@@ -18,6 +18,7 @@
     ],
     "require": { 
         "mos/cdatabase": "dev-master",
-        "mos/cform": "2.*@dev"
+        "mos/cform": "2.*@dev",
+        "scelusswe/escaper": "v1.0"
     }
 }
