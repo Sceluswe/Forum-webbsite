@@ -6,7 +6,8 @@ $di = new \Anax\DI\CDIFactoryDefault();
 // Create a new controller for the comments. 
 $di->set('CommentController', function() use ($di)
 {
-	$controller = new Phpmvc\Comment\CommentController();
+	$controller = new Anax\Comments\CommentController();
+    echo gettype($controller);
 	$controller->setDI($di);
 	return $controller;
 });
@@ -32,7 +33,7 @@ $app->router->add('', function() use ($app) {
 		'content' =>$content, 'byline' => $byline
 	]);
 	
-	$app->dispatcher->forward(
+	/*$app->dispatcher->forward(
 	[
 		'controller' 	=> 'comment',
 		'action'	 	=> 'view',
@@ -52,7 +53,7 @@ $app->router->add('', function() use ($app) {
 		'content'	=> null,
 		'output'	=> null,
 		'redirect'	=> '',
-	]);
+	]);*/
 });
 
 $app->router->add('redovisning', function() use ($app)

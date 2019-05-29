@@ -157,7 +157,8 @@ class CDIFactoryDefault extends CDI
 		
 		$this->setShared('db', function() {
 			$db = new \Mos\Database\CDatabaseBasic();
-			$db->setOptions(require ANAX_APP_PATH . 'config/config_mysql.php');
+			//$db->setOptions(require ANAX_APP_PATH . 'config/config_mysql.php');
+            $db->setOptions(require ANAX_APP_PATH . 'config/config_sqlite.php');
 			$db->connect();
 			return $db;
 		});
