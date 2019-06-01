@@ -4,8 +4,10 @@
 A Forum website created using Anax a HMVC framework. It's a framework developed by Mikael Ros and his readme can be found inside the first folder.
 
 ## Installation
-To get your own version of my Forum website simply download the folder from GitHub and all it's files, make sure you have a development environment
-installed along with the latest version of PHP. 
+1. Download and install XAMPP (or similiar).
+2. Git clone the project into the htdocs folder of xampp.
+3. Run xampp and start a local server.
+4. Direct your browser to: http://localhost/Forum-website/Kmom07/webroot/project.php
 
 If you're using xampp, put the Kmom07 folder in your "htdocs" directory and link to it through your web browser like this:
 http://localhost//Kmom07/webroot/Home
