@@ -2,7 +2,7 @@
 
 return [
     // Set up details on how to connect to the database
-    'dsn'     => "sqlite:db/smite.sqlite",
+    'dsn'     => "sqlite:../app/db/smite.sqlite",
 
     // Display details on what happens: debug mode
     'verbose' => false,
