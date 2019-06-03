@@ -1,5 +1,5 @@
 ## Forum-website
-A Forum website created using Anax a HMVC framework. It's a framework developed by Mikael Ros and his readme can be found inside the first folder.
+A Forum website created using Anax a HMVC framework. It's a framework developed by Mikael Ros.
 
 ## Installation
 1. Download and install XAMPP (or similiar).
