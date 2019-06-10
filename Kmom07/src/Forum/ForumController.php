@@ -505,7 +505,6 @@ class ForumController implements \Anax\DI\IInjectionAware
         $dataObject = $data->find($id);
         // Update it with an increase of 1.
         $data->update([
-            'id' 	=> $id,
             'rating'=> $dataObject->rating + 1,
         ]);
     }
@@ -553,7 +552,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 			$this->response->redirect($url);
 		}
 	}
-	
+    
 	/**
 	* Function to increase the rating of a question, answer or comment.
 	*
@@ -575,7 +574,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 				{
 					// Get the old rating value.
 					$question = $this->questions->find($id);
-					// Update it with an decrease of 1.
+					// Update it with a decrease of 1.
 					$this->questions->update([
 						'rating'=> $question->rating - 1,
 					]);
