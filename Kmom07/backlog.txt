@@ -1,0 +1,6 @@
+backlog
+
+Make sure users can only update the score of a question once.
+Fix the design of the number in the score of the question. It looks unaligned.
+Allow users to delete their own questions.
+Display added tags below a posted question.
