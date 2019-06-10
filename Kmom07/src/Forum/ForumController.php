@@ -558,7 +558,23 @@ class ForumController implements \Anax\DI\IInjectionAware
 			$this->response->redirect($url);
 		}
 	}
-	
+    
+    /**
+    * Function finds the correct dataobject and updates its rating column by 1.
+    *
+    * @param array, the data in which the targeted dataobject exists.
+    * @param int, the unique id of the row to use in the table/data.
+    */
+    private function downvote($data, $id)
+    {
+        // Get the old rating value.
+        $dataObject = $data->find($id);
+        // Update it with an increase of 1.
+        $data->update([
+            'rating'=> $dataObject->rating - 1,
+        ]);
+    }
+    
 	/**
 	* Function to increase the rating of a question, answer or comment.
 	*
@@ -578,32 +594,15 @@ class ForumController implements \Anax\DI\IInjectionAware
 				
 				if($table === 'Q')
 				{
-					// Get the old rating value.
-					$question = $this->questions->find($id);
-					// Update it with a decrease of 1.
-					$this->questions->update([
-						'rating'=> $question->rating - 1,
-					]);
+                    $this->downvote($this->questions, $id);
 				}
 				else if($table === 'A')
 				{
-					// Get the old rating value.
-					$answer = $this->answers->find($id);
-					// Update it with an decrease of 1.
-					$this->answers->update([
-						'id' 	=> $id,
-						'rating'=> $answer->rating - 1,
-					]);
+                    $this->downvote($this->answers, $id);
 				}
 				else if($table === 'C')
 				{
-					// Get the old rating value.
-					$comment = $this->comments->find($id);
-					// Update it with an decrease of 1.
-					$this->comments->update([
-						'id' 	=> $id,
-						'rating'=> $comment->rating - 1,
-					]);
+                    $this->downvote($this->comments, $id);
 				}
 				
 				$url = $this->url->create("Forum/id/" . $this->questions->getQuestion());
