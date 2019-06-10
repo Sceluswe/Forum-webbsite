@@ -499,6 +499,16 @@ class ForumController implements \Anax\DI\IInjectionAware
 	
 	
 //---------------- Ratings ----------------
+    private function upvote($data, $id)
+    {
+        // Get the old rating value.
+        $dataObject = $data->find($id);
+        // Update it with an increase of 1.
+        $data->update([
+            'id' 	=> $id,
+            'rating'=> $dataObject->rating + 1,
+        ]);
+    }
 	/**
 	* Function to increase the rating of a question, answer or comment.
 	*
@@ -518,33 +528,15 @@ class ForumController implements \Anax\DI\IInjectionAware
 			
 			if($table === 'Q')
 			{
-				// Get the old rating value.
-				$question = $this->questions->find($id);
-				// Update it with an increase of 1.
-				$this->questions->update([
-					'id' 	=> $id,
-					'rating'=> $question->rating + 1,
-				]);
+                $this->upvote($this->questions, $id);
 			}
 			else if($table === 'A')
 			{
-				// Get the old rating value.
-				$answer = $this->answers->find($id);
-				// Update it with an increase of 1.
-				$this->answers->update([
-					'id' 	=> $id,
-					'rating'=> $answer->rating + 1,
-				]);
+				$this->upvote($this->answers, $id);
 			}
 			else if($table === 'C')
 			{
-				// Get the old rating value.
-				$comment = $this->comments->find($id);
-				// Update it with an increase of 1.
-				$this->comments->update([
-					'id' 	=> $id,
-					'rating'=> $comment->rating + 1,
-				]);
+				$this->upvote($this->comments, $id);
 			}
 			
 			$url = $this->url->create("Forum/id/" . $this->questions->getQuestion());
