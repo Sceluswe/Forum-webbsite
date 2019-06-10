@@ -156,6 +156,7 @@ class User extends \Anax\MVC\CDatabaseModel
 				'updated' 	=> ['datetime'],
 				'deleted' 	=> ['datetime'],
 				'active' 	=> ['datetime'],
+                'score'     => ['integer default 0', 'not null']
 			])->execute();
 			
 			// Make sure database was successfully created.
