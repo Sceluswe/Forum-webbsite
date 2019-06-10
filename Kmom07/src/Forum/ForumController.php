@@ -499,6 +499,12 @@ class ForumController implements \Anax\DI\IInjectionAware
 	
 	
 //---------------- Ratings ----------------
+    /**
+    * Function finds the correct dataobject and updates its rating column by 1.
+    *
+    * @param array, the data in which the targeted dataobject exists.
+    * @param int, the unique id of the row to use in the table/data.
+    */
     private function upvote($data, $id)
     {
         // Get the old rating value.
@@ -552,7 +558,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 			$this->response->redirect($url);
 		}
 	}
-    
+	
 	/**
 	* Function to increase the rating of a question, answer or comment.
 	*
