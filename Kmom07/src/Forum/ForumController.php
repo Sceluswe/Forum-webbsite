@@ -268,7 +268,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		}
 	}
 	
-	/*
+	/**
 	*
 	*/
 	public function homeAction()
@@ -514,6 +514,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
     * @param array, the data in which the targeted dataobject exists.
     * @param int, the unique id of the row to use in the table/data.
+    * @param int, a positive or negative number to add to the rating score.
     */
     private function editVote($data, $id, $number)
     {
@@ -530,6 +531,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*
 	* @param string, a 1 letter value to determine which table to use.
 	* @param int, the unique id of the row to use in the table.
+    * @param int, a positive or negative number to add to the rating score.
 	*/
 	public function voteAction($table, $rowid, $number)
 	{
