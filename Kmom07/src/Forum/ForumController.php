@@ -48,12 +48,9 @@ class ForumController implements \Anax\DI\IInjectionAware
 			'addAnswer'	  	=> 'Forum/addAnswer/',
 			'addQComment' 	=> 'Forum/addQComment/',
 			'addAComment' 	=> 'Forum/addAComment/',
-			'rateQuestion'	=> 'Forum/upvote/Q/',
-			'rateAnswer'	=> 'Forum/upvote/A/',
-			'rateComment'	=> 'Forum/upvote/C/',
-			'derateQuestion'=> 'Forum/downvote/Q/',
-			'derateAnswer'	=> 'Forum/downvote/A/',
-			'derateComment'	=> 'Forum/downvote/C/',
+			'rateQuestion'	=> 'Forum/vote/Q/',
+			'rateAnswer'	=> 'Forum/vote/A/',
+			'rateComment'	=> 'Forum/vote/C/',
 			'user' 			=> 'Users/id/',
 			'question' 		=> 'Forum/id/',
 			'accepted'		=> 'Forum/accepted/',
@@ -518,28 +515,29 @@ class ForumController implements \Anax\DI\IInjectionAware
     * @param array, the data in which the targeted dataobject exists.
     * @param int, the unique id of the row to use in the table/data.
     */
-    private function upvote($data, $id)
+    private function editVote($data, $id, $number)
     {
         // Get the old rating value.
         $dataObject = $data->find($id);
         // Update it with an increase of 1.
         $data->update([
-            'rating'=> $dataObject->rating + 1,
+            'rating'=> $dataObject->rating + $number,
         ]);
     }
+    
 	/**
 	* Function to increase the rating of a question, answer or comment.
 	*
 	* @param string, a 1 letter value to determine which table to use.
 	* @param int, the unique id of the row to use in the table.
 	*/
-	public function upvoteAction($table, $rowid)
+	public function voteAction($table, $rowid, $number)
 	{
 		if($this->users->isUserLoggedIn())
 		{
             // Use the two parameters to find the correct database table
             // and change the rating of the row in that table.
-            if(is_string($table) && is_numeric($rowid))
+            if(is_string($table) && is_numeric($rowid) && ($number == 1 || $number == -1))
             {
                 // Clean parameters.
                 $id = htmlentities($rowid);
@@ -547,13 +545,13 @@ class ForumController implements \Anax\DI\IInjectionAware
                 switch ($table) 
                 {
                     case 'Q':
-                        $this->upvote($this->questions, $id);
+                        $this->editVote($this->questions, $id, $number);
                         break;
                     case 'A':
-                        $this->upvote($this->answers, $id);
+                        $this->editVote($this->answers, $id, $number);
                         break;
                     case 'C':
-                        $this->upvote($this->comments, $id);
+                        $this->editVote($this->comments, $id, $number);
                         break;
                 }
                 
@@ -563,65 +561,6 @@ class ForumController implements \Anax\DI\IInjectionAware
             {
                 die("Error, invalid parameters.");
             }
-		}
-		else
-		{
-            $this->createRedirect("Users/Login");
-		}
-	}
-    
-    /**
-    * Function finds the correct dataobject and updates its rating column by 1.
-    *
-    * @param array, the data in which the targeted dataobject exists.
-    * @param int, the unique id of the row to use in the table/data.
-    */
-    private function downvote($data, $id)
-    {
-        // Get the old rating value.
-        $dataObject = $data->find($id);
-        // Update it with an increase of 1.
-        $data->update([
-            'rating'=> $dataObject->rating - 1,
-        ]);
-    }
-    
-	/**
-	* Function to increase the rating of a question, answer or comment.
-	*
-	* @param string, a 1 letter value to determine which table to use.
-	* @param int, the unique id of the row to use in the table.
-	*/
-	public function downvoteAction($table, $rowid)
-	{
-		if($this->users->isUserLoggedIn())
-		{
-			// Use the two parameters to find the correct database table
-			// and change the rating of the row in that table.
-			if(is_string($table) && is_numeric($rowid))
-			{
-				// Clean parameters.
-				$id = htmlentities($rowid);
-                
-                switch ($table)
-                {
-                    case 'Q':
-                        $this->downvote($this->questions, $id);
-                        break;
-                    case 'A':
-                        $this->downvote($this->answers, $id);
-                        break;
-                    case 'C':
-                        $this->downvote($this->comments, $id);
-                        break;
-                }
-				
-                $this->createRedirect("Forum/id/" . $this->questions->getQuestion());
-			}
-			else
-			{
-				die("Error, invalid parameters.");
-			}
 		}
 		else
 		{

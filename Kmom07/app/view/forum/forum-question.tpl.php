@@ -6,9 +6,9 @@
 	<table class="width100">
 	<tr>
 		<td class="question-rating-data">
-			<a href="<?=$this->url->create($redirect['rateQuestion'] .$question->id)?>"><i class="fa fa-chevron-up"></i></a><br>
+			<a href="<?=$this->url->create($redirect['rateQuestion'] . $question->id . '/1')?>"><i class="fa fa-chevron-up"></i></a><br>
 			<h2 class="question-rating"><?=$question->rating?></h2>
-			<a href="<?=$this->url->create($redirect['derateQuestion'] .$question->id)?>"><i class="fa fa-chevron-down"></i></a>
+			<a href="<?=$this->url->create($redirect['rateQuestion'] . $question->id . '/-1')?>"><i class="fa fa-chevron-down"></i></a>
 		</td>
 		<td class="question-content">
 			<?=$this->textFilter->doFilter($question->content, 'markdown');?>
@@ -33,9 +33,9 @@
 			<tr> <!-- Comment -->
 			<td class="question-rating-data">
 			<?php if(!empty($admin))?>
-				<a href="<?=$this->url->create($redirect['rateComment'] .$item->id)?>"><i class="fa fa-chevron-up chevFontSize"></i></a><br>
+				<a href="<?=$this->url->create($redirect['rateComment'] . $item->id . '/1')?>"><i class="fa fa-chevron-up chevFontSize"></i></a><br>
 				<h2 class="question-rating chevFontSize"><?=$item->rating?></h2>
-				<a href="<?=$this->url->create($redirect['derateComment'] .$item->id)?>"><i class="fa fa-chevron-down chevFontSize"></i></a>
+				<a href="<?=$this->url->create($redirect['rateComment'] . $item->id . '/-1')?>"><i class="fa fa-chevron-down chevFontSize"></i></a>
 			</td>
 				<td class="question-comment">
 					<?=$this->textFilter->doFilter(
@@ -87,9 +87,9 @@
 			<?php elseif($questionAdmin):?>
 				<a href="<?=$this->url->create($redirect['accepted'] . $answer->id)?>" class="nodecoration">Accept Answer</a>
 			<?php endif;?>
-			<a href="<?=$this->url->create($redirect['rateAnswer'] .$answer->id)?>"><i class="fa fa-chevron-up"></i></a><br>
+			<a href="<?=$this->url->create($redirect['rateAnswer'] . $answer->id . '/1')?>"><i class="fa fa-chevron-up"></i></a><br>
 			<h2 class="question-rating"><?=$answer->rating?></h2>
-			<a href="<?=$this->url->create($redirect['derateAnswer'] .$answer->id)?>"><i class="fa fa-chevron-down"></i></a>
+			<a href="<?=$this->url->create($redirect['rateAnswer'] . $answer->id . '/-1')?>"><i class="fa fa-chevron-down"></i></a>
 		</td>
 		<td class="question-content">
 			<?=$this->textFilter->doFilter($answer->content, 'markdown');?>
@@ -106,9 +106,9 @@
 		<?php foreach($answerComments[$answer->id] as $comment):?>
 			<tr> <!-- Comment -->
 				<td class="question-rating-data">
-					<a href="<?=$this->url->create($redirect['rateComment'] .$comment->id)?>"><i class="fa fa-chevron-up chevFontSize"></i></a><br>
+					<a href="<?=$this->url->create($redirect['rateComment'] . $comment->id . '/1')?>"><i class="fa fa-chevron-up chevFontSize"></i></a><br>
 					<h2 class="question-rating chevFontSize"><?=$comment->rating?></h2>
-					<a href="<?=$this->url->create($redirect['derateComment'] .$comment->id)?>"><i class="fa fa-chevron-down chevFontSize"></i></a>
+					<a href="<?=$this->url->create($redirect['rateComment'] . $comment->id . '/-1')?>"><i class="fa fa-chevron-down chevFontSize"></i></a>
 				</td>
 				<td class="question-comment">
 					<?=$this->textFilter->doFilter(
