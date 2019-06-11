@@ -95,7 +95,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		}
 		
 		// Render form.
-        $this->renderDefaultPage("Create Question", $userlink);
+        $this->renderDefaultPage("", $userlink);
 	}
 
 	
