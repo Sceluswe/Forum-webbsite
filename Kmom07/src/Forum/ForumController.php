@@ -619,37 +619,45 @@ class ForumController implements \Anax\DI\IInjectionAware
 		// Render form.
         $this->renderDefaultPage("Create Answer", $this->getAnswerForm(['questionid' => $id,]));
 	}
+    
+    /**
+	* Function that adds a new question comment to the database.
+	*
+	* @param int, the ID of the question in the database.
+    * @param int, the ID of the question or answer the comment belongs to.
+    * @param string, a string indicating what the comments parent is.
+	*/
+    private function createQACValues($questionid, $qaid, $table)
+    {
+        return [
+		'questionid'	=>	$questionid,
+		'qaid'			=>	$qaid,
+		'commentparent' =>  $table
+		];
+    }
 	
 	/**
 	* Function that adds a new question comment to the database.
 	*
-	* @param, int, the ID of the question in the database.
+	* @param int, the ID of the question in the database.
+    * @param int, the ID of the question or answer the comment belongs to.
 	*/
 	public function addQCommentAction($questionid, $qaid)
 	{
-		$values = [
-		'questionid'	=>	$questionid,
-		'qaid'			=>	$qaid,
-		'commentparent' => 'Q'
-		];
-		
+        $values = $this->createQACValues($questionid, $qaid, 'Q');
 		// Render form.
         $this->renderDefaultPage("Create Comment", $this->getCommentForm($values));
 	}	
 	
 	/**
-	* Function that adds a new answer  comment to the database.
+	* Function that adds a new answer comment to the database.
 	*
-	* @param, int, the ID of the answer in the database.
+	* @param int, the ID of the question in the database.
+    * @param int, the ID of the question or answer the comment belongs to.
 	*/
 	public function addACommentAction($questionid, $qaid)
 	{
-		$values = [
-		'questionid'	=>	$questionid,
-		'qaid'			=>	$qaid,
-		'commentparent' => 'A'
-		];
-		
+		$values = $this->createQACValues($questionid, $qaid, 'A');
 		// Render form.
         $this->renderDefaultPage("Create Comment", $this->getCommentForm($values));
 	}
