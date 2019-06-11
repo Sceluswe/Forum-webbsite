@@ -62,6 +62,12 @@ class ForumController implements \Anax\DI\IInjectionAware
 		];
 	}
     
+    /**
+	* Utility function to render a default page with title and content.
+	*
+	* @param, string, the title to display on the default page.
+    * @param, string, a string containing HTML to display on the default page. 
+	*/
     private function renderDefaultPage($title, $content)
     {
         $this->theme->setTitle($title);
