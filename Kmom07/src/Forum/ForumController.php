@@ -61,6 +61,15 @@ class ForumController implements \Anax\DI\IInjectionAware
 			'tagCreate'		=> 'Forum/tagCreate/',
 		];
 	}
+    
+    private function renderDefaultPage($title, $content)
+    {
+        $this->theme->setTitle($title);
+		$this->views->add('default/page', [
+            'title' => $title,
+			'content' => $content
+		]);
+    }
 	
 	public function userStatusAction()
 	{
@@ -79,10 +88,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		}
 		
 		// Render form.
-		$this->theme->setTitle("Create Question");
-		$this->views->add('default/page', [
-			'content' => $userlink,
-		]);
+        $this->renderDefaultPage("Create Question", $userlink);
 	}
 
 	
@@ -194,9 +200,6 @@ class ForumController implements \Anax\DI\IInjectionAware
 			
 			if(!empty($sort))
 			{
-				//$params[] = $order = htmlentities($sort);
-				//$this->answers->query()->where('questionid=?')->orderBy('? DESC');
-				// SELECT * FROM `test_answer` WHERE questionid= 1 ORDER BY timestamp DESC
 				if($sort === 'timestamp')
 				{
 					$this->answers->query()->where('questionid= ?')->orderBy('timestamp DESC');
@@ -354,10 +357,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		]);
 		
 		// Render form.
-		$this->views->add('default/page', [
-			'title'		=> 'Rating',
-			'content' 	=> $table,
-		]);
+        $this->renderDefaultPage("Rating", $table);
 	}
 
 //---------------- Tags ----------------
@@ -410,11 +410,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		}
 		
 		// Render form.
-		$this->theme->setTitle("Create Tag");
-		$this->views->add('default/page', [
-			'title' => "Create Tag",
-			'content' => $this->getTagForm($values)
-		]);
+        $this->renderDefaultPage("Create Tag", $this->getTagForm($values));
 	}
 	
 	/*
@@ -657,11 +653,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	public function addQuestionAction()
 	{
 		// Render form.
-		$this->theme->setTitle("Create Question");
-		$this->views->add('default/page', [
-			'title' => "Create Question",
-			'content' => $this->getQuestionForm()
-		]);
+        $this->renderDefaultPage("Create Question", $this->getQuestionForm());
 	}	
 	
 	/**
@@ -672,11 +664,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	public function addAnswerAction($id)
 	{
 		// Render form.
-		$this->theme->setTitle("Create Answer");
-		$this->views->add('default/page', [
-			'title' => "Create Answer",
-			'content' => $this->getAnswerForm(['questionid' => $id,])
-		]);
+        $this->renderDefaultPage("Create Answer", $this->getAnswerForm(['questionid' => $id,]));
 	}
 	
 	/**
@@ -693,11 +681,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		];
 		
 		// Render form.
-		$this->theme->setTitle("Create Comment");
-		$this->views->add('default/page', [
-			'title' => "Create Comment",
-			'content' => $this->getCommentForm($values)
-		]);
+        $this->renderDefaultPage("Create Comment", $this->getCommentForm($values));
 	}	
 	
 	/**
@@ -714,11 +698,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		];
 		
 		// Render form.
-		$this->theme->setTitle("Create Comment");
-		$this->views->add('default/page', [
-			'title' => "Create Comment",
-			'content' => $this->getCommentForm($values)
-		]);
+        $this->renderDefaultPage("Create Comment", $this->getCommentForm($values));
 	}
 	
 	/*
@@ -1036,7 +1016,6 @@ class ForumController implements \Anax\DI\IInjectionAware
 		}
 		else
 		{
-			
 			$bit = array(
 				'y' => $secs / 31556926 % 12,
 				'd' => $secs / 86400 % 7,
