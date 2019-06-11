@@ -602,19 +602,19 @@ class ForumController implements \Anax\DI\IInjectionAware
 			{
 				// Clean parameters.
 				$id = htmlentities($rowid);
-				
-				if($table === 'Q')
-				{
-                    $this->downvote($this->questions, $id);
-				}
-				else if($table === 'A')
-				{
-                    $this->downvote($this->answers, $id);
-				}
-				else if($table === 'C')
-				{
-                    $this->downvote($this->comments, $id);
-				}
+                
+                switch ($table)
+                {
+                    case 'Q':
+                        $this->downvote($this->questions, $id);
+                        break;
+                    case 'A':
+                        $this->downvote($this->answers, $id);
+                        break;
+                    case 'C':
+                        $this->downvote($this->comments, $id);
+                        break;
+                }
 				
                 $this->createRedirect("Forum/id/" . $this->questions->getQuestion());
 			}
