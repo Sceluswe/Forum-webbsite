@@ -510,7 +510,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	
 //---------------- Ratings ----------------
     /**
-    * Function finds the correct dataobject and updates its rating column by 1.
+    * Function finds the correct dataobject and updates its rating.
     *
     * @param array, the data in which the targeted dataobject exists.
     * @param int, the unique id of the row to use in the table/data.
@@ -527,7 +527,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     }
     
 	/**
-	* Function to increase the rating of a question, answer or comment.
+	* Function to edit the rating of a question, answer or comment.
 	*
 	* @param string, a 1 letter value to determine which table to use.
 	* @param int, the unique id of the row to use in the table.
