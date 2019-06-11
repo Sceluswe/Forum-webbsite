@@ -61,6 +61,34 @@ class ForumController implements \Anax\DI\IInjectionAware
 			'tagCreate'		=> 'Forum/tagCreate/',
 		];
 	}
+    
+    /**
+	* Utility function to render a default page with title and content.
+	*
+	* @param, string, the title to display on the default page.
+    * @param, string, a string containing HTML to display on the default page. 
+	*/
+    private function renderDefaultPage($title, $content)
+    {
+        $this->theme->setTitle($title);
+		$this->views->add('default/page', [
+            'title' => $title,
+			'content' => $content
+        ]);
+    }
+    
+    /**
+	* Utility function to create a URL and redirect the user to it.
+	*
+	* @param, string, the final part of the adress.
+	*/
+    private function createRedirect($redirectAdress)
+    {
+        // Create the URL to redirect to.
+        $url = $this->url->create($redirectAdress);
+        // Redirect user to URL.
+        $this->response->redirect($url);
+    }
 	
 	public function userStatusAction()
 	{
@@ -79,10 +107,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		}
 		
 		// Render form.
-		$this->theme->setTitle("Create Question");
-		$this->views->add('default/page', [
-			'content' => $userlink,
-		]);
+        $this->renderDefaultPage("", $userlink);
 	}
 
 	
@@ -194,9 +219,6 @@ class ForumController implements \Anax\DI\IInjectionAware
 			
 			if(!empty($sort))
 			{
-				//$params[] = $order = htmlentities($sort);
-				//$this->answers->query()->where('questionid=?')->orderBy('? DESC');
-				// SELECT * FROM `test_answer` WHERE questionid= 1 ORDER BY timestamp DESC
 				if($sort === 'timestamp')
 				{
 					$this->answers->query()->where('questionid= ?')->orderBy('timestamp DESC');
@@ -257,7 +279,6 @@ class ForumController implements \Anax\DI\IInjectionAware
 		// Get the recently posted questions.
 		$this->questions->query()->orderBy('timestamp DESC LIMIT 6');
 		$questions = $this->questions->execute();
-		//var_dump($questions);
 		
 		if(!empty($questions))
 		{
@@ -354,10 +375,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		]);
 		
 		// Render form.
-		$this->views->add('default/page', [
-			'title'		=> 'Rating',
-			'content' 	=> $table,
-		]);
+        $this->renderDefaultPage("Rating", $table);
 	}
 
 //---------------- Tags ----------------
@@ -410,11 +428,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		}
 		
 		// Render form.
-		$this->theme->setTitle("Create Tag");
-		$this->views->add('default/page', [
-			'title' => "Create Tag",
-			'content' => $this->getTagForm($values)
-		]);
+        $this->renderDefaultPage("Create Tag", $this->getTagForm($values));
 	}
 	
 	/*
@@ -489,8 +503,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 			}
 			
 			// Use the previous questionid to create a redirect link back to that question.
-			$url = $this->url->create("Forum/id/" . $id);
-			$this->response->redirect($url);
+            $this->createRedirect("Forum/id/" . $id);
 		}
 	
         return $result;
@@ -524,38 +537,36 @@ class ForumController implements \Anax\DI\IInjectionAware
 	{
 		if($this->users->isUserLoggedIn())
 		{
-		// Use the two parameters to find the correct database table
-		// and change the rating of the row in that table.
-		if(is_string($table) && is_numeric($rowid))
-		{
-			// Clean parameters.
-			$id = htmlentities($rowid);
-			
-			if($table === 'Q')
-			{
-                $this->upvote($this->questions, $id);
-			}
-			else if($table === 'A')
-			{
-				$this->upvote($this->answers, $id);
-			}
-			else if($table === 'C')
-			{
-				$this->upvote($this->comments, $id);
-			}
-			
-			$url = $this->url->create("Forum/id/" . $this->questions->getQuestion());
-			$this->response->redirect($url);
+            // Use the two parameters to find the correct database table
+            // and change the rating of the row in that table.
+            if(is_string($table) && is_numeric($rowid))
+            {
+                // Clean parameters.
+                $id = htmlentities($rowid);
+                
+                if($table === 'Q')
+                {
+                    $this->upvote($this->questions, $id);
+                }
+                else if($table === 'A')
+                {
+                    $this->upvote($this->answers, $id);
+                }
+                else if($table === 'C')
+                {
+                    $this->upvote($this->comments, $id);
+                }
+                
+                $this->createRedirect("Forum/id/" . $this->questions->getQuestion());
+            }
+            else
+            {
+                die("Error, invalid parameters.");
+            }
 		}
 		else
 		{
-			die("Error, invalid parameters.");
-		}
-		}
-		else
-		{
-			$url = $this->url->create("Users/Login");
-			$this->response->redirect($url);
+            $this->createRedirect("Users/Login");
 		}
 	}
     
@@ -605,8 +616,7 @@ class ForumController implements \Anax\DI\IInjectionAware
                     $this->downvote($this->comments, $id);
 				}
 				
-				$url = $this->url->create("Forum/id/" . $this->questions->getQuestion());
-				$this->response->redirect($url);
+                $this->createRedirect("Forum/id/" . $this->questions->getQuestion());
 			}
 			else
 			{
@@ -615,8 +625,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		}
 		else
 		{
-			$url = $this->url->create("Users/Login");
-			$this->response->redirect($url);
+            $this->createRedirect("Users/Login");
 		}
 	}
 	
@@ -638,8 +647,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 			// Get the questions id.
 			$qid = $this->questions->getQuestion();
 			// Create redirect link using the questions id.
-			$url = $this->url->create("Forum/Id/{$qid}");
-			$this->response->redirect($url);
+            $this->createRedirect("Forum/Id/{$qid}");
 		}
 		else
 		{
@@ -657,11 +665,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	public function addQuestionAction()
 	{
 		// Render form.
-		$this->theme->setTitle("Create Question");
-		$this->views->add('default/page', [
-			'title' => "Create Question",
-			'content' => $this->getQuestionForm()
-		]);
+        $this->renderDefaultPage("Create Question", $this->getQuestionForm());
 	}	
 	
 	/**
@@ -672,11 +676,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	public function addAnswerAction($id)
 	{
 		// Render form.
-		$this->theme->setTitle("Create Answer");
-		$this->views->add('default/page', [
-			'title' => "Create Answer",
-			'content' => $this->getAnswerForm(['questionid' => $id,])
-		]);
+        $this->renderDefaultPage("Create Answer", $this->getAnswerForm(['questionid' => $id,]));
 	}
 	
 	/**
@@ -693,11 +693,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		];
 		
 		// Render form.
-		$this->theme->setTitle("Create Comment");
-		$this->views->add('default/page', [
-			'title' => "Create Comment",
-			'content' => $this->getCommentForm($values)
-		]);
+        $this->renderDefaultPage("Create Comment", $this->getCommentForm($values));
 	}	
 	
 	/**
@@ -714,11 +710,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		];
 		
 		// Render form.
-		$this->theme->setTitle("Create Comment");
-		$this->views->add('default/page', [
-			'title' => "Create Comment",
-			'content' => $this->getCommentForm($values)
-		]);
+        $this->renderDefaultPage("Create Comment", $this->getCommentForm($values));
 	}
 	
 	/*
@@ -802,8 +794,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 			
 			$result = true;
 			// Use the questionid to create a redirect link back to the question.
-			$url = $this->url->create("Forum/id/" . $form->Value('questionid'));
-			$this->response->redirect($url);
+            $this->createRedirect("Forum/id/" . $form->Value('questionid'));
 		}
 		
         return $result;
@@ -894,8 +885,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 			]);
 			
 			$result = true;
-			$url = $this->url->create("Forum/id/" . $form->Value('questionid'));
-			$this->response->redirect($url);
+            $this->createRedirect("Forum/id/" . $form->Value('questionid'));
 		}
 		
         return $result;
@@ -968,8 +958,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 			]);
 			
 			$result = true;
-			$url = $this->url->create('Questions');
-			$this->response->redirect($url);
+            $this->createRedirect('Questions');
 		}
 		
         return $result;
@@ -1036,7 +1025,6 @@ class ForumController implements \Anax\DI\IInjectionAware
 		}
 		else
 		{
-			
 			$bit = array(
 				'y' => $secs / 31556926 % 12,
 				'd' => $secs / 86400 % 7,

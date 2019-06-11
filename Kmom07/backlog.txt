@@ -4,3 +4,15 @@ Make sure users can only update the score of a question once.
 Fix the design of the number in the score of the question. It looks unaligned.
 Allow users to delete their own questions.
 Display added tags below a posted question.
+Fix the design when displaying a user profile. The lightblue box should be aligned to the left.
+Potentially split up answer, question and comment management into a three new objects to reduce
+the size of ForumController.
+Replace the cleaning of paramters inside ForumController with Escaper cleaning instead, as that is
+much more thorough.
+Update the github readme file to include admin username and password so that users can log in.
+Remove all each() function errors. The function is deprecated.
+
+
+-------- Completed --------
+Removed: 'id' 	=> $id, from ForumController.upvote(). This line could create a bug where the
+question, answer or comment changes ownership. Especially if the id is changed inside the URL.
