@@ -544,17 +544,17 @@ class ForumController implements \Anax\DI\IInjectionAware
                 // Clean parameters.
                 $id = htmlentities($rowid);
                 
-                if($table === 'Q')
+                switch ($table) 
                 {
-                    $this->upvote($this->questions, $id);
-                }
-                else if($table === 'A')
-                {
-                    $this->upvote($this->answers, $id);
-                }
-                else if($table === 'C')
-                {
-                    $this->upvote($this->comments, $id);
+                    case 'Q':
+                        $this->upvote($this->questions, $id);
+                        break;
+                    case 'A':
+                        $this->upvote($this->answers, $id);
+                        break;
+                    case 'C':
+                        $this->upvote($this->comments, $id);
+                        break;
                 }
                 
                 $this->createRedirect("Forum/id/" . $this->questions->getQuestion());
