@@ -74,8 +74,9 @@ class ForumController implements \Anax\DI\IInjectionAware
 		$this->views->add('default/page', [
             'title' => $title,
 			'content' => $content
-		]);
+        ]);
     }
+
 	
 	public function userStatusAction()
 	{
@@ -266,7 +267,6 @@ class ForumController implements \Anax\DI\IInjectionAware
 		// Get the recently posted questions.
 		$this->questions->query()->orderBy('timestamp DESC LIMIT 6');
 		$questions = $this->questions->execute();
-		//var_dump($questions);
 		
 		if(!empty($questions))
 		{
