@@ -46,8 +46,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 			'menu'			=> 'Forum/menu/',
 			'addQuestion' 	=> 'Forum/addQuestion/',
 			'addAnswer'	  	=> 'Forum/addAnswer/',
-			'addQComment' 	=> 'Forum/addQComment/',
-			'addAComment' 	=> 'Forum/addAComment/',
+            'addComment' 	=> 'Forum/addComment/',
 			'rateQuestion'	=> 'Forum/vote/Q/',
 			'rateAnswer'	=> 'Forum/vote/A/',
 			'rateComment'	=> 'Forum/vote/C/',
@@ -639,43 +638,19 @@ class ForumController implements \Anax\DI\IInjectionAware
 	}
     
     /**
-	* Function that adds a new question comment to the database.
+	* Function that adds a new answer comment to the database.
 	*
 	* @param int, the ID of the question in the database.
     * @param int, the ID of the question or answer the comment belongs to.
     * @param string, a string indicating what the comments parent is.
 	*/
-    private function createQACValues($questionid, $qaid, $table)
-    {
-        return [
+	public function addCommentAction($questionid, $qaid, $parent)
+	{
+		$values = [
 		'questionid'	=>	$questionid,
 		'qaid'			=>	$qaid,
-		'commentparent' =>  $table
+		'commentparent' =>  $parent
 		];
-    }
-	
-	/**
-	* Function that adds a new question comment to the database.
-	*
-	* @param int, the ID of the question in the database.
-    * @param int, the ID of the question or answer the comment belongs to.
-	*/
-	public function addQCommentAction($questionid, $qaid)
-	{
-        $values = $this->createQACValues($questionid, $qaid, 'Q');
-		// Render form.
-        $this->renderDefaultPage("Create Comment", $this->getCommentForm($values));
-	}	
-	
-	/**
-	* Function that adds a new answer comment to the database.
-	*
-	* @param int, the ID of the question in the database.
-    * @param int, the ID of the question or answer the comment belongs to.
-	*/
-	public function addACommentAction($questionid, $qaid)
-	{
-		$values = $this->createQACValues($questionid, $qaid, 'A');
 		// Render form.
         $this->renderDefaultPage("Create Comment", $this->getCommentForm($values));
 	}
