@@ -75,7 +75,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     }
     
     /**
-	* Utility function to create a URL and redirect the user to it.
+	* Creates a URL and redirects the user to it.
 	*
 	* @param, string, the final part of the adress.
 	*/
@@ -87,6 +87,10 @@ class ForumController implements \Anax\DI\IInjectionAware
         $this->response->redirect($url);
     }
 	
+    /**
+    * Displays the currently logged in user and links to its profile.
+    *
+    */
 	public function userStatusAction()
 	{
 		$userlink = "You are currently not logged in. <a href='" . $this->url->create("Users/Login") . "'>Login</a>";
@@ -194,6 +198,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 	/**
 	* Function that displays one question and all answers and comments that belong to it.
 	*
+    * @param int, the id of the question to display.
+    * @param string, the column to sort after.
 	*/
 	public function idAction($id, $sort=null)
 	{
@@ -269,7 +275,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	}
 	
 	/**
-	*
+	* Display the homepage.
 	*/
 	public function homeAction()
 	{
@@ -305,6 +311,11 @@ class ForumController implements \Anax\DI\IInjectionAware
 	}
 	
 //---------------- Score ----------------
+    /**
+	* Calculate the overall score of a user.
+    *
+    * @param int, the id of the user to calculate score for.
+	*/
 	public function scoreAction($id)
 	{
 		//Get id from current user.
@@ -376,8 +387,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 	}
 
 //---------------- Tags ----------------
-	/*
-	*	Sorting Menu of all the available tags.
+	/**
+	* Sorting Menu of all the available tags.
 	*/
 	public function tagMenuAction()
 	{
@@ -391,9 +402,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 		]);
 	}
 	
-	/*
-	* Menu that displays all existing tags that we can add to a question.
-	* Also displays a button for creating a new tag.
+	/**
+	* Displays all existing question tags and a 'create tag' button.
 	*/
 	public function tagAction()
 	{
@@ -413,8 +423,10 @@ class ForumController implements \Anax\DI\IInjectionAware
 		]);
 	}
 	
-	/*
-	* 	Method for creating a new tag and adding it to the question.
+	/**
+	* Method for creating a new tag and adding it to the question.
+    *
+    * @param string, name of the tag to add.
 	*/
 	public function tagCreateAction($tag=null)
 	{
@@ -428,9 +440,10 @@ class ForumController implements \Anax\DI\IInjectionAware
         $this->renderDefaultPage("Create Tag", $this->getTagForm($values));
 	}
 	
-	/*
-	* Get a form for creating a tag
+	/**
+	* Create a form for creating a tag.
 	*
+    * @param array, contains the name of the tag to create.
 	* @return the HTML code of the form.
 	*/
 	public function getTagForm($values)
@@ -469,9 +482,10 @@ class ForumController implements \Anax\DI\IInjectionAware
 	}
 	
 	/**
-     * Callback for createTag success.
-     *
-     */
+    * Callback for createTag success.
+    *
+    * @param object, CForm object containing user inut from the create tag form.
+    */
 	public function callbackCreateTag($form)
     {		
 		$result = false;
@@ -573,6 +587,11 @@ class ForumController implements \Anax\DI\IInjectionAware
 	
 	
 // ---------------- Accept answer ---------------
+    /**
+    * Accepts an answer to a question as THE answer.
+    *
+    * @param int, id of the answer to be accepted.
+    */
 	public function acceptedAction($id)
 	{
 		$answerid = htmlentities($id);
@@ -601,7 +620,6 @@ class ForumController implements \Anax\DI\IInjectionAware
 //---------------- Questions, answers and comments actions ----------------
 	/**
 	* Function that adds a new question to the database.
-	*
 	*/
 	public function addQuestionAction()
 	{
@@ -665,6 +683,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 	/*
 	* Get a form for creating a answer.
 	*
+    * @param array, containing the question ID. 
+    *
 	* @return the HTML code of the form.
 	*/
 	public function getAnswerForm($values)
@@ -710,9 +730,10 @@ class ForumController implements \Anax\DI\IInjectionAware
 	}
 	
 	/**
-     * Callback for createAnswer success.
-     *
-     */
+    * Callback for createAnswer success.
+    *
+    * @param object, CForm object containing user input from the answer form.
+    */
 	public function callbackCreateAnswer($form)
     {		
 		$result = false;
@@ -750,8 +771,10 @@ class ForumController implements \Anax\DI\IInjectionAware
     }
 	
 	/*
-	* Get a form for creating a question
+	* Get a form for creating a question.
 	*
+    * @param array, containing data for the db.
+    *
 	* @return the HTML code of the form.
 	*/
 	public function getCommentForm($values)
@@ -809,9 +832,10 @@ class ForumController implements \Anax\DI\IInjectionAware
 	}
 	
 	/**
-     * Callback for createComment success.
-     *
-     */
+    * Callback for createComment success.
+    *
+    * @param object, CForm containing form input from the user.
+    */
 	public function callbackCreateComment($form)
     {		
 		$result = false;
@@ -840,7 +864,7 @@ class ForumController implements \Anax\DI\IInjectionAware
         return $result;
     }
 	
-	/*
+	/**
 	* Get a form for creating a question
 	*
 	* @return the HTML code of the form.
@@ -882,9 +906,10 @@ class ForumController implements \Anax\DI\IInjectionAware
 	}
 	
 	/**
-     * Callback for createQuestion success.
-     *
-     */
+    * Callback for createQuestion success.
+    *
+    * @param object, CForm containing form input from the user.
+    */
 	public function callbackCreateQuestion($form)
     {		
 		$result = false;
@@ -914,9 +939,12 @@ class ForumController implements \Anax\DI\IInjectionAware
     }
 	
 	/**
-     * Callback for submit-button.
-     *
-     */
+    * Callback for submit-button.
+    *
+    * @param object, CForm containing form input from the user.
+    *
+    * @return bool.
+    */
     public function callbackSuccess($form)
     {
         $form->AddOutput("<p><i>Posted.</i></p>");
@@ -924,9 +952,12 @@ class ForumController implements \Anax\DI\IInjectionAware
     }
 
     /**
-     * Callback for submit-button.
-     *
-     */
+    * Callback for submit-button.
+    *
+    * @param object, CForm containing form input from the user.
+    *
+    * @return bool.
+    */
     public function callbackFail($form)
     {
         $form->AddOutput("<p><i>DoSubmitFail(): Form was submitted but it failed to process/save/validate it</i></p>");
@@ -936,9 +967,12 @@ class ForumController implements \Anax\DI\IInjectionAware
 	
 	
 //---------------- Time functions ----------------
-	/*
+	/**
 	* Function to format the timestamp of question, answer and comments.
 	*
+    * @param array, array of timestamps to be converted.
+    *
+    * @return array, array of human readable timestamps.
 	*/
 	public function formatTimestamp($arr)
 	{
@@ -960,8 +994,9 @@ class ForumController implements \Anax\DI\IInjectionAware
 	/**
 	* Format a unix timestamp to display its age (5 days ago, 1 day ago, just now etc.).
 	*
-	* @param   int     $timestamp,  unix timestamp
-	* @return  string
+	* @param int, unix timestamp.
+    *
+	* @return string, a unix timestamp in human readable format.
 	*/
 	public function time_elapsed($timestamp)
 	{
