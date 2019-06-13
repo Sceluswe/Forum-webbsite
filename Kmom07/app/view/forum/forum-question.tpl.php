@@ -52,7 +52,7 @@
 		<tr> 
 			<td></td>
 			<td class="question-comment">
-				<a href="<?=$this->url->create("{$redirect['addQComment']}{$question->id}/{$question->id}")?>" class='nodecoration'>
+				<a href="<?=$this->url->create("{$redirect['addComment']}{$question->id}/{$question->id}/Q")?>" class='nodecoration'>
 				<h4 class="question-comment-header">Post a comment</h4>
 				</a>
 			</td>
@@ -125,7 +125,7 @@
 		<tr> <!-- Post Comment -->
 			<td></td>
 			<td class="question-comment">
-				<a href="<?=$this->url->create("{$redirect['addAComment']}{$question->id}/{$answer->id}")?>" class='nodecoration'>
+				<a href="<?=$this->url->create("{$redirect['addComment']}{$question->id}/{$answer->id}/A")?>" class='nodecoration'>
 				<h4 class="question-comment-header">Post a comment</h4>
 				</a>
 			</td>
