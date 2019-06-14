@@ -88,7 +88,6 @@ class ForumController implements \Anax\DI\IInjectionAware
 	
     /**
     * Displays the currently logged in user and links to its profile.
-    *
     */
 	public function userStatusAction()
 	{
@@ -195,7 +194,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	}
 	
 	/**
-	* Function that displays one question and all answers and comments that belong to it.
+	* Displays one question and all answers and comments that belong to it.
 	*
     * @param int, the id of the question to display.
     * @param string, the column to sort after.
@@ -218,28 +217,22 @@ class ForumController implements \Anax\DI\IInjectionAware
 			// Check if comments do exist otherwise set it to an empty array.
 			$questionComments = !empty($questionComments)
 				? $this->formatTimestamp($questionComments) : array();
-			
-			if(!empty($sort))
-			{
-				if($sort === 'timestamp')
-				{
-					$this->answers->query()->where('questionid= ?')->orderBy('timestamp DESC');
-				}
-				else if($sort === 'rating')
-				{
-					$this->answers->query()->where('questionid= ?')->orderBy('rating DESC');
-				}
-				
-				$answers = $this->answers->execute([$id]);
-			}
-			else
-			{
-				// If question is not empty, get the answers to that question.
-				$answers = $this->answers->findByColumn('questionid', $id);
-			}
+                
+            switch ($sort)
+            {
+                case 'timestamp':
+                    $this->answers->query()->where('questionid= ?')->orderBy('timestamp DESC');
+                    $answers = $this->answers->execute([$id]);
+                    break;
+                case 'rating':
+                    $this->answers->query()->where('questionid= ?')->orderBy('rating DESC');
+                    $answers = $this->answers->execute([$id]);
+                    break;
+                default:
+                    $answers = $this->answers->findByColumn('questionid', $id);
+            }
 
-			$answers = !empty($answers)
-				? $this->formatTimestamp($answers) : array();
+			$answers = !empty($answers) ? $this->formatTimestamp($answers) : array();
 			
 			// Initialize answerComments array with an empty array, in case there are no comments.
 			$answerComments = array();
