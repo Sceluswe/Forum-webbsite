@@ -88,7 +88,6 @@ class ForumController implements \Anax\DI\IInjectionAware
 	
     /**
     * Displays the currently logged in user and links to its profile.
-    *
     */
 	public function userStatusAction()
 	{
@@ -195,7 +194,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	}
 	
 	/**
-	* Function that displays one question and all answers and comments that belong to it.
+	* Displays one question and all answers and comments that belong to it.
 	*
     * @param int, the id of the question to display.
     * @param string, the column to sort after.
@@ -209,52 +208,45 @@ class ForumController implements \Anax\DI\IInjectionAware
 		$this->questions->setQuestion($question->id);
 		
 		// Check if the question did indeed exist.
-		if(!empty($question))
+		if($question)
 		{	
 			$question = $this->formatTimestamp($question);
 			// If question is not empty, get the comments to that question.
-			$questionComments = $this->comments->findQuestioncomments($id);
+			$questionComments = $this->comments->findQuestionComments($id);
 
-			// Check if comments do exist otherwise set it to an empty array.
-			$questionComments = !empty($questionComments)
-				? $this->formatTimestamp($questionComments) : array();
-			
-			if(!empty($sort))
-			{
-				if($sort === 'timestamp')
-				{
-					$this->answers->query()->where('questionid= ?')->orderBy('timestamp DESC');
-				}
-				else if($sort === 'rating')
-				{
-					$this->answers->query()->where('questionid= ?')->orderBy('rating DESC');
-				}
-				
-				$answers = $this->answers->execute([$id]);
-			}
-			else
-			{
-				// If question is not empty, get the answers to that question.
-				$answers = $this->answers->findByColumn('questionid', $id);
-			}
+			// Check if the question has any comments.
+			$questionComments = $questionComments ? $this->formatTimestamp($questionComments) : array();
+                
+            switch ($sort)
+            {
+                case 'timestamp':
+                    $this->answers->query()->where('questionid= ?')->orderBy('timestamp DESC');
+                    $answers = $this->answers->execute([$id]);
+                    break;
+                case 'rating':
+                    $this->answers->query()->where('questionid= ?')->orderBy('rating DESC');
+                    $answers = $this->answers->execute([$id]);
+                    break;
+                default:
+                    $answers = $this->answers->findByColumn('questionid', $id);
+            }
 
-			$answers = !empty($answers)
-				? $this->formatTimestamp($answers) : array();
+			$answers = !empty($answers) ? $this->formatTimestamp($answers) : array();
 			
-			// Initialize answerComments array with an empty array, in case there are no comments.
+			// Initialize answerComments an empty array, in case there are no comments.
 			$answerComments = array();
 			
 			// Make sure answer does indeed exist.
-			if(!empty($answers))
+			if($answers)
 			{	// For each answer, find the corresponding comments.
 				foreach($answers as $item)
 				{	// Get the comments to the current answer.
 					$answerComments[$item->id] = $this->comments->findAnswerComments($item->id);
 				}
 				// Format timestamp of answerComments.
-				foreach($answerComments as $comments)
+				foreach($answerComments as $comment)
 				{
-					$comments = $this->formatTimestamp($comments);
+					$comment = $this->formatTimestamp($comment);
 				}
 			}
 			
@@ -945,7 +937,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	/**
 	* Function to format the timestamp of question, answer and comments.
 	*
-    * @param array, array of timestamps to be converted.
+    * @param array, array of objects with timestamps to be converted.
     *
     * @return array, array of human readable timestamps.
 	*/
