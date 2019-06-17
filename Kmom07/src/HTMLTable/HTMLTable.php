@@ -18,6 +18,7 @@ class HTMLTable
             if(is_array($item))
             {
                 $table .= isset($item['class']) ? "<tr class='{$item['class']}'>" : '<tr>';
+                unset($item['class']);
                 
                 if($i == 0)
                 {
@@ -39,6 +40,8 @@ class HTMLTable
                 $table .= "</tr>";
             }
         }
+        
+        $table .= "</table>";
         
         return $table;
     }
