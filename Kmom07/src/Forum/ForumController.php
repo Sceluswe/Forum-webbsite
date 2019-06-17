@@ -340,7 +340,6 @@ class ForumController implements \Anax\DI\IInjectionAware
 		$sumQ = $qrating + $nrOfQ;
 		$sumA = $arating + $nrOfA;
 		$total = $sumQ + $sumA + $nrOfC;
-		
         $table = $this->table->createTable([
             'class' => 'width45',
             ['', 'Amount', 'Rating', 'Sum', 'class' => 'menu-table-header'],
