@@ -33,6 +33,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 		
 		$this->tags = new \Anax\Forum\Tag();
 		$this->tags->setDI($this->di);
+        
+        $this->table = new \Anax\HTMLTable\HTMLTable();
 	}
 	
 	/**
@@ -338,34 +340,15 @@ class ForumController implements \Anax\DI\IInjectionAware
 		$sumQ = $qrating + $nrOfQ;
 		$sumA = $arating + $nrOfA;
 		$total = $sumQ + $sumA + $nrOfC;
-		$table = "
-		<table class='width45'>
-			<tr class='menu-table-header'>
-				<th></th>
-				<th>Amount</th>
-				<th>Rating</th>
-				<th>Sum</th>
-			</tr>
-		<tr>
-			<td><b>Q</b></td>
-			<td>{$nrOfQ}</td>
-			<td>{$qrating}</td>
-			<td>{$sumQ}</td>
-		</tr>
-		<tr>
-			<td><b>A</b></td>
-			<td>{$nrOfA}</td>
-			<td>{$arating}</td>
-			<td>{$sumA}</td>
-		</tr>
-		<tr>
-			<td><b>C</b></td>
-			<td>{$nrOfC}</td>
-			<td>-</td>
-			<td>{$nrOfC}</td>
-		</tr></table>
-		<br><br><br><br><br>
-		<p><b>User rating:</b> {$total}</p>";
+		
+        $table = $this->table->createTable([
+            'class' => 'width45',
+            ['', 'Amount', 'Rating', 'Sum', 'class' => 'menu-table-header'],
+            ['Q', $nrOfQ, $qrating, $sumQ],
+            ['A', $nrOfA, $arating, $sumA],
+            ['C', $nrOfC, '-', $nrOfC]
+        ]);
+        $table .= "<br><br><br><br><br><p><b>User rating:</b> {$total}</p>";
 		
 		// Update the users score.
 		$this->users->id = $id;
