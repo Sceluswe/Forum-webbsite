@@ -215,8 +215,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 			$questionComments = $this->comments->findQuestionComments($id);
 
 			// Check if the question has any comments.
-			$questionComments = $questionComments ? $this->formatTimestamp($questionComments) : array();
-                
+			$questionComments = ($questionComments) ? $this->formatTimestamp($questionComments) : array();
+            
             switch ($sort)
             {
                 case 'timestamp':
