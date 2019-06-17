@@ -2,12 +2,17 @@
 namespace Anax\HTMLTable;
 
 /**
- * Model for Users.
- * 
- * Contains interactions with the database.
+ * Model for creating tables.
  */
 class HTMLTable
 {
+    /**
+    * Creates tables and returns it in a string.
+    *
+    * @param array, an array of arrays, first index is the table header.
+    *
+    * @return string, string with the table in HTML format.
+    */
     public function createTable($data)
     {
         $table =  isset($data['class']) ? "<table class='{$data['class']}'>" : '<table>';
