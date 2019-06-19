@@ -10,7 +10,6 @@ class ForumController implements \Anax\DI\IInjectionAware
 	use \Anax\DI\TInjectable,
 		\Anax\MVC\TRedirectHelpers;
 		
-		
 	/**
 	* Initialize the controller.
 	*
@@ -469,7 +468,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		// Check if question exists.
 		$questionCheck = $this->questions->find($id);
 		
-		if(!empty($questionCheck))
+		if(isset($questionCheck))
 		{	// If question exists, check if tag already exists for that question.
 			$this->tags->query()->where('questionid = ?')->andWhere('tag = ?');
 			$checkTag = $this->tags->execute([$id, $tag]);
