@@ -485,7 +485,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 				'class' 	 => 'cform-submit',
 				'callback'  => [$this, 'logoutSubmit'],
 				'value'		=> 'Logout'
-			],
+			]
 		]);
 		
 		// Check the status of the form.
