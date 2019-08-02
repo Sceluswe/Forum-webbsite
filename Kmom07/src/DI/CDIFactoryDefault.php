@@ -154,6 +154,12 @@ class CDIFactoryDefault extends CDI
 			$escaper = new \Mos\HTMLForm\CForm();
 			return $escaper;
 		});
+        
+        $this->setShared('utility', function () {
+            $utility = new \Anax\Utility\CUtility();
+            $utility->setDI($this);
+            return $utility;
+        });
 		
 		$this->setShared('db', function() {
 			$db = new \Mos\Database\CDatabaseBasic();

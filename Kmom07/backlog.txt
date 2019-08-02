@@ -1,5 +1,3 @@
-backlog
-
 Make sure users can only update the score of a question once.
     1. Create a new column in question, answer and comment tables.
     2. Make sure it contains a string where each ID is split with a comma.
@@ -10,24 +8,27 @@ Make sure users can only update the score of a question once.
     Just to elaborate: explode turns the string into an array, splitting it at each ',' in this case. 
     Then, in_array checks if the string '13' is in the resulting array somewhere.
 
-Check if you can use the HTMLTable class to create the questions table.
-Clean the $tag parameter with escaper in the ForumController.tagCreateAction($tag=null) function.
-Look over why ForumController.getTagForm($values) takes an array.
-Fix the design of the number in the score of the question. It looks unaligned.
-Allow users to delete their own questions.
-Display added tags below a posted question.
-Fix the design when displaying a user profile. The lightblue box should be aligned to the left.
-Potentially split up answer, question and comment management into a three new objects to reduce
-the size of ForumController.
-Replace the cleaning of paramters inside ForumController with Escaper cleaning instead, as that is
-much more thorough.
-Update the github readme file to include admin username and password so that users can log in.
-Remove all each() function errors. The function is deprecated.
-Make sure you clean the variable $number in ForumController.voteAction().
+Design: Fix the design of the number in the score of the question. It looks unaligned.
+Design: Display added tags below a posted question.
+Design: Fix the design when displaying a user profile. The lightblue box should be aligned to the left.
+
+ForumController: Look over why ForumController.getTagForm($values) takes an array.
+ForumController.tagCreateAction($tag=null): Clean the $tag parameter with escaper.
+ForumController.voteAction() clean the variable $number.
+ForumController: Replace the cleaning of paramters with Escaper cleaning instead
+ForumController: Potentially reduce size by splitting up answer, question and comment management into three new objects
+
+ForumController & UserController: either add a class or find a way to move the renderDefaultPage() out
+of ForumController so that both UserController and ForumController can use it.
 
 
+User: Allow users to delete their own questions.
+
+Fix: Remove all each() function errors. The function is deprecated.
 
 -------- Completed --------
+Update the github readme file to include admin username and password so that users can log in.
+Check if you can use the HTMLTable class to create the questions table: no
 Create a class that creates tables easily.
 Find out why the comments aren't displaying properly.
 Replace if-statement at 223-240 in ForumController with a switch.
