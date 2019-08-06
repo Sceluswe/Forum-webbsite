@@ -39,16 +39,11 @@ class UsersController implements \Anax\DI\IInjectionAware
 		if(!$this->users->isUserLoggedIn())
 		{
 			// Render form.
-			$this->theme->setTitle("Login");
-			$this->views->add('default/page', [
-				'title' => "Login",
-				'content' => $this->getLoginForm(),
-			]);
+            $this->utility->renderDefaultPage("Login", $this->getLoginForm());
 		}
 		else
 		{
-			$url = $this->url->create('Users/Logout');
-			$this->response->redirect($url);
+            $this->utility->createRedirect('Users/Logout');
 		}
 	}
 	
@@ -211,11 +206,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 		$this->users->created = gmdate('Y-m-d H:i:s');
 		
 		// Render form.
-		$this->theme->setTitle("Create User");
-		$this->views->add('default/page', [
-			'title' => "Create a user",
-			'content' => $this->getUserForm()
-		]);
+        $this->uility->renderDefaultPage("Create User", $this->getUserForm());
 	}
 	
 	public function restoreAction($id = null)
@@ -233,9 +224,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 		$user->active = $now;
 		$user->save();
 		
-		//Create a url to the updated object.
-		$url = $this->url->create('Users/id/' . $id);
-		$this->response->redirect($url);
+		//Create a url and redirect to the updated object.
+        $this->uility->createRedirect('Users/id/' . $id);
 	}
 	
 	public function updateAction($id = null)
@@ -259,11 +249,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 		];
 		
 		// Render form.
-		$this->theme->setTitle("Update User");
-		$this->views->add('default/page', [
-			'title' => "Update a user",
-			'content' => $this->getUserForm($values)
-		]);
+        $this->uility->renderDefaultPage("Update User", $this->getUserForm($values));
 	}
 	
 	/**
@@ -282,8 +268,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 		
 		$res = $this->users->delete($id);
 		
-		$url = $this->url->create('Users/list');
-		$this->response->redirect($url);
+        
 	}
 	
 	/*
@@ -307,9 +292,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 		$user->deleted = $now;
 		$user->save();
 		
-		//Create a url to the updated object.
-		$url = $this->url->create('Users/id/' . $id);
-		$this->response->redirect($url);
+		//Create a url and redirect to the updated object.
+        $this->utility->createRedirect('Users/id/' . $id);
 	}
 	
 	/**
@@ -439,8 +423,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 				$success = true;
 			}
 			
-			$url = $this->url->create('Users/id/' . $this->users->id);
-			$this->response->redirect($url);
+            $this->uility->createRedirect('Users/id/' . $this->users->id);
 		}
 
         return $success;
@@ -508,8 +491,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 			$this->users->logoutUser();
 			$success = true;
 			
-			$url = $this->url->create('Users/Login');
-			$this->response->redirect($url);
+            $this->utility->createRedirect('Users/Login');
 		}
 
         return $success;
@@ -610,8 +592,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 				'active' 	=> $now,
 			]);
 
-		$url = $this->url->create('Users/id/' . $this->users->id);
-		$this->response->redirect($url);
+        $this->uility->createRedirect('Users/id/' . $this->users->id);
 		
         return true;
     }
