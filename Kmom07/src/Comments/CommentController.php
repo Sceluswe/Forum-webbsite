@@ -21,19 +21,20 @@ class CommentController implements \Anax\DI\IInjectionAware
 		$this->comments = $obj;
 		$this->comments->setDI($this->di);
 	}
+    
 	/**
-	* Return redirects.
+	* Create redirects and return them.
 	* 
 	* @return array containing redirects.
 	*/
 	public function redirects()
 	{
 		return $values = [
-		'Comment/removeAll', 
-		'Comment/setup', 
-		'Comment/update/', 
-		'Comment/delete/',
-		'Comment/add'
+            'Comment/removeAll', 
+            'Comment/setup', 
+            'Comment/update/', 
+            'Comment/delete/',
+            'Comment/add'
 		];
 	}
 	
@@ -67,8 +68,7 @@ class CommentController implements \Anax\DI\IInjectionAware
 		
 		$this->comments->setRedirect($this->request->getRoute());
 		
-        $this->views->add('comment/comments-list-all', 
-		[
+        $this->views->add('comment/comments-list-all', [
             'comments' 	=> $all,
 			'title' => "All Comments",
 			'redirect'	=> $this->redirects(),
@@ -76,18 +76,14 @@ class CommentController implements \Anax\DI\IInjectionAware
     }
 	
 	/**
-     * Add a comment.
-     *
-     * @return void
-     */
+    * Add a comment.
+    *
+    * @return void
+    */
     public function addAction()
     {	
 		// Render form.
-		$this->theme->setTitle("Create Comment");
-		$this->views->add('default/page', [
-			'title' => "Create a Comment",
-			'content' => $this->getUserForm()
-		]);
+        $this->utility->renderDefaultPage("Create a Comment", $this->getUserForm());
     }
 	
 	public function updateAction($id = null)
@@ -109,11 +105,7 @@ class CommentController implements \Anax\DI\IInjectionAware
 		];
 		
 		// Render form.
-		$this->theme->setTitle("Edit Comment");
-		$this->views->add('default/page', [
-			'title' => "Edit a comment",
-			'content' => $this->getUserForm($values)
-		]);
+        $this->utility->renderDefaultPage("Edit Comment", $this->getUserForm($values));
 	}
 	
 	/**
@@ -130,8 +122,7 @@ class CommentController implements \Anax\DI\IInjectionAware
 		
 		$res = $this->comments->delete($id);
 		
-		$url = $this->url->create($this->comments->getRedirect());
-		$this->response->redirect($url);
+        $this->utility->createRedirect($this->comments->getRedirect());
     }
 	/**
      * Remove all comments.
@@ -142,8 +133,7 @@ class CommentController implements \Anax\DI\IInjectionAware
     {
         $this->comments->createCommentTable();
 		
-		$url = $this->url->create($this->comments->getRedirect());
-		$this->response->redirect($url);
+        $this->utility->createRedirect($this->comments->getRedirect());
     }
 	
 	private function getUserForm($values = null)
@@ -212,8 +202,7 @@ class CommentController implements \Anax\DI\IInjectionAware
 				'ip'		=> $this->request->getServer('REMOTE_ADDR')
 			]);
 
-		$url = $this->url->create($this->comments->getRedirect());
-		$this->response->redirect($url);
+        $this->utility->createRedirect($this->comments->getRedirect());
 		
         return true;
     }
