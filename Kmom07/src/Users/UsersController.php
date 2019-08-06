@@ -30,9 +30,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 	
 	/**
 	* Function that logs in a user and stores the currently logged in user in session.
-	*
-	* @param id of the user to be logged in. 
-	*
+    * 
+	* @return void
 	*/
 	public function loginAction()
 	{	
@@ -48,10 +47,9 @@ class UsersController implements \Anax\DI\IInjectionAware
 	}
 	
 	/**
-	* Function that logs in a user and stores the currently logged in user in session.
-	*
-	* @param id of the user to be logged in. 
-	*
+	* Function presents a logout form to the user.
+    * 
+	* @return void
 	*/
 	public function logoutAction()
 	{	
@@ -67,7 +65,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 	}
 	
 	/**
-	* Add an options menu as view.
+	* Create an options menun view.
 	* 
 	* @return void
 	*/
@@ -190,13 +188,10 @@ class UsersController implements \Anax\DI\IInjectionAware
 	}
 	 
 	/**
-	 * Cheat function to add a new user in a simplified way.
-	 * Add new user.
-	 *
-	 * @param string $acronym of user to add.
-	 *
-	 * @return void
-	 */
+    * Cheat function to add a new user in a simplified way.
+    *
+    * @return void
+    */
 	public function addAction()
 	{
 		$this->initialize();
@@ -208,7 +203,14 @@ class UsersController implements \Anax\DI\IInjectionAware
 		// Render form.
         $this->uility->renderDefaultPage("Create User", $this->getUserForm());
 	}
-	
+    
+	/**
+    * Restores a soft-deleted user to active.
+    *
+    * @id int, id of the user to restore.
+    *
+    * @return void
+    */
 	public function restoreAction($id = null)
 	{
 		if(!isset($id))
@@ -228,6 +230,13 @@ class UsersController implements \Anax\DI\IInjectionAware
         $this->uility->createRedirect('Users/id/' . $id);
 	}
 	
+    /**
+    * Update the information of a user.
+    *
+    * @id int, id of the user to update.
+    *
+    * @return void
+    */
 	public function updateAction($id = null)
 	{
 		if(!isset($id))
@@ -255,9 +264,9 @@ class UsersController implements \Anax\DI\IInjectionAware
 	/**
 	* Delete user.
 	*
-	* $param integer $id of user to delete.
+	* $param int $id of the user to delete.
 	*
-	* @return void
+	* @return void.
 	*/
 	public function deleteAction($id = null)
 	{
@@ -274,7 +283,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 	/*
 	* Soft delete User.
 	*
-	* @param integer, id for the User to delete.
+	* @param integer, id of the user to soft-delete.
 	*
 	* @return void.
 	*/
@@ -354,8 +363,6 @@ class UsersController implements \Anax\DI\IInjectionAware
 	/*
 	* Get a form for logging in a user.
 	*
-	* @param optional, values to be put into the textfields.
-	*
 	* @return the HTML code of the form.
 	*/
 	private function getLoginForm()
@@ -392,9 +399,10 @@ class UsersController implements \Anax\DI\IInjectionAware
 	}
 	
 	/**
-     * Callback for login-button success.
-     *
-     */
+    * Callback for login-button success.
+    *
+    * @return boolean.
+    */
 	public function loginSubmit($form)
     {		
 		$success = false;
@@ -430,9 +438,12 @@ class UsersController implements \Anax\DI\IInjectionAware
     }
 	
 	/**
-     * Callback for submit-button.
-     *
-     */
+    * Callback for submit-button.
+    *
+    * @param CForm object, the form used.
+    *
+    * @return boolean.
+    */
     public function loginSuccess($form)
     {
         $form->AddOutput("<p><i>You've been logged in.</i></p>");
@@ -440,19 +451,20 @@ class UsersController implements \Anax\DI\IInjectionAware
     }
 
     /**
-     * Callback for submit-button.
-     *
-     */
+    * Callback for submit-button.
+    *
+    * @param CForm object, the form used.
+    *
+    * @return boolean.
+    */
     public function loginFail($form)
     {
         $form->AddOutput("<p><i>Invalid login information.</i></p>");
         return false;
     }
 	
-	/*
+	/**
 	* Get a form for logging out a user.
-	*
-	* @param optional, values to be put into the textfields.
 	*
 	* @return the HTML code of the form.
 	*/
@@ -478,9 +490,12 @@ class UsersController implements \Anax\DI\IInjectionAware
 	}
 	
 	/**
-     * Callback for login-button success.
-     *
-     */
+    * Callback for login-button success.
+    *
+    * @param CForm object, the form used.
+    *
+    * @return boolean.
+    */
 	public function logoutSubmit($form)
     {		
 		$success = false;
@@ -497,10 +512,13 @@ class UsersController implements \Anax\DI\IInjectionAware
         return $success;
     }
 	
-	 /**
-     * Callback for submit-button.
-     *
-     */
+	/**
+    * Callback for submit-button.
+    *
+    * @param CForm object, the form used.
+    *
+    * @return boolean.
+    */
     public function logoutSuccess($form)
     {
         $form->AddOutput("<p><i>You've been logged out.</i></p>");
@@ -508,16 +526,19 @@ class UsersController implements \Anax\DI\IInjectionAware
     }
 
     /**
-     * Callback for submit-button.
-     *
-     */
+    * Callback for submit-button.
+    *
+    * @param CForm object, the form used.
+    *
+    * @return boolean.
+    */
     public function logoutFail($form)
     {
         $form->AddOutput("<p><i>You're not logged in.</i></p>");
         return false;
     }
 
-	/*
+	/**
 	* Get a form for creating and updating a user.
 	*
 	* @param optional, values to be put into the textfields.
@@ -574,9 +595,12 @@ class UsersController implements \Anax\DI\IInjectionAware
 	}
 	
 	/**
-     * Callback for submit-button success.
-     *
-     */
+    * Callback for submit-button success.
+    *
+    * @param CForm object, the form used.
+    *
+    * @return boolean.
+    */
 	public function callbackSubmit($form)
     {			
 		// Save form.
@@ -597,10 +621,13 @@ class UsersController implements \Anax\DI\IInjectionAware
         return true;
     }
 	
-	 /**
-     * Callback for submit-button.
-     *
-     */
+    /**
+    * Callback for submit-button.
+    *
+    * @param CForm object, the form used.
+    *
+    * @return boolean.
+    */
     public function callbackSuccess($form)
     {
         $form->AddOutput("<p><i>User Created.</i></p>");
@@ -608,9 +635,12 @@ class UsersController implements \Anax\DI\IInjectionAware
     }
 
     /**
-     * Callback for submit-button.
-     *
-     */
+    * Callback for submit-button.
+    *
+    * @param CForm object, the form used.
+    *
+    * @return boolean.
+    */
     public function callbackFail($form)
     {
         $form->AddOutput("<p><i>DoSubmitFail(): Form was submitted but I failed to process/save/validate it</i></p>");
