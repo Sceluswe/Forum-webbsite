@@ -2,9 +2,9 @@
 namespace Anax\Comments;
 
 /**
- * To attach comments-flow to a page or some content.
- *
- */
+* To attach comments-flow to a page or some content.
+*
+*/
 class CommentController implements \Anax\DI\IInjectionAware
 {
     use \Anax\DI\TInjectable,
@@ -37,7 +37,12 @@ class CommentController implements \Anax\DI\IInjectionAware
             'Comment/add'
 		];
 	}
-	
+    
+    /**
+	* Reset a comment section.
+	* 
+	* @return void.
+	*/
 	public function setupAction()
 	{			
 		if($this->comments->initializeTable())
@@ -56,7 +61,7 @@ class CommentController implements \Anax\DI\IInjectionAware
     /**
 	* View all comments.
 	*
-	* @return void
+	* @return void.
 	*/
     public function viewAction()
     {
@@ -78,14 +83,19 @@ class CommentController implements \Anax\DI\IInjectionAware
 	/**
     * Add a comment.
     *
-    * @return void
+    * @return void.
     */
     public function addAction()
     {	
 		// Render form.
         $this->utility->renderDefaultPage("Create a Comment", $this->getUserForm());
     }
-	
+    
+	/**
+	* Update a comment.
+	* 
+	* @return void.
+	*/
 	public function updateAction($id = null)
 	{
 		if(!isset($id))
@@ -109,10 +119,12 @@ class CommentController implements \Anax\DI\IInjectionAware
 	}
 	
 	/**
-     * Remove all comments.
-     *
-     * @return void
-     */
+    * Remove a comment.
+    *
+    * @param int, id of the comment to remove.
+    *
+    * @return void.
+    */
     public function deleteAction($id = null)
     {
 		if(!isset($id))
@@ -124,18 +136,26 @@ class CommentController implements \Anax\DI\IInjectionAware
 		
         $this->utility->createRedirect($this->comments->getRedirect());
     }
+    
 	/**
-     * Remove all comments.
-     *
-     * @return void
-     */
+    * Remove all comments.
+    *
+    * @return void.
+    */
     public function removeAllAction()
     {
         $this->comments->createCommentTable();
 		
         $this->utility->createRedirect($this->comments->getRedirect());
     }
-	
+    
+	/**
+	* Get a form for creating and updating a comment.
+	*
+	* @param optional, values to be put into the textfields.
+	*
+	* @return the HTML code of the form.
+	*/
 	private function getUserForm($values = null)
 	{
 		// Initiate object instance.
@@ -185,9 +205,12 @@ class CommentController implements \Anax\DI\IInjectionAware
 	}
 	
 	/**
-     * Callback for submit-button success.
-     *
-     */
+    * Callback for submit-button success.
+    *
+    * @param CForm object, the form to be submitted.
+    *
+    * @return boolean.
+    */
 	public function callbackSubmit($form)
     {			
 		// Save form.
@@ -206,12 +229,13 @@ class CommentController implements \Anax\DI\IInjectionAware
 		
         return true;
     }
-/**
-* Format a unix timestamp to display its age (5 days ago, 1 day ago, just now etc.).
-*
-* @param   int     $timestamp,  unix timestamp
-* @return  string
-*/
+    
+    /**
+    * Format a unix timestamp to display its age (5 days ago, 1 day ago, just now etc.).
+    *
+    * @param   int     $timestamp,  unix timestamp
+    * @return  string
+    */
 	function elapsedTime($timestamp) 
 	{
 		$elapsedTime = ""; // returnvalue
