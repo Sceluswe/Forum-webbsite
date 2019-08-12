@@ -37,4 +37,44 @@ class CUtility implements \Anax\DI\IInjectionAware
         // Redirect user to URL.
         $this->response->redirect($url);
     }
+    
+    /**
+	* Format a unix timestamp to display its age (5 days ago, 1 day ago, just now etc.).
+	*
+	* @param int, unix timestamp.
+    *
+	* @return string, a unix timestamp in human readable format.
+	*/
+	public function humanUnixTime($timestamp)
+	{
+		$elapsedtime;
+		$ret = array();
+		$secs = time() - $timestamp;
+		if($secs == 0)
+		{
+			$elapsedtime = "Just now.";
+		}
+		else
+		{
+			$bit = array(
+				'y' => $secs / 31556926 % 12,
+				'd' => $secs / 86400 % 7,
+				'h' => $secs / 3600 % 24,
+				'm' => $secs / 60 % 60,
+				's' => $secs % 60
+				);
+				
+			foreach($bit as $k => $v)
+			{
+				if($v > 0)
+				{
+					$ret[] = $v . $k;
+				}
+			}
+			
+			$elapsedtime = join(' ', $ret);
+		}
+			
+		return $elapsedtime;
+    }
 }
