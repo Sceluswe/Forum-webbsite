@@ -118,7 +118,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		
 		foreach($result as $item)
 		{	// Format timestamp
-			$item->timestamp = $this->time_elapsed($item->timestamp);
+			$item->timestamp = $this->utility->humanUnixTime($item->timestamp);
 		}
 		
 		$conditions = ['admin', $this->users->currentUser()];
@@ -156,7 +156,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		{
 			foreach($result as $item)
 			{
-				$item->timestamp = $this->time_elapsed($item->timestamp);
+				$item->timestamp = $this->utility->humanUnixTime($item->timestamp);
 			}
 			
 			$this->theme->setTitle("All Questions");
@@ -253,7 +253,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		{
 			foreach($questions as $item)
 			{
-				$item->timestamp = $this->time_elapsed($item->timestamp);
+				$item->timestamp = $this->utility->humanUnixTime($item->timestamp);
 			}
 		}
 		
@@ -902,54 +902,14 @@ class ForumController implements \Anax\DI\IInjectionAware
 		{
 			foreach($arr as $item)
 			{
-				$item->timestamp = $this->time_elapsed($item->timestamp);
+				$item->timestamp = $this->utility->humanUnixTime($item->timestamp);
 			}
 		}
 		else
 		{
-			$arr->timestamp = $this->time_elapsed($arr->timestamp);
+			$arr->timestamp = $this->utility->humanUnixTime($arr->timestamp);
 		}
 		
 		return $arr;
 	}
-	
-	/**
-	* Format a unix timestamp to display its age (5 days ago, 1 day ago, just now etc.).
-	*
-	* @param int, unix timestamp.
-    *
-	* @return string, a unix timestamp in human readable format.
-	*/
-	public function time_elapsed($timestamp)
-	{
-		$elapsedtime;
-		$ret = array();
-		$secs = time() - $timestamp;
-		if($secs == 0)
-		{
-			$elapsedtime = "Just now.";
-		}
-		else
-		{
-			$bit = array(
-				'y' => $secs / 31556926 % 12,
-				'd' => $secs / 86400 % 7,
-				'h' => $secs / 3600 % 24,
-				'm' => $secs / 60 % 60,
-				's' => $secs % 60
-				);
-				
-			foreach($bit as $k => $v)
-			{
-				if($v > 0)
-				{
-					$ret[] = $v . $k;
-				}
-			}
-			
-			$elapsedtime = join(' ', $ret);
-		}
-			
-		return $elapsedtime;
-    }
 }
