@@ -63,6 +63,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 
     /**
     * Displays the currently logged in user and links to its profile.
+    *
+    * @return void.
     */
 	public function userStatusAction()
 	{
@@ -91,6 +93,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 	* Function that displays all questions on the database or by sorted value.
 	*
 	* @param, string, sorts by the paramaterized value.
+    *
+    * @return void.
 	*/
 	public function menuAction($sort=null)
 	{
@@ -146,7 +150,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 	* Function that displays all questions posted by the user with the parameterized id.
 	*
 	* @param The database id of the user.
-	*
+    *
+    * @return void.
 	*/
 	public function userQuestionsAction($id)
 	{
@@ -173,6 +178,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*
     * @param int, the id of the question to display.
     * @param string, the column to sort after.
+    *
+    * @return void.
 	*/
 	public function idAction($id, $sort=null)
 	{
@@ -242,6 +249,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 	
 	/**
 	* Display the homepage.
+    *
+    * @return void.
 	*/
 	public function homeAction()
 	{
@@ -281,6 +290,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 	* Calculate the overall score of a user.
     *
     * @param int, the id of the user to calculate score for.
+    *
+    * @return void.
 	*/
 	public function scoreAction($id)
 	{
@@ -335,6 +346,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 //---------------- Tags ----------------
 	/**
 	* Sorting Menu of all the available tags.
+    *
+    * @return void.
 	*/
 	public function tagMenuAction()
 	{
@@ -350,6 +363,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 	
 	/**
 	* Displays all existing question tags and a 'create tag' button.
+    *
+    * @return void.
 	*/
 	public function tagAction()
 	{
@@ -373,6 +388,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 	* Method for creating a new tag and adding it to the question.
     *
     * @param string, name of the tag to add.
+    *
+    * @return void.
 	*/
 	public function tagCreateAction($tag=null)
 	{
@@ -390,6 +407,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	* Create a form for creating a tag.
 	*
     * @param array, contains the name of the tag to create.
+    *
 	* @return the HTML code of the form.
 	*/
 	public function getTagForm($values)
@@ -431,6 +449,8 @@ class ForumController implements \Anax\DI\IInjectionAware
     * Callback for createTag success.
     *
     * @param object, CForm object containing user inut from the create tag form.
+    *
+    * @return boolean, true if tag creation is successful.
     */
 	public function callbackCreateTag($form)
     {		
@@ -475,6 +495,8 @@ class ForumController implements \Anax\DI\IInjectionAware
     * @param array, the data in which the targeted dataobject exists.
     * @param int, the unique id of the row to use in the table/data.
     * @param int, a positive or negative number to add to the rating score.
+    *
+    * @return void.
     */
     private function editVote($data, $id, $number)
     {
@@ -492,6 +514,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 	* @param string, a 1 letter value to determine which table to use.
 	* @param int, the unique id of the row to use in the table.
     * @param int, a positive or negative number to add to the rating score.
+    *
+    * @return void.
 	*/
 	public function voteAction($table, $rowid, $number)
 	{
@@ -537,6 +561,8 @@ class ForumController implements \Anax\DI\IInjectionAware
     * Accepts an answer to a question as THE answer.
     *
     * @param int, id of the answer to be accepted.
+    *
+    * @return void.
     */
 	public function acceptedAction($id)
 	{
@@ -566,6 +592,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 //---------------- Questions, answers and comments actions ----------------
 	/**
 	* Function that adds a new question to the database.
+    *
+    * @return void.
 	*/
 	public function addQuestionAction()
 	{
@@ -577,6 +605,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 	* Function that adds a new answer to the database.
 	*
 	* @param, int, ID of the row in the database table.
+    *
+    * @return void.
 	*/
 	public function addAnswerAction($id)
 	{
@@ -590,6 +620,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 	* @param int, the ID of the question in the database.
     * @param int, the ID of the question or answer the comment belongs to.
     * @param string, a string indicating what the comments parent is.
+    *
+    * @return void.
 	*/
 	public function addCommentAction($questionid, $qaid, $parent)
 	{
@@ -655,6 +687,8 @@ class ForumController implements \Anax\DI\IInjectionAware
     * Callback for createAnswer success.
     *
     * @param object, CForm object containing user input from the answer form.
+    *
+    * @return boolean, true if answer was created.
     */
 	public function callbackCreateAnswer($form)
     {		
@@ -757,6 +791,8 @@ class ForumController implements \Anax\DI\IInjectionAware
     * Callback for createComment success.
     *
     * @param object, CForm containing form input from the user.
+    *
+    * @return boolean, true if comment was created.
     */
 	public function callbackCreateComment($form)
     {		
@@ -821,7 +857,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 			]
 		]);
 		
-		// Check the status of the form
+		// Check the status of the form.
 		$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
 				
 		return $form->getHTML();
@@ -831,6 +867,8 @@ class ForumController implements \Anax\DI\IInjectionAware
     * Callback for createQuestion success.
     *
     * @param object, CForm containing form input from the user.
+    *
+    * @return boolean, true if comment was created.
     */
 	public function callbackCreateQuestion($form)
     {		
