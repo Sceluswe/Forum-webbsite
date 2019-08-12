@@ -2,9 +2,9 @@
 namespace Anax\Comments;
 
 /**
- * To attach comments-flow to a page or some content.
- *
- */
+* To attach comments-flow to a page or some content.
+*
+*/
 class CommentController implements \Anax\DI\IInjectionAware
 {
     use \Anax\DI\TInjectable,
@@ -40,10 +40,9 @@ class CommentController implements \Anax\DI\IInjectionAware
 		];
 	}
     
-    
-    
-	/**
-	* Initializes table and if successful creates a view with all default comments.
+
+    /**
+	* Reset a comment section.
 	* 
 	* @return void.
 	*/
@@ -101,9 +100,11 @@ class CommentController implements \Anax\DI\IInjectionAware
 	
     
     
-    /**
-	* Update a comment with new information.
+	/**
+	* Update a comment.
 	* 
+    * @param int, the database id of the comment to update.
+    *
 	* @return void.
 	*/
 	public function updateAction($id = null)
@@ -131,7 +132,9 @@ class CommentController implements \Anax\DI\IInjectionAware
     
     
 	/**
-    * Remove all comments.
+    * Remove a comment.
+    *
+    * @param int, id of the comment to remove.
     *
     * @return void.
     */
@@ -160,14 +163,15 @@ class CommentController implements \Anax\DI\IInjectionAware
 		
         $this->utility->createRedirect($this->comments->getRedirect());
     }
+    
 	
     
-    /**
-	* Creates a form for creating a comment.
-	* 
-    * @param array, contains form values for autofilling the form.
-    *
-	* @return array containing redirects.
+	/**
+	* Get a form for creating and updating a comment.
+	*
+	* @param optional, values to be put into the textfields.
+	*
+	* @return the HTML code of the form.
 	*/
 	private function getUserForm($values = null)
 	{
@@ -222,7 +226,7 @@ class CommentController implements \Anax\DI\IInjectionAware
 	/**
     * Callback for submit-button success.
     *
-    * @param object, HTLMForm object.
+    * @param CForm object, the form to be submitted.
     *
     * @return boolean true.
     */
