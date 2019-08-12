@@ -15,6 +15,8 @@ class CUtility implements \Anax\DI\IInjectionAware
 	*
 	* @param, string, the title to display on the default page.
     * @param, string, a string containing HTML to display on the default page. 
+    *
+    * @return void.
 	*/
     public function renderDefaultPage($title, $content)
     {
@@ -29,6 +31,8 @@ class CUtility implements \Anax\DI\IInjectionAware
 	* Creates a URL and redirects the user to it.
 	*
 	* @param, string, the final part of the adress.
+    *
+    * @return void.
 	*/
     public function createRedirect($redirectAdress)
     {
