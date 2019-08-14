@@ -95,7 +95,7 @@ class CommentController implements \Anax\DI\IInjectionAware
     public function addAction()
     {	
 		// Render form.
-        $this->utility->renderDefaultPage("Create a Comment", $this->getUserForm());
+        $this->utility->renderDefaultPage("Create a Comment", $this->getCommentForm());
     }
 	
     
@@ -126,7 +126,7 @@ class CommentController implements \Anax\DI\IInjectionAware
 		];
 		
 		// Render form.
-        $this->utility->renderDefaultPage("Edit Comment", $this->getUserForm($values));
+        $this->utility->renderDefaultPage("Edit Comment", $this->getCommentForm($values));
 	}
 	
     
@@ -173,7 +173,7 @@ class CommentController implements \Anax\DI\IInjectionAware
 	*
 	* @return the HTML code of the form.
 	*/
-	private function getUserForm($values = null)
+	private function getCommentForm($values = null)
 	{
 		// Initiate object instance.
 		$form = new \Mos\HTMLForm\CForm();
