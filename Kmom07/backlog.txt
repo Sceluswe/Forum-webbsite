@@ -7,6 +7,9 @@ Make sure users can only update the score of a question once.
     in_array('13', explode(',', '8,7,13,14,16'));
     Just to elaborate: explode turns the string into an array, splitting it at each ',' in this case. 
     Then, in_array checks if the string '13' is in the resulting array somewhere.
+    
+CommentController: Check if removeAllAction() should be removed. Could be a security risk.
+CommentController: Check if setupAction() should be removed. Could be a security risk.
 
 Design: Fix the design of the number in the score of the question. It looks unaligned.
 Design: Display added tags below a posted question.
