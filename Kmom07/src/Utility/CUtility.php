@@ -9,12 +9,12 @@ namespace Anax\Utility;
 class CUtility implements \Anax\DI\IInjectionAware
 {
 	use \Anax\DI\TInjectable;
-        
+
 	/**
 	* Render a default page with title and content.
 	*
 	* @param, string, the title to display on the default page.
-    * @param, string, a string containing HTML to display on the default page. 
+    * @param, string, a string containing HTML to display on the default page.
     *
     * @return void.
 	*/
@@ -26,7 +26,7 @@ class CUtility implements \Anax\DI\IInjectionAware
 			'content' => $content
         ]);
     }
-    
+
     /**
 	* Creates a URL and redirects the user to it.
 	*
@@ -41,44 +41,23 @@ class CUtility implements \Anax\DI\IInjectionAware
         // Redirect user to URL.
         $this->response->redirect($url);
     }
-    
+
     /**
-	* Format a unix timestamp to display its age (5 days ago, 1 day ago, just now etc.).
-	*
-	* @param int, unix timestamp.
+    * Calculates the sum of an array of objects rating property.
     *
-	* @return string, a unix timestamp in human readable format.
-	*/
-	public function humanUnixTime($timestamp)
-	{
-		$elapsedtime;
-		$ret = array();
-		$secs = time() - $timestamp;
-		if($secs == 0)
+    * @param array of objects, the objects containing the property.
+    *
+    * @return int, the sum of all ratings.
+    */
+    public function ratingSum($arrObj)
+    {
+        $ratingSum = 0;
+
+        foreach($arrObj as $item)
 		{
-			$elapsedtime = "Just now.";
+			$ratingSum += $item->rating;
 		}
-		else
-		{
-			$bit = array(
-				'y' => $secs / 31556926 % 12,
-				'd' => $secs / 86400 % 7,
-				'h' => $secs / 3600 % 24,
-				'm' => $secs / 60 % 60,
-				's' => $secs % 60
-				);
-				
-			foreach($bit as $k => $v)
-			{
-				if($v > 0)
-				{
-					$ret[] = $v . $k;
-				}
-			}
-			
-			$elapsedtime = join(' ', $ret);
-		}
-			
-		return $elapsedtime;
+
+        return $ratingSum;
     }
 }
