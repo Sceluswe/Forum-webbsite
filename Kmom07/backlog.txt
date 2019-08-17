@@ -1,3 +1,6 @@
+Find out why the "Why?" question is displayed when sorting by a tag that it doesn't have. I'm guessing
+it's because the tag created contains two words "New Tag" it somehow messes with the prepared statement.
+
 Make sure users can only update the score of a question once.
     1. Create a new column in question, answer and comment tables.
     2. Make sure it contains a string where each ID is split with a comma.
@@ -15,7 +18,7 @@ Design: Fix the design of the number in the score of the question. It looks unal
 Design: Display added tags below a posted question.
 Design: Fix the design when displaying a user profile. The lightblue box should be aligned to the left.
 
-ForumController: Look over why ForumController.getTagForm($values) takes an array.
+ForumController: See if you can split it up into several controllers, one for tag one for... and so on.
 ForumController.tagCreateAction($tag=null): Clean the $tag parameter with escaper.
 ForumController.voteAction() clean the variable $number.
 ForumController: Replace the cleaning of paramters with Escaper cleaning instead
@@ -30,6 +33,8 @@ User: Allow users to delete their own questions.
 Fix: Remove all each() function errors. The function is deprecated.
 
 -------- Completed --------
+ForumController: Look over why ForumController.getTagForm($values) takes an array.
+^ Because it needs one to autofill the values of the form.
 Update the github readme file to include admin username and password so that users can log in.
 Check if you can use the HTMLTable class to create the questions table: no
 Create a class that creates tables easily.
