@@ -14,7 +14,7 @@ class CFormatUnixTime
     *
     * @return array, array of human readable timestamps.
     */
-    function formatUnixProperty($obj)
+    function formatUnixProperty(object $obj)
     {
         $obj->timestamp = $this->humanUnixTime($obj->timestamp);
         return $obj;
@@ -29,7 +29,7 @@ class CFormatUnixTime
     *
     * @return array, array of human readable timestamps.
     */
-    function formatUnixProperties($arrOfObj)
+    function formatUnixProperties(array $arrOfObj)
     {
         foreach($arrOfObj as $item)
         {
@@ -48,7 +48,7 @@ class CFormatUnixTime
     *
     * @return string, a unix timestamp in human readable format.
     */
-    public function humanUnixTime($timestamp)
+    public function humanUnixTime(int $timestamp)
     {
         $elapsedtime;
         $ret = array();
