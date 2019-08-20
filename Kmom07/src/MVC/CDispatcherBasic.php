@@ -37,7 +37,7 @@ class CDispatcherBasic implements \Anax\DI\IInjectionAware
         $name = str_replace(['-', '_'], ' ', $name);
         $name = ucwords($name);
         $name = str_replace(' ', '', $name);
-        
+
         return $name;
     }
 
@@ -197,6 +197,27 @@ class CDispatcherBasic implements \Anax\DI\IInjectionAware
         return call_user_func_array([$this->controller, $this->action], $this->params);
     }
 
+    /**
+     * Check controller and action parameters.
+     *
+     * @param string details for controller.
+     * @param string details for action.
+     *
+     * @return void.
+     */
+    private function setControllerAction($controller, $action)
+    {
+        $checkedController = isset($controller)
+            ? $controller
+            : null;
+
+        $checkedAction = isset($action)
+            ? $action
+            : null;
+
+        $this->setControllerName($checkedController);
+        $this->setActionName($checkedAction);
+    }
 
     /**
      * Forward to a controller, action with parameters.
@@ -207,22 +228,28 @@ class CDispatcherBasic implements \Anax\DI\IInjectionAware
      */
     public function forward($forward = [])
     {
-        $controller = isset($forward['controller'])
-            ? $forward['controller']
-            : null;
-
-        $action = isset($forward['action'])
-            ? $forward['action']
-            : null;
-        
+        $this->setControllerAction($forward['controller'], $forward['action']);
         $params = isset($forward['params'])
             ? $forward['params']
             : [];
 
-        $this->setControllerName($controller);
-        $this->setActionName($action);
         $this->setParams($params);
 
+        $this->isCallableOrException();
+        return $this->dispatch();
+    }
+
+    /**
+     * Forward to a controller, action with parameters.
+     *
+     * @param string details for controller.
+     * @param string details for action.
+     *
+     * @return mixed result from dispatched controller action.
+     */
+    public function forwardTo($controller, $action)
+    {
+        $this->setControllerAction($controller, $action);
         $this->isCallableOrException();
         return $this->dispatch();
     }

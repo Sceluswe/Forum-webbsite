@@ -33,58 +33,33 @@ $app->navbar->configure(ANAX_APP_PATH . 'config/theme-navbar-me.php');
 // Home
 $app->router->add('Home', function () use ($app) {
 	$app->theme->setTitle('Home');
-
-	$app->dispatcher->forward([
-		'controller'=> 'Forum',
-		'action'	=> 'home'
-	]);
+    $app->dispatcher->forwardTo('Forum', 'home');
 });
 
 $app->router->add('Questions', function() use ($app){
 	$app->theme->setTitle("Questions");
-
-	$app->dispatcher->forward([
-		'controller' => 'Forum',
-		'action' 	 => 'menu'
-	]);
+    $app->dispatcher->forwardTo('Forum', 'menu');
 });
 
 $app->router->add('Tag', function() use ($app){
 	$app->theme->setTitle("Questions");
-
-	$app->dispatcher->forward([
-		'controller' => 'Forum',
-		'action'	 =>	'userStatus'
-	]);
-
-	$app->dispatcher->forward([
-		'controller' => 'Forum',
-		'action' 	 => 'tagMenu'
-	]);
+    $app->dispatcher->forwardTo('Forum', 'userStatus');
+    $app->dispatcher->forwardTo('Forum', 'tagMenu');
 });
 
 $app->router->add('Login', function() use ($app){
 	$app->theme->setTitle("Questions");
-
-	$app->dispatcher->forward([
-		'controller' => 'Users',
-		'action' 	 => 'login'
-	]);
+    $app->dispatcher->forwardTo('Users', 'login');
 });
 
 $app->router->add('Users', function() use ($app){
 	$app->theme->setTitle("Users menu");
-
-	$app->dispatcher->forward([
-		'controller' => 'Users',
-		'action' 	 => 'menu'
-	]);
+    $app->dispatcher->forwardTo('Users', 'menu');
 
 	$content = "<h1>User menu</h1><p>Choose an action.</p>";
 
-	$app->views->add('me/page',
-	[
-		'content' =>$content
+	$app->views->add('me/page', [
+		'content' => $content
 	]);
 });
 
@@ -94,59 +69,34 @@ $app->router->add('About', function () use ($app) {
 	$content = $app->fileContent->get('about.md');
 	$content = $app->textFilter->doFilter($content, 'shortcode, markdown');
 
-	$app->views->add('default/page',
-	[
-		'content' =>$content,
+	$app->views->add('default/page', [
+		'content' => $content,
 	]);
 });
 
 $app->router->add('Setup', function() use ($app) {
-
 	$app->theme->setTitle("Setup");
-
-	$app->dispatcher->forward([
-		'controller' 	=> 'Users',
-		'action'		=> 'setup'
-	]);
+    $app->dispatcher->forwardTo('Users', 'setup');
 });
 
 $app->router->add('Users/Add', function() use ($app){
 	$app->theme->setTitle("Users menu");
-
-	$app->dispatcher->forward([
-		'controller' => 'Users',
-		'action'	 => 'add'
-	]);
+    $app->dispatcher->forwardTo('Users', 'add');
 });
 
 $app->router->add('Users/List-all', function() use ($app) {
-
 	$app->theme->setTitle("All Users");
-
-	$app->dispatcher->forward([
-		'controller' 	=> 'Users',
-		'action'		=> 'list'
-	]);
+    $app->dispatcher->forwardTo('Users', 'list');
 });
 
 $app->router->add('Users/List-active', function() use ($app) {
-
 	$app->theme->setTitle("All Users");
-
-	$app->dispatcher->forward([
-		'controller' 	=> 'Users',
-		'action'		=> 'active'
-	]);
+    $app->dispatcher->forwardTo('Users', 'active');
 });
 
 $app->router->add('Users/List-trash', function() use ($app) {
-
-	$app->theme->setTitle("All Users");
-
-	$app->dispatcher->forward([
-		'controller' 	=> 'Users',
-		'action'		=> 'deleted'
-	]);
+	$app->theme->setTitle("All Users")
+    $app->dispatcher->forwardTo('Users', 'deleted');
 });
 
 

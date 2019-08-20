@@ -119,15 +119,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 			$result = $this->time->formatUnixProperties($this->questions->findAll());
 		}
 
-		$this->dispatcher->forward([
-			'controller' => 'Forum',
-			'action' 	 => 'userStatus'
-		]);
-
-		$this->dispatcher->forward([
-			'controller' => 'Forum',
-			'action'	 => 'tagMenu',
-		]);
+        $this->dispatcher->forwardTo('Forum', 'userStatus');
+        $this->dispatcher->forwardTo('Forum', 'tagMenu');
 
         $conditions = ['admin', $this->users->currentUser()];
 		$this->theme->setTitle("All Questions");
