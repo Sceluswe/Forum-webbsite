@@ -50,22 +50,19 @@ class CFormatUnixTime
     */
     public function humanUnixTime(int $timestamp)
     {
-        $elapsedtime;
-        $ret = array();
+        $elapsedtime = "Just now.";
         $secs = time() - $timestamp;
-        if($secs == 0)
+
+        if($secs > 0)
         {
-            $elapsedtime = "Just now.";
-        }
-        else
-        {
+            $ret = array();
             $bit = array(
                 'y' => $secs / 31556926 % 12,
                 'd' => $secs / 86400 % 7,
                 'h' => $secs / 3600 % 24,
                 'm' => $secs / 60 % 60,
                 's' => $secs % 60
-                );
+            );
 
             foreach($bit as $k => $v)
             {
