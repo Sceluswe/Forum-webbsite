@@ -3,15 +3,15 @@ namespace Anax\Forum;
 
 /**
  * Model for Users.
- * 
+ *
  * Contains interactions with the database.
  */
 class Comment extends \Anax\MVC\CDatabaseModel
-{	
+{
 	/*
 	* Set route to redirect to in session.
 	*
-	* @param string, route to redirect to. 
+	* @param string, route to redirect to.
 	*
 	* @return string.
 	*/
@@ -19,7 +19,7 @@ class Comment extends \Anax\MVC\CDatabaseModel
 	{
 		$this->session->set('redirectc', $key);
 	}
-	
+
 	/*
 	* Get route to redirect to from session.
 	*
@@ -33,16 +33,16 @@ class Comment extends \Anax\MVC\CDatabaseModel
 	public function findQuestionComments($id)
 	{
 		$this->query()->where("commentparent='Q'")->andWhere("qaid = ?");
-
 		$result = $this->execute([$id]);
+        
 		return $result;
 	}
 
 	public function findAnswerComments($id)
 	{
 		$this->query()->where("commentparent='A'")->andWhere("qaid = ?");
-
 		$result = $this->execute([$id]);
+
 		return $result;
 	}
 }
