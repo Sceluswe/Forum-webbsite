@@ -11,6 +11,9 @@ Make sure users can only update the score of a question once.
     Just to elaborate: explode turns the string into an array, splitting it at each ',' in this case.
     Then, in_array checks if the string '13' is in the resulting array somewhere.
 
+CDatabaseModel: Check if orderBy groupBy executeFetchAll are necessary and how they work.
+CDatabaseModel: If orderBy groupBy executeFetchAll are necessary add comments.
+
 CommentController: Check if removeAllAction() should be removed. Could be a security risk.
 CommentController: Check if setupAction() should be removed. Could be a security risk.
 
