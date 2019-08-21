@@ -672,55 +672,48 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
 	* @return the HTML code of the form.
 	*/
-	public function getCommentForm($values)
+	public function getCommentForm(array $values)
 	{
-		if(is_array($values))
-		{
-			// Initiate object instance.
-			$form = new \Mos\HTMLForm\CForm();
+		// Initiate object instance.
+		$form = new \Mos\HTMLForm\CForm();
 
-			// Create form.
-			$form = $form->create([], [
-				'questionid' => [
-					'type' 		=> 'hidden',
-					'required' 	=> true,
-					'validation'=> ['not_empty'],
-					'value' 	=> $values['questionid'],
-				],
-				'qaid' => [
-					'type' 		=> 'hidden',
-					'required' 	=> true,
-					'validation'=> ['not_empty'],
-					'value' 	=> $values['qaid'],
-				],
-				'commentparent' => [
-					'type' 		=> 'hidden',
-					'required' 	=> true,
-					'validation'=> ['not_empty'],
-					'value' 	=> $values['commentparent'],
-				],
-				'content' => [
-					'type'       => 'textarea',
-					'required'   => true,
-					'class' 	 => 'cform-textarea',
-					'validation' => ['not_empty'],
-					'value' 	 => ''
-				],
-				'submit' => [
-    				'type' 		=> 'submit',
-    				'class' 	=> 'cform-submit',
-    				'callback'  => [$this, 'callbackCreateComment'],
-    				'value'		=> 'Post comment'
-				]
-			]);
+		// Create form.
+		$form = $form->create([], [
+			'questionid' => [
+				'type' 		=> 'hidden',
+				'required' 	=> true,
+				'validation'=> ['not_empty'],
+				'value' 	=> $values['questionid'],
+			],
+			'qaid' => [
+				'type' 		=> 'hidden',
+				'required' 	=> true,
+				'validation'=> ['not_empty'],
+				'value' 	=> $values['qaid'],
+			],
+			'commentparent' => [
+				'type' 		=> 'hidden',
+				'required' 	=> true,
+				'validation'=> ['not_empty'],
+				'value' 	=> $values['commentparent'],
+			],
+			'content' => [
+				'type'       => 'textarea',
+				'required'   => true,
+				'class' 	 => 'cform-textarea',
+				'validation' => ['not_empty'],
+				'value' 	 => ''
+			],
+			'submit' => [
+				'type' 		=> 'submit',
+				'class' 	=> 'cform-submit',
+				'callback'  => [$this, 'callbackCreateComment'],
+				'value'		=> 'Post comment'
+			]
+		]);
 
-			// Check the status of the form
-			$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
-		}
-		else
-		{
-			die("ERROR: Form missing arguments.");
-		}
+		// Check the status of the form
+		$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
 
 		return $form->getHTML();
 	}
