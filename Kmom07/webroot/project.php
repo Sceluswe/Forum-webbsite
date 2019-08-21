@@ -95,7 +95,7 @@ $app->router->add('Users/List-active', function() use ($app) {
 });
 
 $app->router->add('Users/List-trash', function() use ($app) {
-	$app->theme->setTitle("All Users")
+	$app->theme->setTitle("All Users");
     $app->dispatcher->forwardTo('Users', 'deleted');
 });
 
