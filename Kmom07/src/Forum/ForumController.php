@@ -38,6 +38,8 @@ class ForumController implements \Anax\DI\IInjectionAware
         $this->table = new \Anax\HTMLTable\HTMLTable();
 	}
 
+
+
 	/**
 	* Return redirects.
 	*
@@ -132,6 +134,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 		]);
 	}
 
+
+
 	/**
 	* Function that displays all questions posted by the user with the parameterized id.
 	*
@@ -153,6 +157,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 			]);
 		}
 	}
+
+
 
 	/**
 	* Displays one question and all answers and comments that belong to it.
@@ -228,6 +234,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 			]);
 		}
 	}
+
+
 
 	/**
 	* Display the homepage.
@@ -324,6 +332,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 		]);
 	}
 
+
+
 	/**
 	* Displays all existing question tags and a 'create tag' button.
     *
@@ -341,6 +351,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 		]);
 	}
 
+
+
 	/**
 	* Render a create tag form and add the input to a question.
     *
@@ -357,6 +369,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 		// Render form.
         $this->utility->renderDefaultPage("Create Tag", $this->getTagForm($values));
 	}
+
+
 
 	/**
 	* Create a form for creating a tag.
@@ -391,6 +405,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 		return $form->getHTML();
 	}
+
+
 
 	/**
     * Callback for createTag success.
@@ -453,6 +469,8 @@ class ForumController implements \Anax\DI\IInjectionAware
             'rating'=> $data->find($id)->rating + $number,
         ]);
     }
+
+
 
 	/**
 	* Function to edit the rating of a question, answer or comment.
@@ -547,6 +565,8 @@ class ForumController implements \Anax\DI\IInjectionAware
         $this->utility->renderDefaultPage("Create Question", $this->getQuestionForm());
 	}
 
+
+
 	/**
 	* Function that adds a new answer to the database.
 	*
@@ -559,6 +579,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 		// Render form.
         $this->utility->renderDefaultPage("Create Answer", $this->getAnswerForm(['questionid' => $id,]));
 	}
+
+
 
     /**
 	* Function that adds a new answer comment to the database.
@@ -580,6 +602,8 @@ class ForumController implements \Anax\DI\IInjectionAware
         // Render form.
         $this->utility->renderDefaultPage("Create Comment", $this->getCommentForm($values));
 	}
+
+
 
 	/*
 	* Get a form for creating a answer.
@@ -621,6 +645,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 		return $form->getHTML();
 	}
+
+
 
 	/**
     * Callback for createAnswer success.
@@ -664,6 +690,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 
         return $result;
     }
+
+
 
 	/*
 	* Get a form for creating a question.
@@ -718,6 +746,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 		return $form->getHTML();
 	}
 
+
+
 	/**
     * Callback for createComment success.
     *
@@ -751,6 +781,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 
         return $result;
     }
+
+
 
 	/**
 	* Get a form for creating a question
@@ -792,6 +824,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 		return $form->getHTML();
 	}
 
+
+
 	/**
     * Callback for createQuestion success.
     *
@@ -827,6 +861,8 @@ class ForumController implements \Anax\DI\IInjectionAware
         return $result;
     }
 
+
+
 	/**
     * Callback for submit-button.
     *
@@ -839,6 +875,8 @@ class ForumController implements \Anax\DI\IInjectionAware
         $form->AddOutput("<p><i>Posted.</i></p>");
         return false;
     }
+
+
 
     /**
     * Callback for submit-button.
