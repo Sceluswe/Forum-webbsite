@@ -16,6 +16,7 @@ CDatabaseModel: If orderBy groupBy executeFetchAll are necessary add comments.
 
 CommentController: Check if removeAllAction() should be removed. Could be a security risk.
 CommentController: Check if setupAction() should be removed. Could be a security risk.
+Comments: add 3 empty lines in between functions.
 
 Design: Fix the design of the number in the score of the question. It looks unaligned.
 Design: Display added tags below a posted question.
