@@ -38,6 +38,8 @@ class ForumController implements \Anax\DI\IInjectionAware
         $this->table = new \Anax\HTMLTable\HTMLTable();
 	}
 
+
+
 	/**
 	* Return redirects.
 	*
@@ -132,6 +134,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 		]);
 	}
 
+
+
 	/**
 	* Function that displays all questions posted by the user with the parameterized id.
 	*
@@ -153,6 +157,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 			]);
 		}
 	}
+
+
 
 	/**
 	* Displays one question and all answers and comments that belong to it.
@@ -206,11 +212,9 @@ class ForumController implements \Anax\DI\IInjectionAware
                 // For each answer, find the corresponding comments.
 				foreach($answers as $item)
 				{
-					$answerComments[$item->id] = $this->comments->findAnswerComments($item->id);
+                    $comments = $this->comments->findAnswerComments($item->id);
+					$answerComments[$item->id] = $this->time->formatUnixProperties($comments);
 				}
-
-				// Format timestamp of answerComments.
-                $answerComments = $this->time->formatUnixProperties($answerComments);
 			}
 
 			$condition = ['admin', $question->user];
@@ -228,6 +232,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 			]);
 		}
 	}
+
+
 
 	/**
 	* Display the homepage.
@@ -324,6 +330,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 		]);
 	}
 
+
+
 	/**
 	* Displays all existing question tags and a 'create tag' button.
     *
@@ -341,8 +349,10 @@ class ForumController implements \Anax\DI\IInjectionAware
 		]);
 	}
 
+
+
 	/**
-	* Method for creating a new tag and adding it to the question.
+	* Render a create tag form and add the input to a question.
     *
     * @param string, name of the tag to add.
     *
@@ -350,16 +360,15 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function tagCreateAction($tag=null)
 	{
-		$values = array();
-        $cleanedTag = $this->escaper->escapeHTML($tag);
-		if(!empty($cleanedTag))
-		{
-			$values = ['tag' => $cleanedTag];
-		}
+		$values = (!empty($tag))
+			? $values = ['tag' => $this->escaper->escapeHTML($tag)]
+            : [];
 
 		// Render form.
         $this->utility->renderDefaultPage("Create Tag", $this->getTagForm($values));
 	}
+
+
 
 	/**
 	* Create a form for creating a tag.
@@ -394,6 +403,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 		return $form->getHTML();
 	}
+
+
 
 	/**
     * Callback for createTag success.
@@ -456,6 +467,8 @@ class ForumController implements \Anax\DI\IInjectionAware
             'rating'=> $data->find($id)->rating + $number,
         ]);
     }
+
+
 
 	/**
 	* Function to edit the rating of a question, answer or comment.
@@ -550,6 +563,8 @@ class ForumController implements \Anax\DI\IInjectionAware
         $this->utility->renderDefaultPage("Create Question", $this->getQuestionForm());
 	}
 
+
+
 	/**
 	* Function that adds a new answer to the database.
 	*
@@ -562,6 +577,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 		// Render form.
         $this->utility->renderDefaultPage("Create Answer", $this->getAnswerForm(['questionid' => $id,]));
 	}
+
+
 
     /**
 	* Function that adds a new answer comment to the database.
@@ -584,6 +601,8 @@ class ForumController implements \Anax\DI\IInjectionAware
         $this->utility->renderDefaultPage("Create Comment", $this->getCommentForm($values));
 	}
 
+
+
 	/*
 	* Get a form for creating a answer.
 	*
@@ -591,46 +610,41 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
 	* @return the HTML code of the form.
 	*/
-	public function getAnswerForm($values)
+	public function getAnswerForm(array $values)
 	{
-		if(is_array($values))
-		{
-			// Initiate object instance.
-			$form = new \Mos\HTMLForm\CForm();
+		// Initiate object instance.
+		$form = new \Mos\HTMLForm\CForm();
 
-			// Create answer form.
-			$form = $form->create([], [
-				'questionid' => [
-					'type' 		=> 'hidden',
-					'required' 	=> true,
-					'validation'=> ['not_empty'],
-					'value' 	=> $values['questionid'],
-				],
-				'content' => [
-					'type'       => 'textarea',
-					'required'   => true,
-					'class' 	 => 'cform-textarea',
-					'validation' => ['not_empty'],
-					'value' 	 => ''
-				],
-				'submit' => [
-    				'type' 		=> 'submit',
-    				'class' 	=> 'cform-submit',
-    				'callback'  => [$this, 'callbackCreateAnswer'],
-    				'value'		=> 'Post answer'
-				]
-			]);
+		// Create answer form.
+		$form = $form->create([], [
+			'questionid' => [
+				'type' 		=> 'hidden',
+				'required' 	=> true,
+				'validation'=> ['not_empty'],
+				'value' 	=> $values['questionid'],
+			],
+			'content' => [
+				'type'       => 'textarea',
+				'required'   => true,
+				'class' 	 => 'cform-textarea',
+				'validation' => ['not_empty'],
+				'value' 	 => ''
+			],
+			'submit' => [
+				'type' 		=> 'submit',
+				'class' 	=> 'cform-submit',
+				'callback'  => [$this, 'callbackCreateAnswer'],
+				'value'		=> 'Post answer'
+			]
+		]);
 
-			// Check the status of the form
-			$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
-		}
-		else
-		{
-			die("ERROR: Form missing arguments.");
-		}
+		// Check the status of the form
+		$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
 
 		return $form->getHTML();
 	}
+
+
 
 	/**
     * Callback for createAnswer success.
@@ -675,6 +689,8 @@ class ForumController implements \Anax\DI\IInjectionAware
         return $result;
     }
 
+
+
 	/*
 	* Get a form for creating a question.
 	*
@@ -682,58 +698,53 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
 	* @return the HTML code of the form.
 	*/
-	public function getCommentForm($values)
+	public function getCommentForm(array $values)
 	{
-		if(is_array($values))
-		{
-			// Initiate object instance.
-			$form = new \Mos\HTMLForm\CForm();
+		// Initiate object instance.
+		$form = new \Mos\HTMLForm\CForm();
 
-			// Create form.
-			$form = $form->create([], [
-				'questionid' => [
-					'type' 		=> 'hidden',
-					'required' 	=> true,
-					'validation'=> ['not_empty'],
-					'value' 	=> $values['questionid'],
-				],
-				'qaid' => [
-					'type' 		=> 'hidden',
-					'required' 	=> true,
-					'validation'=> ['not_empty'],
-					'value' 	=> $values['qaid'],
-				],
-				'commentparent' => [
-					'type' 		=> 'hidden',
-					'required' 	=> true,
-					'validation'=> ['not_empty'],
-					'value' 	=> $values['commentparent'],
-				],
-				'content' => [
-					'type'       => 'textarea',
-					'required'   => true,
-					'class' 	 => 'cform-textarea',
-					'validation' => ['not_empty'],
-					'value' 	 => ''
-				],
-				'submit' => [
-    				'type' 		=> 'submit',
-    				'class' 	=> 'cform-submit',
-    				'callback'  => [$this, 'callbackCreateComment'],
-    				'value'		=> 'Post comment'
-				]
-			]);
+		// Create form.
+		$form = $form->create([], [
+			'questionid' => [
+				'type' 		=> 'hidden',
+				'required' 	=> true,
+				'validation'=> ['not_empty'],
+				'value' 	=> $values['questionid'],
+			],
+			'qaid' => [
+				'type' 		=> 'hidden',
+				'required' 	=> true,
+				'validation'=> ['not_empty'],
+				'value' 	=> $values['qaid'],
+			],
+			'commentparent' => [
+				'type' 		=> 'hidden',
+				'required' 	=> true,
+				'validation'=> ['not_empty'],
+				'value' 	=> $values['commentparent'],
+			],
+			'content' => [
+				'type'       => 'textarea',
+				'required'   => true,
+				'class' 	 => 'cform-textarea',
+				'validation' => ['not_empty'],
+				'value' 	 => ''
+			],
+			'submit' => [
+				'type' 		=> 'submit',
+				'class' 	=> 'cform-submit',
+				'callback'  => [$this, 'callbackCreateComment'],
+				'value'		=> 'Post comment'
+			]
+		]);
 
-			// Check the status of the form
-			$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
-		}
-		else
-		{
-			die("ERROR: Form missing arguments.");
-		}
+		// Check the status of the form
+		$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
 
 		return $form->getHTML();
 	}
+
+
 
 	/**
     * Callback for createComment success.
@@ -768,6 +779,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 
         return $result;
     }
+
+
 
 	/**
 	* Get a form for creating a question
@@ -809,6 +822,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 		return $form->getHTML();
 	}
 
+
+
 	/**
     * Callback for createQuestion success.
     *
@@ -844,6 +859,8 @@ class ForumController implements \Anax\DI\IInjectionAware
         return $result;
     }
 
+
+
 	/**
     * Callback for submit-button.
     *
@@ -856,6 +873,8 @@ class ForumController implements \Anax\DI\IInjectionAware
         $form->AddOutput("<p><i>Posted.</i></p>");
         return false;
     }
+
+
 
     /**
     * Callback for submit-button.
