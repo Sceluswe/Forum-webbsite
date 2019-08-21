@@ -588,43 +588,36 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
 	* @return the HTML code of the form.
 	*/
-	public function getAnswerForm($values)
+	public function getAnswerForm(array $values)
 	{
-		if(is_array($values))
-		{
-			// Initiate object instance.
-			$form = new \Mos\HTMLForm\CForm();
+		// Initiate object instance.
+		$form = new \Mos\HTMLForm\CForm();
 
-			// Create answer form.
-			$form = $form->create([], [
-				'questionid' => [
-					'type' 		=> 'hidden',
-					'required' 	=> true,
-					'validation'=> ['not_empty'],
-					'value' 	=> $values['questionid'],
-				],
-				'content' => [
-					'type'       => 'textarea',
-					'required'   => true,
-					'class' 	 => 'cform-textarea',
-					'validation' => ['not_empty'],
-					'value' 	 => ''
-				],
-				'submit' => [
-    				'type' 		=> 'submit',
-    				'class' 	=> 'cform-submit',
-    				'callback'  => [$this, 'callbackCreateAnswer'],
-    				'value'		=> 'Post answer'
-				]
-			]);
+		// Create answer form.
+		$form = $form->create([], [
+			'questionid' => [
+				'type' 		=> 'hidden',
+				'required' 	=> true,
+				'validation'=> ['not_empty'],
+				'value' 	=> $values['questionid'],
+			],
+			'content' => [
+				'type'       => 'textarea',
+				'required'   => true,
+				'class' 	 => 'cform-textarea',
+				'validation' => ['not_empty'],
+				'value' 	 => ''
+			],
+			'submit' => [
+				'type' 		=> 'submit',
+				'class' 	=> 'cform-submit',
+				'callback'  => [$this, 'callbackCreateAnswer'],
+				'value'		=> 'Post answer'
+			]
+		]);
 
-			// Check the status of the form
-			$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
-		}
-		else
-		{
-			die("ERROR: Form missing arguments.");
-		}
+		// Check the status of the form
+		$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
 
 		return $form->getHTML();
 	}
