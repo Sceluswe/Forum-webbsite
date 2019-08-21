@@ -250,6 +250,7 @@ class CDispatcherBasic implements \Anax\DI\IInjectionAware
     public function forwardTo($controller, $action)
     {
         $this->setControllerAction($controller, $action);
+        $this->setParams([]);
         $this->isCallableOrException();
         return $this->dispatch();
     }
