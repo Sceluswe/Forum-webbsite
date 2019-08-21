@@ -212,11 +212,9 @@ class ForumController implements \Anax\DI\IInjectionAware
                 // For each answer, find the corresponding comments.
 				foreach($answers as $item)
 				{
-					$answerComments[$item->id] = $this->comments->findAnswerComments($item->id);
+                    $comments = $this->comments->findAnswerComments($item->id);
+					$answerComments[$item->id] = $this->time->formatUnixProperties($comments);
 				}
-
-				// Format timestamp of answerComments.
-                $answerComments = $this->time->formatUnixProperties($answerComments);
 			}
 
 			$condition = ['admin', $question->user];
