@@ -6,11 +6,11 @@ Make sure users can only update the score of a question once.
     2. Make sure it contains a string where each ID is split with a comma.
     3. When upvoting or downvoting, take the string from the database, check if the ID is there before
     making any changes. If it is, nothing happens, if it isn't a vote is placed.
-    
+
     in_array('13', explode(',', '8,7,13,14,16'));
-    Just to elaborate: explode turns the string into an array, splitting it at each ',' in this case. 
+    Just to elaborate: explode turns the string into an array, splitting it at each ',' in this case.
     Then, in_array checks if the string '13' is in the resulting array somewhere.
-    
+
 CommentController: Check if removeAllAction() should be removed. Could be a security risk.
 CommentController: Check if setupAction() should be removed. Could be a security risk.
 
@@ -18,11 +18,13 @@ Design: Fix the design of the number in the score of the question. It looks unal
 Design: Display added tags below a posted question.
 Design: Fix the design when displaying a user profile. The lightblue box should be aligned to the left.
 
+ForumController: Check in callbackCreateTag() the tag value is being cleaned, does it need the escaper?
+ForumController: Start using type declarations in function parameter lists to reduce type checks.
 ForumController: See if you can split it up into several controllers, one for tag one for... and so on.
-ForumController.tagCreateAction($tag=null): Clean the $tag parameter with escaper.
 ForumController.voteAction() clean the variable $number.
 ForumController: Replace the cleaning of paramters with Escaper cleaning instead
 ForumController: Potentially reduce size by splitting up answer, question and comment management into three new objects
+ForumController: have tagCreateAction() include a cancel button in  case the user doesn't want to create a tag.
 
 ForumController & UserController: either add a class or find a way to move the renderDefaultPage() out
 of ForumController so that both UserController and ForumController can use it.
@@ -33,6 +35,7 @@ User: Allow users to delete their own questions.
 Fix: Remove all each() function errors. The function is deprecated.
 
 -------- Completed --------
+ForumController.tagCreateAction($tag=null): Clean the $tag parameter with escaper.
 ForumController: Look over why ForumController.getTagForm($values) takes an array.
 ^ Because it needs one to autofill the values of the form.
 Update the github readme file to include admin username and password so that users can log in.
@@ -53,4 +56,3 @@ Edit lines 547-558 in ForumController to be a switch instead of if-statements.
 commit changes in fixup as "add private ForumController.createRedirect()"
 Removed: 'id' 	=> $id, from ForumController.upvote(). This line could create a bug where the
 question, answer or comment changes ownership. Especially if the id is changed inside the URL.
-
