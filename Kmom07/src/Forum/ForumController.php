@@ -342,7 +342,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	}
 
 	/**
-	* Method for creating a new tag and adding it to the question.
+	* Render a create tag form and add the input to a question.
     *
     * @param string, name of the tag to add.
     *
@@ -350,12 +350,9 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function tagCreateAction($tag=null)
 	{
-		$values = array();
-        $cleanedTag = $this->escaper->escapeHTML($tag);
-		if(!empty($cleanedTag))
-		{
-			$values = ['tag' => $cleanedTag];
-		}
+		$values = (!empty($tag))
+			? $values = ['tag' => $this->escaper->escapeHTML($tag)]
+            : [];
 
 		// Render form.
         $this->utility->renderDefaultPage("Create Tag", $this->getTagForm($values));
