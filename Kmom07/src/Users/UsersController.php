@@ -36,13 +36,15 @@ class UsersController implements \Anax\DI\IInjectionAware
     public function redirects()
     {
         return [
-            "Users/id/",
-            "Users/update/",
-            "Users/delete/",
-            "Users/softDelete/",
-            "Users/restore/"
+            "profile"       =>    "Users/id/",
+            "update"        =>    "Users/update/",
+            "delete"        =>    "Users/delete/",
+            "softDelete"    =>    "Users/softDelete/",
+            "restore"       =>    "Users/restore/"
         ];
     }
+
+
 
 	/**
 	* Function that logs in a user and stores the currently logged in user in session.
@@ -60,6 +62,8 @@ class UsersController implements \Anax\DI\IInjectionAware
             $this->utility->createRedirect('Users/Logout');
         }
 	}
+
+
 
 	/**
 	* Function presents a logout form to the user.
@@ -79,6 +83,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 		]);
 	}
 
+
+
 	/**
 	* Create an options menun view.
 	*
@@ -91,6 +97,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 			'url'	 => 'Users/'
 		]);
 	}
+
+
 
 	/**
 	* Create a database and initialize two users.
@@ -120,6 +128,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 		}
 	}
 
+
+
 	/**
 	 * List all users.
 	 *
@@ -139,6 +149,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 			'redirect' => $this->redirects()
 		]);
 	}
+
+
 
 	/**
 	* List user with id.
@@ -185,6 +197,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 		}
 	}
 
+
+
 	/**
     * Cheat function to add a new user in a simplified way.
     *
@@ -201,6 +215,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 		// Render form.
         $this->utility->renderDefaultPage("Create User", $this->getUserForm());
 	}
+
+
 
 	/**
     * Restores a soft-deleted user to active.
@@ -222,6 +238,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 		//Create a url and redirect to the updated object.
         $this->utility->createRedirect('Users/id/' . $id);
 	}
+
+
 
     /**
     * Update the information of a user.
@@ -251,6 +269,8 @@ class UsersController implements \Anax\DI\IInjectionAware
         $this->utility->renderDefaultPage("Update User", $this->getUserForm($values));
 	}
 
+
+
 	/**
 	* Delete user.
 	*
@@ -263,8 +283,10 @@ class UsersController implements \Anax\DI\IInjectionAware
 		if(!isset($id))
 			die("Missing id.");
 
-		$res = $this->users->delete($id);
+		$this->users->delete($id);
 	}
+
+
 
 	/*
 	* Soft delete User.
@@ -285,6 +307,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 		//Create a url and redirect to the updated object.
         $this->utility->createRedirect('Users/id/' . $id);
 	}
+
+
 
 	/**
 	* List all active and not deleted users.
@@ -308,6 +332,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 		]);
 	}
 
+
+
 	/**
 	* List all deleted users.
 	*
@@ -327,6 +353,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 			'redirect' => $this->redirects()
 		]);
 	}
+
+
 
 	/*
 	* Get a form for logging in a user.
@@ -366,6 +394,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 		return $form->getHTML();
 	}
 
+
+
 	/**
     * Callback for login-button success.
     *
@@ -404,6 +434,8 @@ class UsersController implements \Anax\DI\IInjectionAware
         return $success;
     }
 
+
+
 	/**
     * Callback for submit-button.
     *
@@ -417,6 +449,8 @@ class UsersController implements \Anax\DI\IInjectionAware
         return false;
     }
 
+
+
     /**
     * Callback for submit-button.
     *
@@ -429,6 +463,8 @@ class UsersController implements \Anax\DI\IInjectionAware
         $form->AddOutput("<p><i>Invalid login information.</i></p>");
         return false;
     }
+
+
 
 	/**
 	* Get a form for logging out a user.
@@ -456,6 +492,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 		return $form->getHTML();
 	}
 
+
+
 	/**
     * Callback for login-button success.
     *
@@ -480,6 +518,8 @@ class UsersController implements \Anax\DI\IInjectionAware
         return $success;
     }
 
+
+
 	/**
     * Callback for submit-button.
     *
@@ -493,6 +533,8 @@ class UsersController implements \Anax\DI\IInjectionAware
         return false;
     }
 
+
+
     /**
     * Callback for submit-button.
     *
@@ -505,6 +547,8 @@ class UsersController implements \Anax\DI\IInjectionAware
         $form->AddOutput("<p><i>You're not logged in.</i></p>");
         return false;
     }
+
+
 
 	/**
 	* Get a form for creating and updating a user.
@@ -562,6 +606,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 		return $form->getHTML();
 	}
 
+
+
 	/**
     * Callback for submit-button success.
     *
@@ -589,6 +635,8 @@ class UsersController implements \Anax\DI\IInjectionAware
         return true;
     }
 
+
+
     /**
     * Callback for submit-button.
     *
@@ -601,6 +649,8 @@ class UsersController implements \Anax\DI\IInjectionAware
         $form->AddOutput("<p><i>User Created.</i></p>");
         return false;
     }
+
+
 
     /**
     * Callback for submit-button.

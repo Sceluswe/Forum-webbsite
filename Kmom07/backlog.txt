@@ -11,6 +11,13 @@ Make sure users can only update the score of a question once.
     Just to elaborate: explode turns the string into an array, splitting it at each ',' in this case.
     Then, in_array checks if the string '13' is in the resulting array somewhere.
 
+UserController: make sure that the webpage redirects to the menu again after a user has been deleted.
+User: change isUserAdmin() to use $SESSION['currentUser'] instead of taking the currentUser as param.
+
+Consider creating a HTMLList class that creates a list or possibly HTMLlink to create links
+
+Make sure the Administrator can't delete nor softdelete himself or be deleted by anyone for that matter.
+
 CDatabaseModel: Check if orderBy groupBy executeFetchAll are necessary and how they work.
 CDatabaseModel: If orderBy groupBy executeFetchAll are necessary add comments.
 
@@ -21,6 +28,8 @@ Comments: add 3 empty lines in between functions.
 Design: Fix the design of the number in the score of the question. It looks unaligned.
 Design: Display added tags below a posted question.
 Design: Fix the design when displaying a user profile. The lightblue box should be aligned to the left.
+Design: Make sure the size of a user box remains the same in the user menu, even if buttons are displayed
+or not.
 
 ForumController: Check in callbackCreateTag() the tag value is being cleaned, does it need the escaper?
 ForumController: Start using type declarations in function parameter lists to reduce type checks.

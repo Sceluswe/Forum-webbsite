@@ -47,7 +47,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function redirects()
 	{
-		return $values = [
+		return [
 			'menu'			=> 'Forum/menu/',
 			'addQuestion' 	=> 'Forum/addQuestion/',
 			'addAnswer'	  	=> 'Forum/addAnswer/',
@@ -184,10 +184,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 		{
 			$question = $this->time->formatUnixProperty($question);
 
-            // If question is not empty, get the comments to that question.
+            // Get comments to the question (if any) and format timestamp.
 			$questionComments = $this->comments->findQuestionComments($id);
-
-			// Check if the question has any comments.
 			$questionComments = ($questionComments) ? $this->time->formatUnixProperties($questionComments) : array();
 
             switch ($sort)
@@ -266,6 +264,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 		]);
 	}
 
+
+
 //---------------- Score ----------------
     /**
 	* Calculate the overall score of a user.
@@ -314,6 +314,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 		// Render form.
         $this->utility->renderDefaultPage("Rating", $table);
 	}
+
+
 
 //---------------- Tags ----------------
 	/**
@@ -504,7 +506,7 @@ class ForumController implements \Anax\DI\IInjectionAware
             }
             else
             {
-                die("Error, invalid parameters.");
+                die("Error: invalid parameters in ForumController.voteAction().");
             }
 		}
 		else
@@ -519,7 +521,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     /**
     * Accepts an answer to a question as THE answer.
     *
-    * @param int, id of the answer to be accepted.
+    * @param string, treated as int, id of the answer to be accepted.
     *
     * @return void.
     */
@@ -545,7 +547,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		}
 		else
 		{
-			die("Error: Id is not numeric.");
+			die("Error: Invalid parameter in ForumController.acceptedAction() Id is not numeric.");
 		}
 	}
 
