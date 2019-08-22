@@ -20,6 +20,8 @@ class Comment extends \Anax\MVC\CDatabaseModel
 		$this->session->set('redirectc', $key);
 	}
 
+
+
 	/*
 	* Get route to redirect to from session.
 	*
@@ -29,6 +31,8 @@ class Comment extends \Anax\MVC\CDatabaseModel
 	{
 		return $this->session->get('redirectc');
 	}
+
+
 
     /**
     * Find the comments belonging to a question.
@@ -44,6 +48,8 @@ class Comment extends \Anax\MVC\CDatabaseModel
 
 		return $result;
 	}
+
+
 
     /**
     * Find the comments belonging to an answer.
