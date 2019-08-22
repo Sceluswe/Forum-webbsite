@@ -16,29 +16,13 @@ class User extends \Anax\MVC\CDatabaseModel
 	*
 	* @return boolean, depending on result.
 	*/
-	public function isUserAdmin($currentUser, $condition)
+	public function isUserAdmin($currentUser, array $condition)
 	{
-		if(is_array($condition))
-		{
-			$result = false;
-			if($this->isUserLoggedIn())
-			{
-				if(in_array($currentUser, $condition))
-				{
-					$result = true;
-				}
-			}
-		}
-		else
-		{
-			die("Error: $condition needs to be array in UsersController::isUserAdmin()");
-		}
-
-		return $result;
+        return ($this->isUserLoggedIn()) ? in_array($currentUser, $condition) : false;
 	}
 
 
-    
+
 	/*
 	* Function that validates a user based on acronym and password.
 	*
@@ -47,7 +31,8 @@ class User extends \Anax\MVC\CDatabaseModel
 	public function validateUser($acronym, $password)
 	{
 		$valid = false;
-		if(!empty($acronym) && !empty($password))
+
+        if(!empty($acronym) && !empty($password))
 		{
 			// Prepare SQL statement.
 			$this->query('acronym')
@@ -59,9 +44,7 @@ class User extends \Anax\MVC\CDatabaseModel
 
 			// Check if a user matching the provided data does exist.
 			if(!empty($result))
-			{	// Set return variable $valid to true if that is the case.
-				$valid = true;
-			}
+                $valid = true;
 		}
 
 		return $valid;
@@ -76,14 +59,14 @@ class User extends \Anax\MVC\CDatabaseModel
 	*/
 	public function loginUser($user)
 	{
-		if(!empty($user))
-		{
-			$_SESSION['currentUser'] = $user;
-		}
-		else
-		{
-			die("Error: User was not set in User::loginUser()");
-		}
+        if(!empty($user))
+        {
+            $_SESSION['currentUser'] = $user;
+        }
+        else
+        {
+            die("User.loginUser() error: User was not set.");
+        }
 	}
 
 
@@ -94,14 +77,7 @@ class User extends \Anax\MVC\CDatabaseModel
 	*/
 	public function logoutUser()
 	{
-		if(!empty($_SESSION['currentUser']))
-		{
-			unset($_SESSION['currentUser']);
-		}
-		else
-		{
-			die("Error: User was not set in session and could not be logged out.");
-		}
+        unset($_SESSION['currentUser']);
 	}
 
 
@@ -113,13 +89,7 @@ class User extends \Anax\MVC\CDatabaseModel
 	*/
 	public function currentUser()
 	{
-		$result = "";
-		if(!empty($_SESSION['currentUser']))
-		{
-			$result = $_SESSION['currentUser'];
-		}
-
-		return $result;
+        return (!empty($_SESSION['currentUser'])) ? $_SESSION['currentUser'] : "";
 	}
 
 
@@ -131,14 +101,7 @@ class User extends \Anax\MVC\CDatabaseModel
 	*/
 	public function isUserLoggedIn()
 	{
-		$result = false;
-		// Check if a user is logged in.
-		if(!empty($_SESSION['currentUser']))
-		{
-			$result = true;
-		}
-
-		return $result;
+        return (!empty($_SESSION['currentUser'])) ? true : false;
 	}
 
 
@@ -148,66 +111,68 @@ class User extends \Anax\MVC\CDatabaseModel
 	*
 	* @return boolean.
 	*/
-	public function initializeTable($table)
+	public function initializeTable(string $table)
 	{
 		$boolean = false;
 
-		if(is_string($table))
-		{
-			$this->db->dropTableIfExists($table)->execute();
+        if(!empty($table))
+        {
+    		$this->db->dropTableIfExists($table)->execute();
 
-			$result = $this->db->createTable($table,
-			[
-				'id' 		=> ['integer', 'primary key', 'not null', 'auto_increment'],
-				'acronym' 	=> ['varchar(20)', 'unique', 'not null'],
-				'email' 	=> ['varchar(80)'],
-				'name' 		=> ['varchar(80)'],
-				'password' 	=> ['varchar(255)'],
-				'created' 	=> ['datetime'],
-				'updated' 	=> ['datetime'],
-				'deleted' 	=> ['datetime'],
-				'active' 	=> ['datetime'],
+    		$result = $this->db->createTable($table, [
+    			'id' 		=> ['integer', 'primary key', 'not null', 'auto_increment'],
+    			'acronym' 	=> ['varchar(20)', 'unique', 'not null'],
+    			'email' 	=> ['varchar(80)'],
+    			'name' 		=> ['varchar(80)'],
+    			'password' 	=> ['varchar(255)', 'not null'],
+    			'created' 	=> ['datetime'],
+    			'updated' 	=> ['datetime'],
+    			'deleted' 	=> ['datetime'],
+    			'active' 	=> ['datetime'],
                 'score'     => ['integer default 0', 'not null']
-			])->execute();
+    		])->execute();
 
-			// Make sure database was successfully created.
-			if(isset($result))
-			{
-				// Build insert statement.
-				$this->db->insert(
-					$table,
-					['acronym', 'email', 'name', 'password', 'created', 'active', 'answers', 'questions', 'comments']
-				);
-				// Get current time.
-				$now = gmdate('Y-m-d H:i:s');
-				// Insert user 'admin' with the following values:
-				$insert1 = $this->db->execute([
-					'admin',
-					'admin@dbwebb.se',
-					'Administrator',
-					md5('admin'),
-					$now,
-					$now,
-				]);
-				// Insert user 'doe' with the following values:
-				$insert2 = $this->db->execute([
-					'doe',
-					'doe@dbwebb.se',
-					'John/Jane Doe',
-					md5('doe'),
-					$now,
-					$now,
-					0,
-					0,
-					0
-				]);
+    		// Make sure database was successfully created.
+    		if(isset($result))
+    		{
+    			// Build insert statement.
+    			$this->db->insert($table, [
+                    'acronym',
+                    'email',
+                    'name',
+                    'password',
+                    'created',
+                    'active'
+                ]);
 
-				if(isset($insert1) && isset($insert2))
-				{
-					$boolean = true;
-				}
-			}
-		}
-		return $boolean;
+    			// Get current time.
+    			$now = gmdate('Y-m-d H:i:s');
+
+    			// Insert user 'admin' with the following values:
+    			$insert1 = $this->db->execute([
+    				'admin',
+    				'admin@dbwebb.se',
+    				'Administrator',
+    				md5('admin'),
+    				$now,
+    				$now
+    			]);
+
+    			// Insert user 'doe' with the following values:
+    			$insert2 = $this->db->execute([
+    				'doe',
+    				'doe@dbwebb.se',
+    				'John/Jane Doe',
+    				md5('doe'),
+    				$now,
+    				$now
+    			]);
+
+    			if(isset($insert1) && isset($insert2))
+    				$boolean = true;
+    		}
+        }
+
+        return $boolean;
 	}
 }
