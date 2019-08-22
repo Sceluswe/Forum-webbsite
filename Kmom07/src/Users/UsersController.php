@@ -10,7 +10,6 @@ class UsersController implements \Anax\DI\IInjectionAware
     use \Anax\DI\TInjectable,
 		\Anax\MVC\TRedirectHelpers;
 
-
 	/**
 	* Initialize the controller.
 	*
@@ -27,6 +26,24 @@ class UsersController implements \Anax\DI\IInjectionAware
 		//$this->questions->setSource('question');
 	}
 
+
+
+    /**
+    * Return redirects.
+    *
+    * @return array containing redirects.
+    */
+    public function redirects()
+    {
+        return [
+            "Users/id/",
+            "Users/update/",
+            "Users/delete/",
+            "Users/softDelete/",
+            "Users/restore/"
+        ];
+    }
+
 	/**
 	* Function that logs in a user and stores the currently logged in user in session.
     *
@@ -34,15 +51,14 @@ class UsersController implements \Anax\DI\IInjectionAware
 	*/
 	public function loginAction()
 	{
-		if(!$this->users->isUserLoggedIn())
-		{
-			// Render form.
+        if(!$this->users->isUserLoggedIn())
+        {
             $this->utility->renderDefaultPage("Login", $this->getLoginForm());
-		}
-		else
-		{
+        }
+        else
+        {
             $this->utility->createRedirect('Users/Logout');
-		}
+        }
 	}
 
 	/**
@@ -52,14 +68,14 @@ class UsersController implements \Anax\DI\IInjectionAware
 	*/
 	public function logoutAction()
 	{
-		$content = "<p>You're currently logged in as user: " . ucfirst($this->users->currentUser()) . "</p>";
+		$content = "<p>You're currently logged in as: " . ucfirst($this->users->currentUser()) . "</p>";
 
 		// Render form.
 		$this->theme->setTitle("Logout");
 		$this->views->add('default/page-2', [
 			'title' 	=> "Logout",
 			'content' 	=> $content,
-			'content2' 	=> $this->getLogoutForm(),
+			'content2' 	=> $this->getLogoutForm()
 		]);
 	}
 
@@ -70,9 +86,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 	*/
 	public function menuAction()
 	{
-		$values = ['Add', 'List-all', 'List-active', 'List-trash'];
 		$this->views->add('users/menu', [
-			'values' => $values,
+			'values' => ['Add', 'List-all', 'List-active', 'List-trash'],
 			'url'	 => 'Users/'
 		]);
 	}
@@ -90,18 +105,12 @@ class UsersController implements \Anax\DI\IInjectionAware
 			{
 				$this->menuAction();
 
-				$all = $this->users->findAll();
-
 				$this->theme->setTitle("Create Table");
 				$this->views->add('users/list-all', [
 					'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
-					'users' => $all,
+					'users' => $this->users->findAll(),
 					'title' => "Table Successfully created!",
-					'redirect' => [
-						"Users/id/",
-						"Users/update/",
-						"Users/softDelete/",
-						"Users/restore/"]
+					'redirect' => $this->redirects()
 				]);
 			}
 		}
@@ -122,18 +131,12 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 		$this->menuAction();
 
-		$all = $this->users->findAll();
-
 		$this->theme->setTitle("List all users");
 		$this->views->add('users/list-all', [
 			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
-			'users' => $all,
+			'users' => $this->users->findAll(),
 			'title' => "View all users",
-			'redirect' => [
-			"Users/id/",
-			"Users/update/",
-			"Users/softDelete/",
-			"Users/restore/"]
+			'redirect' => $this->redirects()
 		]);
 	}
 
@@ -161,11 +164,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 				'superadmin' => $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
 				'user' => $user,
 				'title' => "View user: " . $user->name,
-				'redirect' => [
-				"Users/update/",
-				"Users/softDelete/",
-				"Users/restore/",
-				"Users/delete/"]
+				'redirect' => $this->redirects()
 			]);
 
 			$this->dispatcher->forward([
@@ -200,7 +199,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 		$this->users->created = gmdate('Y-m-d H:i:s');
 
 		// Render form.
-        $this->uility->renderDefaultPage("Create User", $this->getUserForm());
+        $this->utility->renderDefaultPage("Create User", $this->getUserForm());
 	}
 
 	/**
@@ -213,20 +212,15 @@ class UsersController implements \Anax\DI\IInjectionAware
 	public function restoreAction($id = null)
 	{
 		if(!isset($id))
-		{
 			die("Missing id.");
-		}
-
-		$now = gmdate("Y-m-d H:i:s");
 
 		$user = $this->users->find($id);
-
 		$user->deleted = null;
-		$user->active = $now;
+		$user->active = gmdate("Y-m-d H:i:s");
 		$user->save();
 
 		//Create a url and redirect to the updated object.
-        $this->uility->createRedirect('Users/id/' . $id);
+        $this->utility->createRedirect('Users/id/' . $id);
 	}
 
     /**
@@ -239,14 +233,11 @@ class UsersController implements \Anax\DI\IInjectionAware
 	public function updateAction($id = null)
 	{
 		if(!isset($id))
-		{
 			die("Missing id.");
-		}
 
 		$this->menuAction();
 
 		$user = $this->users->find($id);
-
 		$this->users->updated = gmdate('Y-m-d H:i:s');
 
 		$values = [
@@ -257,7 +248,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 		];
 
 		// Render form.
-        $this->uility->renderDefaultPage("Update User", $this->getUserForm($values));
+        $this->utility->renderDefaultPage("Update User", $this->getUserForm($values));
 	}
 
 	/**
@@ -270,13 +261,9 @@ class UsersController implements \Anax\DI\IInjectionAware
 	public function deleteAction($id = null)
 	{
 		if(!isset($id))
-		{
 			die("Missing id.");
-		}
 
 		$res = $this->users->delete($id);
-
-
 	}
 
 	/*
@@ -289,15 +276,10 @@ class UsersController implements \Anax\DI\IInjectionAware
 	public function softDeleteAction($id = null)
 	{
 		if(!isset($id))
-		{
 			die("Missing id.");
-		}
-
-		$now = gmdate("Y-m-d H:i:s");
 
 		$user = $this->users->find($id);
-
-		$user->deleted = $now;
+		$user->deleted = gmdate("Y-m-d H:i:s");
 		$user->save();
 
 		//Create a url and redirect to the updated object.
@@ -313,21 +295,16 @@ class UsersController implements \Anax\DI\IInjectionAware
 	{
 		$this->menuAction();
 
-		$all = $this->users->query()
-			->where('active is NOT NULL')
-			->andWhere('deleted is NULL')
-			->execute();
+		$all = $this->users->query()->where('active is NOT NULL')
+            ->andWhere('deleted is NULL')
+            ->execute();
 
 		$this->theme->setTitle("Users that are active");
 		$this->views->add('users/list-all', [
 			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
 			'users' => $all,
 			'title' => "View all users",
-			'redirect' => [
-			"Users/id/",
-			"Users/update/",
-			"Users/softDelete/",
-			"Users/restore/"]
+			'redirect' => $this->redirects()
 		]);
 	}
 
@@ -342,20 +319,12 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 		$this->menuAction();
 
-		$all = $this->users->query()
-			->where('deleted is NOT NULL')
-			->execute();
-
 		$this->theme->setTitle("Users that are deleted");
 		$this->views->add('users/list-all', [
 			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
-			'users' => $all,
+			'users' => $this->users->query()->where('deleted is NOT NULL')->execute(),
 			'title' => "View all users",
-			'redirect' => [
-			"Users/id/",
-			"Users/update/",
-			"Users/softDelete/",
-			"Users/restore/"]
+			'redirect' => $this->redirects()
 		]);
 	}
 
@@ -375,19 +344,19 @@ class UsersController implements \Anax\DI\IInjectionAware
 				'type' 		 => 'text',
 				'required' 	 => true,
 				'class' 	 => 'cform-textbox',
-				'validation' => ['not_empty'],
+				'validation' => ['not_empty']
 			],
 			'password' => [
 				'type' 		 => 'password',
 				'required' 	 => true,
 				'class' 	 => 'cform-textbox',
-				'validation' => ['not_empty'],
+				'validation' => ['not_empty']
 			],
 			'submit' => [
-			'type' 		=> 'submit',
-			'class' 	=> 'cform-submit',
-			'callback'  => [$this, 'loginSubmit'],
-			'value'		=> 'Login'
+    			'type' 		=> 'submit',
+    			'class' 	=> 'cform-submit',
+    			'callback'  => [$this, 'loginSubmit'],
+    			'value'		=> 'Login'
 			],
 		]);
 
@@ -405,11 +374,11 @@ class UsersController implements \Anax\DI\IInjectionAware
 	public function loginSubmit($form)
     {
 		$success = false;
-		// Get acronym from form and escape it.
+
+        // Get acronym from form and escape it and hash the password.
 		$acronym = strtolower($this->escaper->escapeHTML($form->Value('acronym')));
-		// Hash the password.
 		$password = md5($form->Value('password'));
-		//$password = strtolower($form->Value('password'));
+
 		// Ask the module if user is valid.
 		if($this->users->validateUser($acronym, $password))
 		{
@@ -418,10 +387,9 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 			// Update the users active variable.
 			$form->saveInSession = true;
-			$now = gmdate('Y-m-d H:i:s');
 			$updated = $this->users->update([
 				'id'		=> $this->users->id,
-				'active' 	=> $now,
+				'active' 	=> gmdate('Y-m-d H:i:s')
 			]);
 
 			if($updated)
@@ -430,7 +398,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 				$success = true;
 			}
 
-            $this->uility->createRedirect('Users/id/' . $this->users->id);
+            $this->utility->createRedirect('Users/id/' . $this->users->id);
 		}
 
         return $success;
@@ -498,6 +466,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 	public function logoutSubmit($form)
     {
 		$success = false;
+
 		// Check if user is logged in.
 		if($this->users->isUserLoggedIn())
 		{
@@ -580,10 +549,10 @@ class UsersController implements \Anax\DI\IInjectionAware
 				'value' 	 => !empty($values['password']) ? $values['password'] : ''
 			],
 			'submit' => [
-			'type' 		=> 'submit',
-			'class' 	=> 'cform-submit',
-			'callback'  => [$this, 'callbackSubmit'],
-			'value'		=> 'Submit user'
+    			'type' 		=> 'submit',
+    			'class' 	=> 'cform-submit',
+    			'callback'  => [$this, 'callbackSubmit'],
+    			'value'		=> 'Submit user'
 			]
 		]);
 
@@ -604,18 +573,18 @@ class UsersController implements \Anax\DI\IInjectionAware
     {
 		// Save form.
 		$form->saveInSession = true;
-		$now = gmdate('Y-m-d H:i:s');
-			$this->users->save([
-				'acronym' 	=> strtolower($form->Value('acronym')),
-				'email' 	=> $form->Value('email'),
-				'name' 		=> $form->Value('name'),
-				'password' 	=> md5($form->Value('password')),
-				'created' 	=> $this->users->created,
-				'updated'	=> isset($this->users->updated) ? $this->users->updated : null,
-				'active' 	=> $now,
-			]);
 
-        $this->uility->createRedirect('Users/id/' . $this->users->id);
+		$this->users->save([
+			'acronym' 	=> strtolower($form->Value('acronym')),
+			'email' 	=> $form->Value('email'),
+			'name' 		=> $form->Value('name'),
+			'password' 	=> md5($form->Value('password')),
+			'created' 	=> $this->users->created,
+			'updated'	=> isset($this->users->updated) ? $this->users->updated : null,
+			'active' 	=> gmdate('Y-m-d H:i:s')
+		]);
+
+        $this->utility->createRedirect('Users/id/' . $this->users->id);
 
         return true;
     }
