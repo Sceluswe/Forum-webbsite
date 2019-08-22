@@ -3,7 +3,7 @@ namespace Anax\Users;
 
 /**
  * Model for Users.
- * 
+ *
  * Contains interactions with the database.
  */
 class User extends \Anax\MVC\CDatabaseModel
@@ -33,10 +33,12 @@ class User extends \Anax\MVC\CDatabaseModel
 		{
 			die("Error: $condition needs to be array in UsersController::isUserAdmin()");
 		}
-		
+
 		return $result;
 	}
-	
+
+
+    
 	/*
 	* Function that validates a user based on acronym and password.
 	*
@@ -54,17 +56,19 @@ class User extends \Anax\MVC\CDatabaseModel
 
 			// Execute SQL.
 			$result = $this->execute([$acronym, $password]);
-			
+
 			// Check if a user matching the provided data does exist.
 			if(!empty($result))
 			{	// Set return variable $valid to true if that is the case.
 				$valid = true;
 			}
 		}
-		
+
 		return $valid;
 	}
-	
+
+
+
 	/*
 	* Function that saves the logged in user in session.
 	*
@@ -81,7 +85,9 @@ class User extends \Anax\MVC\CDatabaseModel
 			die("Error: User was not set in User::loginUser()");
 		}
 	}
-	
+
+
+
 	/*
 	* Function that unsets the logged in user in session.
 	*
@@ -97,7 +103,9 @@ class User extends \Anax\MVC\CDatabaseModel
 			die("Error: User was not set in session and could not be logged out.");
 		}
 	}
-	
+
+
+
 	/*
 	* Returns the current user from session, if one exists.
 	*
@@ -110,10 +118,12 @@ class User extends \Anax\MVC\CDatabaseModel
 		{
 			$result = $_SESSION['currentUser'];
 		}
-		
+
 		return $result;
 	}
-	
+
+
+
 	/*
 	* Checks if a user is logged in or not.
 	*
@@ -127,11 +137,12 @@ class User extends \Anax\MVC\CDatabaseModel
 		{
 			$result = true;
 		}
-		
+
 		return $result;
 	}
-	
-	
+
+
+
 	/*
 	* Test function to initialize a database table.
 	*
@@ -140,12 +151,12 @@ class User extends \Anax\MVC\CDatabaseModel
 	public function initializeTable($table)
 	{
 		$boolean = false;
-		
+
 		if(is_string($table))
 		{
 			$this->db->dropTableIfExists($table)->execute();
-		
-			$result = $this->db->createTable($table, 
+
+			$result = $this->db->createTable($table,
 			[
 				'id' 		=> ['integer', 'primary key', 'not null', 'auto_increment'],
 				'acronym' 	=> ['varchar(20)', 'unique', 'not null'],
@@ -158,7 +169,7 @@ class User extends \Anax\MVC\CDatabaseModel
 				'active' 	=> ['datetime'],
                 'score'     => ['integer default 0', 'not null']
 			])->execute();
-			
+
 			// Make sure database was successfully created.
 			if(isset($result))
 			{
@@ -190,7 +201,7 @@ class User extends \Anax\MVC\CDatabaseModel
 					0,
 					0
 				]);
-				
+
 				if(isset($insert1) && isset($insert2))
 				{
 					$boolean = true;
