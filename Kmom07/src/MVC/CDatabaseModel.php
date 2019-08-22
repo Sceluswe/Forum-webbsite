@@ -20,17 +20,12 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 	{
 		// If there are any incoming values, fill the object with them.
 		$this->setProperties($values);
+
+        // Get all properties.
 		$values = $this->getProperties();
 
-		// Check if the object exists already or not.
-		if(isset($values['id']))
-		{
-			return $this->update($values);
-		}
-		else
-		{
-			return $this->create($values);
-		}
+		// Check if the object exists already or not, return result.
+        return (isset($values['id'])) ? $this->update($values) : $this->create($values);
 	}
 
 
@@ -51,11 +46,7 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 		unset($keys['id']);
 		$values[] = $this->id;
 
-		$this->db->update(
-			$this->getSource(), // Database table.
-			$keys, // Table Keys.
-			"id = ?" // Where id = ?
-		);
+		$this->db->update($this->getSource(), $keys, "id = ?");
 
 		return $this->db->execute($values);
 	}
@@ -96,9 +87,7 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 	*/
 	public function find($id)
 	{
-		$this->db->select()
-					->from($this->getSource())
-					->where("id = ?");
+		$this->db->select()->from($this->getSource())->where("id = ?");
 
 		$this->db->execute([$id]);
 		return $this->db->fetchInto($this);
@@ -156,10 +145,7 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 		$keys = array_keys($values);
 		$values = array_values($values);
 
-		$this->db->insert(
-			$this->getSource(),
-			$keys
-		);
+		$this->db->insert($this->getSource(), $keys);
 
 		$res = $this->db->execute($values);
 
@@ -180,14 +166,10 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 	public function delete($id = null)
 	{
 		if(!isset($id))
-		{
 			$id = $this->id;
-		}
 
-		$this->db->delete(
-			$this->getSource(), // Database table.
-			'id = ?' // Where-clause.
-		);
+        // Delete in $this->getSource (table) where id = ?
+		$this->db->delete($this->getSource(), 'id = ?');
 
 		return $this->db->execute([$id]);
 	}
@@ -203,8 +185,7 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 	*/
 	public function query($columns = '*')
 	{
-		$this->db->select($columns)
-			->from($this->getSource());
+		$this->db->select($columns)->from($this->getSource());
 
 		return $this;
 	}
@@ -267,9 +248,7 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 	*/
 	public function findByColumn($column, $id)
 	{
-		$this->db->select()
-			->from($this->getSource())
-			->where("{$column} = ?");
+		$this->db->select()->from($this->getSource())->where("{$column} = ?");
 
 		$this->db->execute([$id]);
 		return $this->db->fetchAll();
