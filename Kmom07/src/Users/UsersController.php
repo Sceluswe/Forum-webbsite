@@ -263,7 +263,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 		if(!isset($id))
 			die("Missing id.");
 
-		$res = $this->users->delete($id);
+		$this->users->delete($id);
 	}
 
 	/*
