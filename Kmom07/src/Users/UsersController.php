@@ -36,11 +36,11 @@ class UsersController implements \Anax\DI\IInjectionAware
     public function redirects()
     {
         return [
-            "Users/id/",
-            "Users/update/",
-            "Users/delete/",
-            "Users/softDelete/",
-            "Users/restore/"
+            "profile"       =>    "Users/id/",
+            "update"        =>    "Users/update/",
+            "delete"        =>    "Users/delete/",
+            "softDelete"    =>    "Users/softDelete/",
+            "restore"       =>    "Users/restore/"
         ];
     }
 
