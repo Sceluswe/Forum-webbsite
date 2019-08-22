@@ -1,6 +1,6 @@
 <?php
 namespace Anax\Users;
- 
+
 /**
  * A controller for users and admin related events.
  *
@@ -10,7 +10,7 @@ class UsersController implements \Anax\DI\IInjectionAware
     use \Anax\DI\TInjectable,
 		\Anax\MVC\TRedirectHelpers;
 
-		
+
 	/**
 	* Initialize the controller.
 	*
@@ -21,20 +21,19 @@ class UsersController implements \Anax\DI\IInjectionAware
 		$this->users = new \Anax\Users\User();
 		$this->users->setDI($this->di);
 		$this->di->session();
-		
-		$obj = new \Anax\Forum\Question();
-		$this->questions = $obj;
+
+		$this->questions = new \Anax\Forum\Question();
 		$this->questions->setDI($this->di);
 		//$this->questions->setSource('question');
 	}
-	
+
 	/**
 	* Function that logs in a user and stores the currently logged in user in session.
-    * 
+    *
 	* @return void
 	*/
 	public function loginAction()
-	{	
+	{
 		if(!$this->users->isUserLoggedIn())
 		{
 			// Render form.
@@ -45,16 +44,16 @@ class UsersController implements \Anax\DI\IInjectionAware
             $this->utility->createRedirect('Users/Logout');
 		}
 	}
-	
+
 	/**
 	* Function presents a logout form to the user.
-    * 
+    *
 	* @return void
 	*/
 	public function logoutAction()
-	{	
+	{
 		$content = "<p>You're currently logged in as user: " . ucfirst($this->users->currentUser()) . "</p>";
-		
+
 		// Render form.
 		$this->theme->setTitle("Logout");
 		$this->views->add('default/page-2', [
@@ -63,10 +62,10 @@ class UsersController implements \Anax\DI\IInjectionAware
 			'content2' 	=> $this->getLogoutForm(),
 		]);
 	}
-	
+
 	/**
 	* Create an options menun view.
-	* 
+	*
 	* @return void
 	*/
 	public function menuAction()
@@ -77,10 +76,10 @@ class UsersController implements \Anax\DI\IInjectionAware
 			'url'	 => 'Users/'
 		]);
 	}
-	
+
 	/**
 	* Create a database and initialize two users.
-	* 
+	*
 	* @return void
 	*/
 	public function setupAction()
@@ -90,9 +89,9 @@ class UsersController implements \Anax\DI\IInjectionAware
 			if($this->users->initializeTable('user'))
 			{
 				$this->menuAction();
-				
+
 				$all = $this->users->findAll();
-				
+
 				$this->theme->setTitle("Create Table");
 				$this->views->add('users/list-all', [
 					'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
@@ -111,7 +110,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 			$this->listAction();
 		}
 	}
-	
+
 	/**
 	 * List all users.
 	 *
@@ -120,24 +119,24 @@ class UsersController implements \Anax\DI\IInjectionAware
 	public function listAction()
 	{
 		$this->initialize();
-		
+
 		$this->menuAction();
-	 
+
 		$all = $this->users->findAll();
-	 
+
 		$this->theme->setTitle("List all users");
 		$this->views->add('users/list-all', [
 			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
 			'users' => $all,
 			'title' => "View all users",
 			'redirect' => [
-			"Users/id/",  
-			"Users/update/", 
-			"Users/softDelete/", 
+			"Users/id/",
+			"Users/update/",
+			"Users/softDelete/",
 			"Users/restore/"]
 		]);
 	}
-	
+
 	/**
 	* List user with id.
 	*
@@ -148,15 +147,15 @@ class UsersController implements \Anax\DI\IInjectionAware
 	public function idAction($id = null)
 	{
 		$this->initialize();
-		
+
 		$this->menuAction();
-		
+
 		$user = $this->users->find($id);
-		
+
 		if(!empty($user))
 		{
 			$this->theme->setTitle("View user with id");
-		
+
 			$this->views->add('users/view', [
 				'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin', $user->acronym]),
 				'superadmin' => $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
@@ -168,13 +167,13 @@ class UsersController implements \Anax\DI\IInjectionAware
 				"Users/restore/",
 				"Users/delete/"]
 			]);
-			
+
 			$this->dispatcher->forward([
 				'controller'=> 'Forum',
 				'action'	=> 'score',
 				'params'	=> ['id' => $id]
 			]);
-			
+
 			$this->dispatcher->forward([
 				'controller' => 'Forum',
 				'action'	 => 'userQuestions',
@@ -186,7 +185,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 			$this->views->add('users/none', []);
 		}
 	}
-	 
+
 	/**
     * Cheat function to add a new user in a simplified way.
     *
@@ -195,15 +194,15 @@ class UsersController implements \Anax\DI\IInjectionAware
 	public function addAction()
 	{
 		$this->initialize();
-		
+
 		$this->menuAction();
-		
+
 		$this->users->created = gmdate('Y-m-d H:i:s');
-		
+
 		// Render form.
         $this->uility->renderDefaultPage("Create User", $this->getUserForm());
 	}
-    
+
 	/**
     * Restores a soft-deleted user to active.
     *
@@ -217,19 +216,19 @@ class UsersController implements \Anax\DI\IInjectionAware
 		{
 			die("Missing id.");
 		}
-		
+
 		$now = gmdate("Y-m-d H:i:s");
-		
+
 		$user = $this->users->find($id);
-		
+
 		$user->deleted = null;
 		$user->active = $now;
 		$user->save();
-		
+
 		//Create a url and redirect to the updated object.
         $this->uility->createRedirect('Users/id/' . $id);
 	}
-	
+
     /**
     * Update the information of a user.
     *
@@ -243,24 +242,24 @@ class UsersController implements \Anax\DI\IInjectionAware
 		{
 			die("Missing id.");
 		}
-		
+
 		$this->menuAction();
-		
+
 		$user = $this->users->find($id);
-		
+
 		$this->users->updated = gmdate('Y-m-d H:i:s');
-		
+
 		$values = [
 			'acronym' 	=> $user->acronym,
 			'email'		=> $user->email,
 			'name' 		=> $user->name,
 			'password'	=> $user->password,
 		];
-		
+
 		// Render form.
         $this->uility->renderDefaultPage("Update User", $this->getUserForm($values));
 	}
-	
+
 	/**
 	* Delete user.
 	*
@@ -274,12 +273,12 @@ class UsersController implements \Anax\DI\IInjectionAware
 		{
 			die("Missing id.");
 		}
-		
+
 		$res = $this->users->delete($id);
-		
-        
+
+
 	}
-	
+
 	/*
 	* Soft delete User.
 	*
@@ -293,18 +292,18 @@ class UsersController implements \Anax\DI\IInjectionAware
 		{
 			die("Missing id.");
 		}
-		
+
 		$now = gmdate("Y-m-d H:i:s");
-		
+
 		$user = $this->users->find($id);
-		
+
 		$user->deleted = $now;
 		$user->save();
-		
+
 		//Create a url and redirect to the updated object.
         $this->utility->createRedirect('Users/id/' . $id);
 	}
-	
+
 	/**
 	* List all active and not deleted users.
 	*
@@ -313,25 +312,25 @@ class UsersController implements \Anax\DI\IInjectionAware
 	public function activeAction()
 	{
 		$this->menuAction();
-		
+
 		$all = $this->users->query()
 			->where('active is NOT NULL')
 			->andWhere('deleted is NULL')
 			->execute();
-			
+
 		$this->theme->setTitle("Users that are active");
 		$this->views->add('users/list-all', [
 			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
 			'users' => $all,
 			'title' => "View all users",
 			'redirect' => [
-			"Users/id/",  
-			"Users/update/", 
+			"Users/id/",
+			"Users/update/",
 			"Users/softDelete/",
 			"Users/restore/"]
 		]);
 	}
-	
+
 	/**
 	* List all deleted users.
 	*
@@ -340,26 +339,26 @@ class UsersController implements \Anax\DI\IInjectionAware
 	public function deletedAction()
 	{
 		$this->initialize();
-		
+
 		$this->menuAction();
-		
+
 		$all = $this->users->query()
 			->where('deleted is NOT NULL')
 			->execute();
-			
+
 		$this->theme->setTitle("Users that are deleted");
 		$this->views->add('users/list-all', [
 			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
 			'users' => $all,
 			'title' => "View all users",
 			'redirect' => [
-			"Users/id/",  
-			"Users/update/", 
-			"Users/softDelete/", 
+			"Users/id/",
+			"Users/update/",
+			"Users/softDelete/",
 			"Users/restore/"]
 		]);
 	}
-	
+
 	/*
 	* Get a form for logging in a user.
 	*
@@ -369,7 +368,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 	{
 		// Initiate object instance.
 		$form = new \Mos\HTMLForm\CForm();
-		
+
 		// Create form.
 		$form = $form->create([], [
 			'acronym' => [
@@ -391,20 +390,20 @@ class UsersController implements \Anax\DI\IInjectionAware
 			'value'		=> 'Login'
 			],
 		]);
-		
+
 		// Check the status of the form
 		$form->check([$this, 'loginSuccess'], [$this, 'loginFail']);
-				
+
 		return $form->getHTML();
 	}
-	
+
 	/**
     * Callback for login-button success.
     *
     * @return boolean.
     */
 	public function loginSubmit($form)
-    {		
+    {
 		$success = false;
 		// Get acronym from form and escape it.
 		$acronym = strtolower($this->escaper->escapeHTML($form->Value('acronym')));
@@ -424,19 +423,19 @@ class UsersController implements \Anax\DI\IInjectionAware
 				'id'		=> $this->users->id,
 				'active' 	=> $now,
 			]);
-			
+
 			if($updated)
 			{	// Save user in session.
 				$this->users->loginUser($acronym);
 				$success = true;
 			}
-			
+
             $this->uility->createRedirect('Users/id/' . $this->users->id);
 		}
 
         return $success;
     }
-	
+
 	/**
     * Callback for submit-button.
     *
@@ -462,7 +461,7 @@ class UsersController implements \Anax\DI\IInjectionAware
         $form->AddOutput("<p><i>Invalid login information.</i></p>");
         return false;
     }
-	
+
 	/**
 	* Get a form for logging out a user.
 	*
@@ -472,7 +471,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 	{
 		// Initiate object instance.
 		$form = new \Mos\HTMLForm\CForm();
-		
+
 		// Create form.
 		$form = $form->create([], [
 			'logout' => [
@@ -482,13 +481,13 @@ class UsersController implements \Anax\DI\IInjectionAware
 				'value'		=> 'Logout'
 			]
 		]);
-		
+
 		// Check the status of the form.
 		$form->check([$this, 'logoutSuccess'], [$this, 'logoutFail']);
-				
+
 		return $form->getHTML();
 	}
-	
+
 	/**
     * Callback for login-button success.
     *
@@ -497,21 +496,21 @@ class UsersController implements \Anax\DI\IInjectionAware
     * @return boolean.
     */
 	public function logoutSubmit($form)
-    {		
+    {
 		$success = false;
 		// Check if user is logged in.
 		if($this->users->isUserLoggedIn())
-		{	
+		{
 			// Log the user out.
 			$this->users->logoutUser();
 			$success = true;
-			
+
             $this->utility->createRedirect('Users/Login');
 		}
 
         return $success;
     }
-	
+
 	/**
     * Callback for submit-button.
     *
@@ -549,7 +548,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 	{
 		// Initiate object instance.
 		$form = new \Mos\HTMLForm\CForm();
-		
+
 		// Create form.
 		$form = $form->create([], [
 			'acronym' => [
@@ -587,13 +586,13 @@ class UsersController implements \Anax\DI\IInjectionAware
 			'value'		=> 'Submit user'
 			]
 		]);
-		
+
 		// Check the status of the form
 		$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
-				
+
 		return $form->getHTML();
 	}
-	
+
 	/**
     * Callback for submit-button success.
     *
@@ -602,7 +601,7 @@ class UsersController implements \Anax\DI\IInjectionAware
     * @return boolean.
     */
 	public function callbackSubmit($form)
-    {			
+    {
 		// Save form.
 		$form->saveInSession = true;
 		$now = gmdate('Y-m-d H:i:s');
@@ -617,10 +616,10 @@ class UsersController implements \Anax\DI\IInjectionAware
 			]);
 
         $this->uility->createRedirect('Users/id/' . $this->users->id);
-		
+
         return true;
     }
-	
+
     /**
     * Callback for submit-button.
     *
