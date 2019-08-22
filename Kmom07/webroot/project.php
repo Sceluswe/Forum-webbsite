@@ -14,7 +14,6 @@ $di->set('ForumController', function() use ($di) {
 });
 
 $di->set('users', '\Anax\Users');
-
 $di->set('UsersController', function() use ($di)
 {
 	$controller = new \Anax\Users\UsersController();
