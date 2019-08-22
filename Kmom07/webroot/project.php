@@ -14,8 +14,7 @@ $di->set('ForumController', function() use ($di) {
 });
 
 $di->set('users', '\Anax\Users');
-$di->set('UsersController', function() use ($di)
-{
+$di->set('UsersController', function() use ($di) {
 	$controller = new \Anax\Users\UsersController();
 	$controller->setDI($di);
 	return $controller;
@@ -57,9 +56,9 @@ $app->router->add('Users', function() use ($app){
 
 	$content = "<h1>User menu</h1><p>Choose an action.</p>";
 
-	$app->views->add('me/page', [
-		'content' => $content
-	]);
+    $app->views->add('me/page', [
+        'content' => $content
+    ]);
 });
 
 $app->router->add('About', function () use ($app) {
@@ -68,9 +67,9 @@ $app->router->add('About', function () use ($app) {
 	$content = $app->fileContent->get('about.md');
 	$content = $app->textFilter->doFilter($content, 'shortcode, markdown');
 
-	$app->views->add('default/page', [
-		'content' => $content,
-	]);
+    $app->views->add('default/page', [
+        'content' => $content
+    ]);
 });
 
 $app->router->add('Setup', function() use ($app) {
@@ -78,7 +77,7 @@ $app->router->add('Setup', function() use ($app) {
     $app->dispatcher->forwardTo('Users', 'setup');
 });
 
-$app->router->add('Users/Add', function() use ($app){
+$app->router->add('Users/Add', function() use ($app) {
 	$app->theme->setTitle("Users menu");
     $app->dispatcher->forwardTo('Users', 'add');
 });
