@@ -9,23 +9,75 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 {
 	use \Anax\DI\TInjectable;
 
-	/**
-	* Save current object/row.
-	*
-	* @param array $values key/values to save or empty to use object properties.
-	*
-	* @return boolean true of false if saving went okay.
+    /**
+	* Returns the name of the Class which is also the name of the database table.
+    *
+    * @return string
 	*/
-	public function save($values = [])
+	public function getSource()
 	{
-		// If there are any incoming values, fill the object with them.
-		$this->setProperties($values);
+		return strtolower(implode('', array_slice(explode('\\', get_class($this)), -1)));
+	}
 
-        // Get all properties.
-		$values = $this->getProperties();
 
-		// Check if the object exists already or not, return result.
-        return (isset($values['id'])) ? $this->update($values) : $this->create($values);
+
+	/**
+	* Get object properties.
+    *
+	* @return array with object properties.
+	*/
+	public function getProperties()
+	{
+		$properties = get_object_vars($this);
+		unset($properties['di']);
+		unset($properties['db']);
+
+		return $properties;
+	}
+
+
+
+    /**
+    * Set object properties.
+    *
+    * @param array $properties with properties to set.
+    *
+    * @return void
+    */
+    public function setProperties($properties)
+    {
+        // Update object with incoming values, if any.
+        if(!empty($properties))
+        {
+            foreach($properties as $key => $val)
+            {
+                $this->$key = $val;
+            }
+        }
+    }
+
+
+
+    /**
+	* Create User.
+	*
+	* @param array values with which to initiate User.
+	*
+	* @return boolean true or false.
+	*/
+	public function create($values)
+	{
+		// Turn incoming values into arrays.
+		$keys = array_keys($values);
+		$values = array_values($values);
+
+		$this->db->insert($this->getSource(), $keys);
+
+		$res = $this->db->execute($values);
+
+		$this->id = $this->db->lastInsertId();
+
+		return $res;
 	}
 
 
@@ -53,15 +105,24 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 
 
 
-	/**
-	* Returns the name of the Class which is also the name of the database table.
+    /**
+    * Save current object/row.
     *
-    * @return string
-	*/
-	public function getSource()
-	{
-		return strtolower(implode('', array_slice(explode('\\', get_class($this)), -1)));
-	}
+    * @param array $values key/values to save or empty to use object properties.
+    *
+    * @return boolean true of false if saving went okay.
+    */
+    public function save($values = [])
+    {
+        // If there are any incoming values, fill the object with them.
+        $this->setProperties($values);
+
+        // Get all properties.
+        $values = $this->getProperties();
+
+        // Check if the object exists already or not, return result.
+        return (isset($values['id'])) ? $this->update($values) : $this->create($values);
+    }
 
 
 
@@ -91,67 +152,6 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 
 		$this->db->execute([$id]);
 		return $this->db->fetchInto($this);
-	}
-
-
-
-	/**
-	* Get object properties.
-    *
-	* @return array with object properties.
-	*/
-	public function getProperties()
-	{
-		$properties = get_object_vars($this);
-		unset($properties['di']);
-		unset($properties['db']);
-
-		return $properties;
-	}
-
-
-
-	/**
-	* Set object properties.
-	*
-	* @param array $properties with properties to set.
-	*
-	* @return void
-	*/
-	public function setProperties($properties)
-	{
-		// Update object with incoming values, if any.
-		if(!empty($properties))
-		{
-			foreach($properties as $key => $val)
-			{
-				$this->$key = $val;
-			}
-		}
-	}
-
-
-
-	/**
-	* Create User.
-	*
-	* @param array values with which to initiate User.
-	*
-	* @return boolean true or false.
-	*/
-	public function create($values)
-	{
-		// Turn incoming values into arrays.
-		$keys = array_keys($values);
-		$values = array_values($values);
-
-		$this->db->insert($this->getSource(), $keys);
-
-		$res = $this->db->execute($values);
-
-		$this->id = $this->db->lastInsertId();
-
-		return $res;
 	}
 
 
