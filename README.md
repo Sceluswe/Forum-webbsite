@@ -4,7 +4,7 @@ A Forum website created using Anax a HMVC framework. It's a framework developed 
 ## Installation
 1. Download and install XAMPP (or similiar).
 2. Git clone the project into the htdocs folder of xampp.
-3. Download dependencies using ´composer install´ in your command line of choice.
+3. Download dependencies using `composer install` in your command line of choice.
 3. Run xampp and start a local server.
 4. Direct your browser to: http://localhost/Forum-website/Kmom07/webroot/project.php
 
