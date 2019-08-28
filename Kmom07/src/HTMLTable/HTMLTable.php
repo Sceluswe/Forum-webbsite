@@ -16,23 +16,23 @@ class HTMLTable
     public function createTable($data)
     {
         $table =  isset($data['class']) ? "<table class='{$data['class']}'>" : '<table>';
-        $i = 0;
-        
+        $headers = true;
+
         foreach($data as $item)
         {
             if(is_array($item))
             {
                 $table .= isset($item['class']) ? "<tr class='{$item['class']}'>" : '<tr>';
                 unset($item['class']);
-                
-                if($i == 0)
+
+                if($headers)
                 {
                     foreach($item as $index)
                     {
                         $table .= "<th>{$index}</th>";
                     }
-                    
-                    $i++;
+
+                    $headers = false;
                 }
                 else
                 {
@@ -41,13 +41,13 @@ class HTMLTable
                         $table .= "<td>{$index}</td>";
                     }
                 }
-                
+
                 $table .= "</tr>";
             }
         }
-        
+
         $table .= "</table>";
-        
+
         return $table;
     }
 }
