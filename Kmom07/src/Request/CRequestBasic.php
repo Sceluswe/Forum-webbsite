@@ -10,6 +10,7 @@ class CRequestBasic
 {
 
 
+
     /**
     * Properties
     *
@@ -33,10 +34,10 @@ class CRequestBasic
 
 
     /**
-     * Constructor.
-     *
-     *
-     */
+    * Constructor.
+    *
+    *
+    */
     public function __construct()
     {
         $this->setGlobals();
@@ -45,12 +46,12 @@ class CRequestBasic
 
 
     /**
-     * Read info from the globals.
-     *
-     * @param array $globals use to initiate globals with values.
-     *
-     * @return void
-     */
+    * Read info from the globals.
+    *
+    * @param array $globals use to initiate globals with values.
+    *
+    * @return void
+    */
     public function setGlobals($globals = [])
     {
         $this->server = isset($globals['server']) ? array_merge($_SERVER, $globals['server']) : $_SERVER;
@@ -61,10 +62,10 @@ class CRequestBasic
 
 
     /**
-     * Init the request class by reading information from the request.
-     *
-     * @return $this
-     */
+    * Init the request class by reading information from the request.
+    *
+    * @return $this
+    */
     public function init()
     {
         $this->requestUri = $this->getServer('REQUEST_URI');
@@ -89,10 +90,10 @@ class CRequestBasic
 
 
     /**
-     * Get site url.
-     *
-     * @return string
-     */
+    * Get site url.
+    *
+    * @return string
+    */
     public function getSiteUrl()
     {
         return $this->siteUrl;
@@ -101,10 +102,10 @@ class CRequestBasic
 
 
     /**
-     * Get base url.
-     *
-     * @return string
-     */
+    * Get base url.
+    *
+    * @return string
+    */
     public function getBaseUrl()
     {
         return $this->baseUrl;
@@ -113,10 +114,10 @@ class CRequestBasic
 
 
     /**
-     * Get script name.
-     *
-     * @return string
-     */
+    * Get script name.
+    *
+    * @return string
+    */
     public function getScriptName()
     {
         return $this->scriptName;
@@ -125,10 +126,10 @@ class CRequestBasic
 
 
     /**
-     * Get route parts.
-     *
-     * @return array
-     */
+    * Get route parts.
+    *
+    * @return array
+    */
     public function getRouteParts()
     {
         return $this->routeParts;
@@ -137,10 +138,10 @@ class CRequestBasic
 
 
     /**
-     * Get the route.
-     *
-     * @return string as the current extracted route
-     */
+    * Get the route.
+    *
+    * @return string as the current extracted route
+    */
     public function getRoute()
     {
         return $this->route;
@@ -149,10 +150,10 @@ class CRequestBasic
 
 
     /**
-     * Extract the part containing the route.
-     *
-     * @return string as the current extracted route
-     */
+    * Extract the part containing the route.
+    *
+    * @return string as the current extracted route
+    */
     public function extractRoute()
     {
         $requestUri = $this->getServer('REQUEST_URI');
@@ -191,19 +192,19 @@ class CRequestBasic
 
         $this->route = $route;
         $this->routeParts = explode('/', trim($route, '/'));
-//var_dump($route);
+
         return $this->route;
     }
 
 
 
     /**
-     * Get the current url.
-     *
-     * @param boolean $queryString attach query string, default is true.
-     * 
-     * @return string as current url.
-     */
+    * Get the current url.
+    *
+    * @param boolean $queryString attach query string, default is true.
+    *
+    * @return string as current url.
+    */
     public function getCurrentUrl($queryString = true)
     {
         $rs    = $this->getServer('REQUEST_SCHEME');
@@ -228,20 +229,20 @@ class CRequestBasic
         $url .= $https ? 's' : '';
         $url .= '://';
         $url .= $sn . $port . htmlspecialchars($ru);
-        
+
         return $url;
     }
 
 
 
     /**
-     * Get a value from the _SERVER array and use default if it is not set.
-     *
-     * @param string $key     to check if it exists in the $_SERVER variable
-     * @param string $default value to return as default
-     *
-     * @return mixed
-     */
+    * Get a value from the _SERVER array and use default if it is not set.
+    *
+    * @param string $key     to check if it exists in the $_SERVER variable
+    * @param string $default value to return as default
+    *
+    * @return mixed
+    */
     public function getServer($key, $default = null)
     {
         return isset($this->server[$key]) ? $this->server[$key] : $default;
@@ -250,13 +251,13 @@ class CRequestBasic
 
 
     /**
-     * Set variable in the server array.
-     *
-     * @param mixed  $key   the key an the , or an key-value array
-     * @param string $value the value of the key
-     *
-     * @return $this
-     */
+    * Set variable in the server array.
+    *
+    * @param mixed  $key   the key an the , or an key-value array
+    * @param string $value the value of the key
+    *
+    * @return $this
+    */
     public function setServer($key, $value = null)
     {
         if (is_array($key)) {
@@ -269,13 +270,13 @@ class CRequestBasic
 
 
     /**
-     * Get a value from the _GET array and use default if it is not set.
+    * Get a value from the _GET array and use default if it is not set.
      *
-     * @param string $key     to check if it exists in the $_GET variable
-     * @param string $default value to return as default
-     *
-     * @return mixed
-     */
+    * @param string $key     to check if it exists in the $_GET variable
+    * @param string $default value to return as default
+    *
+    * @return mixed
+    */
     public function getGet($key, $default = null)
     {
         return isset($this->get[$key]) ? $this->get[$key] : $default;
@@ -284,13 +285,13 @@ class CRequestBasic
 
 
     /**
-     * Set variable in the get array.
-     *
-     * @param mixed  $key   the key an the , or an key-value array
-     * @param string $value the value of the key
-     *
-     * @return $this
-     */
+    * Set variable in the get array.
+    *
+    * @param mixed  $key   the key an the , or an key-value array
+    * @param string $value the value of the key
+    *
+    * @return $this
+    */
     public function setGet($key, $value = null)
     {
         if (is_array($key)) {
@@ -303,25 +304,25 @@ class CRequestBasic
 
 
     /**
-     * Get a value from the _POST array and use default if it is not set.
-     *
-     * @param string $key     to check if it exists in the $_POST variable
-     * @param string $default value to return as default
-     *
-     * @return mixed
-     */
+    * Get a value from the _POST array and use default if it is not set.
+    *
+    * @param string $key     to check if it exists in the $_POST variable
+    * @param string $default value to return as default
+    *
+    * @return mixed
+    */
     public function getPost($key = null, $default = null)
     {
-        if ($key) 
+        if ($key)
 		{
             return isset($this->post[$key]) ? $this->post[$key] : $default;
-        } 
-		else 
+        }
+		else
 		{
             return $this->post;
         }
     }
-	
+
 	public function hasPost($key)
 	{
 		$boolean = false;
@@ -329,7 +330,7 @@ class CRequestBasic
 		{
 			$boolean = isset($this->post[$key]) ? true : false;
 		}
-		
+
 		return $boolean;
 	}
 }
