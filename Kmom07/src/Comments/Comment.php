@@ -86,17 +86,20 @@ class Comment extends \Anax\MVC\CDatabaseModel
 					$table,
 					['name', 'email', 'web', 'content', 'timestamp', 'ip']
 				);
+
 				// Get current time.
 				$now = gmdate('Y-m-d H:i:s');
+
 				// Insert user 'admin' with the following values:
 				$insert1 = $this->db->execute([
 					'admin',
 					'admin@dbwebb.se',
 					'www.google.se',
-					'Jag heter Emil Mattsson och drömmen är att bli en spelprogrammerare. Förra året arbetade jag på ett eget spel tillsammans med två vänner. Nu pluggar jag webbprogrammering för att vidga min kunskap, den kommer att behövas i framtiden; till det egna företaget. Att jobba med programmering har länge varit en dröm och det är något jag siktar på, oavsett vart den vägen leder.',
+					'Jag heter Emil Mattsson och drömmen är att bli en spelprogrammerare. Förra året arbetade jag på ett eget spel tillsammans med två vänner. Nu pluggar jag webbprogrammering för att vidga min kunskap.',
 					$now,
 					$this->request->getServer('REMOTE_ADDR')
 				]);
+
 				// Insert user 'doe' with the following values:
 				$insert2 = $this->db->execute([
 					'doe',
