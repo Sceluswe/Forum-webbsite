@@ -15,14 +15,14 @@ class HTMLTable
     */
     public function createTable($data)
     {
-        $table =  isset($data['class']) ? "<table class='{$data['class']}'>" : '<table>';
+        $table =  isset($data['class']) ? "<table class=\"{$data['class']}\">" : '<table>';
         $headers = true;
 
         foreach($data as $item)
         {
             if(is_array($item))
             {
-                $table .= isset($item['class']) ? "<tr class='{$item['class']}'>" : '<tr>';
+                $table .= isset($item['class']) ? "<tr class=\"{$item['class']}\">" : '<tr>';
                 unset($item['class']);
 
                 if($headers)
