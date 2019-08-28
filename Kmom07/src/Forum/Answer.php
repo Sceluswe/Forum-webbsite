@@ -3,15 +3,15 @@ namespace Anax\Forum;
 
 /**
  * Model for Users.
- * 
+ *
  * Contains interactions with the database.
  */
 class Answer extends \Anax\MVC\CDatabaseModel
-{	
+{
 	/*
 	* Set route to redirect to in session.
 	*
-	* @param string, route to redirect to. 
+	* @param string, route to redirect to.
 	*
 	* @return string.
 	*/
@@ -19,7 +19,9 @@ class Answer extends \Anax\MVC\CDatabaseModel
 	{
 		$this->session->set('redirecta', $key);
 	}
-	
+
+
+    
 	/*
 	* Get route to redirect to from session.
 	*
@@ -27,6 +29,6 @@ class Answer extends \Anax\MVC\CDatabaseModel
 	*/
 	public function getRedirect()
 	{
-		return $this->session->get('redirecta');	
+		return $this->session->get('redirecta');
 	}
 }
