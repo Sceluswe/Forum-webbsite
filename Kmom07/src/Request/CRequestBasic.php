@@ -323,6 +323,8 @@ class CRequestBasic
         }
     }
 
+
+
     /**
     * Check if a $key is set inside $_POST.
     *
@@ -332,11 +334,6 @@ class CRequestBasic
     */
 	public function hasPost($key)
 	{
-		$boolean = false;
-
-        if($key)
-			$boolean = isset($this->post[$key]) ? true : false;
-
-		return $boolean;
+		return isset($this->post[$key]);
 	}
 }
