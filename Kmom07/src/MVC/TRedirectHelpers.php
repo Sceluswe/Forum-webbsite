@@ -9,10 +9,12 @@ namespace Anax\MVC;
 trait TRedirectHelpers
 {
 
+
+
     /**
      * Redirect to current or another route.
      *
-     * @param string $route the route to redirect to, 
+     * @param string $route the route to redirect to,
      * null to redirect to current route, "" to redirect to baseurl.
      *
      * @return void
