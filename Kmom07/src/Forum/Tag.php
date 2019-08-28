@@ -3,15 +3,15 @@ namespace Anax\Forum;
 
 /**
  * Model for Users.
- * 
+ *
  * Contains interactions with the database.
  */
 class Tag extends \Anax\MVC\CDatabaseModel
-{	
+{
 	/*
 	* Set route to redirect to in session.
 	*
-	* @param string, route to redirect to. 
+	* @param string, route to redirect to.
 	*
 	* @return string.
 	*/
@@ -19,7 +19,9 @@ class Tag extends \Anax\MVC\CDatabaseModel
 	{
 		$this->session->set('redirectc', $key);
 	}
-	
+
+
+    
 	/*
 	* Get route to redirect to from session.
 	*
