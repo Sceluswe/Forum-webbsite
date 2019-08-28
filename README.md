@@ -12,7 +12,6 @@ You can login with the username 'admin' and the password 'admin'.
 
 ## Requirements
 A local environment that supports PHP (at least version 5.6.0)
-
 A command line with Composer installed: https://getcomposer.org/
 
 ## License
