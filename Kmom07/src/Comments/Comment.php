@@ -8,7 +8,7 @@ namespace Anax\Comments;
  */
 class Comment extends \Anax\MVC\CDatabaseModel
 {
-	/*
+	/**
 	* Set table to store comment in.
 	*
 	* @param string, table to use in the database.
@@ -20,7 +20,9 @@ class Comment extends \Anax\MVC\CDatabaseModel
 		$this->session->set('comment_db', strtolower($key));
 	}
 
-	/*
+
+
+	/**
 	* Get table to store comment in from session.
 	*
 	* @return string.
@@ -30,7 +32,9 @@ class Comment extends \Anax\MVC\CDatabaseModel
 		return $this->session->get('comment_db');
 	}
 
-	/*
+
+
+	/**
 	* Set route to redirect to in session.
 	*
 	* @param string, route to redirect to.
@@ -42,7 +46,9 @@ class Comment extends \Anax\MVC\CDatabaseModel
 		$this->session->set('redirect', $key);
 	}
 
-	/*
+
+
+	/**
 	* Get route to redirect to from session.
 	*
 	* @return string.
@@ -52,7 +58,9 @@ class Comment extends \Anax\MVC\CDatabaseModel
 		return $this->session->get('redirect');
 	}
 
-	/*
+
+
+	/**
 	* Test function to initialize a database table.
 	*
 	* @return boolean.
@@ -117,6 +125,8 @@ class Comment extends \Anax\MVC\CDatabaseModel
 		}
 		return $boolean;
 	}
+
+
 
     /**
     * Create the comment table.
