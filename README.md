@@ -12,7 +12,7 @@ You can login with the username 'admin' and the password 'admin'.
 
 ## Requirements
 1. A local environment that supports PHP (at least version 5.6.0).
-2. A environment capable of hosting a local server (like xampp). 
+2. A environment capable of hosting a local server (like xampp): https://www.apachefriends.org/index.html. 
 3. A command line with Composer installed: https://getcomposer.org/
 
 ## License
