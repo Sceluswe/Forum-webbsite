@@ -127,8 +127,7 @@ class Comment extends \Anax\MVC\CDatabaseModel
 		{
 			$this->db->dropTableIfExists($table)->execute();
 
-			$result = $this->db->createTable($table,
-			[
+			$result = $this->db->createTable($table, [
 				'id' 		=> ['integer', 'primary key', 'not null', 'auto_increment'],
 				'name'		=> ['varchar(40)'],
 				'email' 	=> ['varchar(80)'],
