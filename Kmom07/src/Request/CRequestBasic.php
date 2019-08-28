@@ -323,13 +323,19 @@ class CRequestBasic
         }
     }
 
+    /**
+    * Check if a $key is set inside $_POST.
+    *
+    * @param string $key     to check with if it exists in the $_POST variable.
+    *
+    * @return boolean.
+    */
 	public function hasPost($key)
 	{
 		$boolean = false;
-		if($key)
-		{
+
+        if($key)
 			$boolean = isset($this->post[$key]) ? true : false;
-		}
 
 		return $boolean;
 	}
