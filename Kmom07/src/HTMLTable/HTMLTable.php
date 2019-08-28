@@ -6,6 +6,9 @@ namespace Anax\HTMLTable;
  */
 class HTMLTable
 {
+
+
+    
     /**
     * Creates tables and returns it in a string.
     *
