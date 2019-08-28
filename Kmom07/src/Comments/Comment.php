@@ -3,7 +3,7 @@ namespace Anax\Comments;
 
 /**
  * Model for Users.
- * 
+ *
  * Contains interactions with the database.
  */
 class Comment extends \Anax\MVC\CDatabaseModel
@@ -11,7 +11,7 @@ class Comment extends \Anax\MVC\CDatabaseModel
 	/*
 	* Set table to store comment in.
 	*
-	* @param string, table to use in the database. 
+	* @param string, table to use in the database.
 	*
 	* @return string.
 	*/
@@ -19,7 +19,7 @@ class Comment extends \Anax\MVC\CDatabaseModel
 	{
 		$this->session->set('comment_db', strtolower($key));
 	}
-	
+
 	/*
 	* Get table to store comment in from session.
 	*
@@ -29,11 +29,11 @@ class Comment extends \Anax\MVC\CDatabaseModel
 	{
 		return $this->session->get('comment_db');
 	}
-	
+
 	/*
 	* Set route to redirect to in session.
 	*
-	* @param string, route to redirect to. 
+	* @param string, route to redirect to.
 	*
 	* @return string.
 	*/
@@ -41,7 +41,7 @@ class Comment extends \Anax\MVC\CDatabaseModel
 	{
 		$this->session->set('redirect', $key);
 	}
-	
+
 	/*
 	* Get route to redirect to from session.
 	*
@@ -49,9 +49,9 @@ class Comment extends \Anax\MVC\CDatabaseModel
 	*/
 	public function getRedirect()
 	{
-		return $this->session->get('redirect');	
+		return $this->session->get('redirect');
 	}
-	
+
 	/*
 	* Test function to initialize a database table.
 	*
@@ -60,13 +60,13 @@ class Comment extends \Anax\MVC\CDatabaseModel
 	public function initializeTable()
 	{
 		$boolean = false;
-		
+
 		$table = $this->getSource();
-		
-		if(is_string($table))
+
+		if(empty($table))
 		{
 			$this->db->dropTableIfExists($table)->execute();
-		
+
 			$result = $this->db->createTable($table,
 			[
 				'id' 		=> ['integer', 'primary key', 'not null', 'auto_increment'],
@@ -77,7 +77,7 @@ class Comment extends \Anax\MVC\CDatabaseModel
 				'timestamp' => ['datetime'],
 				'ip'		=> ['integer']
 			])->execute();
-			
+
 			// Make sure database was successfully created.
 			if(isset($result))
 			{
@@ -106,7 +106,7 @@ class Comment extends \Anax\MVC\CDatabaseModel
 					$now,
 					$this->request->getServer('REMOTE_ADDR')
 				]);
-				
+
 				if(isset($insert1) && isset($insert2))
 				{
 					$boolean = true;
@@ -115,15 +115,15 @@ class Comment extends \Anax\MVC\CDatabaseModel
 		}
 		return $boolean;
 	}
-	
+
 	public function createCommentTable()
 	{
 		$table = $this->getSource();
-		
+
 		if(is_string($table))
 		{
 			$this->db->dropTableIfExists($table)->execute();
-		
+
 			$result = $this->db->createTable($table,
 			[
 				'id' 		=> ['integer', 'primary key', 'not null', 'auto_increment'],
