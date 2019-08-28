@@ -72,16 +72,16 @@ class ForumController implements \Anax\DI\IInjectionAware
     */
 	public function userStatusAction()
 	{
-		$userlink = "You are currently not logged in. <a href='" . $this->url->create("Users/Login") . "'>Login</a>";
+		$userlink = "<p>You are currently not logged in. <a href=\"" . $this->url->create("Users/Login") . "\">Login</a></p>";
 
 		if($this->users->isUserLoggedIn())
 		{
 			$user = $this->users->findByColumn('acronym', $this->users->currentUser());
 
             // Create a link to the currently logged in user.
-			$userlink = "You are currently logged in as: <a href='"
+			$userlink = "<p>You are currently logged in as: <a href=\""
 				. $this->url->create("Users/id/{$user[0]->id}")
-				. "'>" . ucfirst($user[0]->acronym) . "</a>";
+				. "\">" . ucfirst($user[0]->acronym) . "</a></p>";
 		}
 
 		// Render form.
