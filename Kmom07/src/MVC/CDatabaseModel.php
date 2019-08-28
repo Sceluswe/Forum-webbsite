@@ -289,13 +289,13 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 
 
     /**
-     * Execute a select-query with arguments and return all resultset.
-     *
-     * @param string  $query      the SQL query with ?.
-     * @param array   $params     array which contains the argument to replace ?.
-     *
-     * @return array with resultset.
-     */
+    * Execute a select-query with arguments and return all resultset.
+    *
+    * @param string  $query      the SQL query with ?.
+    * @param array   $params     array which contains the argument to replace ?.
+    *
+    * @return array with resultset.
+    */
 	public function executeFetchAll($query, $params)
 	{
         return $this->db->executeFetchAll($query, $params);;
