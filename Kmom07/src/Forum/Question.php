@@ -3,7 +3,7 @@ namespace Anax\Forum;
 
 /**
  * Model for Users.
- * 
+ *
  * Contains interactions with the database.
  */
 class Question extends \Anax\MVC\CDatabaseModel
@@ -15,7 +15,9 @@ class Question extends \Anax\MVC\CDatabaseModel
 	{
 		$this->session->set('savedQuestion', htmlentities($question));
 	}
-	
+
+
+
 	/**
 	*	Get the previous object from session.
 	*/
@@ -23,11 +25,13 @@ class Question extends \Anax\MVC\CDatabaseModel
 	{
 		return $this->session->get('savedQuestion');
 	}
-	
+
+
+
 	/*
 	* Set route to redirect to in session.
 	*
-	* @param string, route to redirect to. 
+	* @param string, route to redirect to.
 	*
 	* @return string.
 	*/
@@ -35,7 +39,9 @@ class Question extends \Anax\MVC\CDatabaseModel
 	{
 		$this->session->set('redirect', $key);
 	}
-	
+
+
+    
 	/*
 	* Get route to redirect to from session.
 	*
@@ -43,6 +49,6 @@ class Question extends \Anax\MVC\CDatabaseModel
 	*/
 	public function getRedirect()
 	{
-		return $this->session->get('redirect');	
+		return $this->session->get('redirect');
 	}
 }
