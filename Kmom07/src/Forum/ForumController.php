@@ -76,12 +76,12 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 		if($this->users->isUserLoggedIn())
 		{
-			$user = $this->users->findByColumn('acronym', $this->users->currentUser());
+			$user = $this->users->findByColumn('acronym', $this->users->currentUser())[0];
 
             // Create a link to the currently logged in user.
 			$userlink = "<p>You are currently logged in as: <a href=\""
-				. $this->url->create("Users/id/{$user[0]->id}")
-				. "\">" . ucfirst($user[0]->acronym) . "</a></p>";
+				. $this->url->create("Users/id/{$user->id}")
+				. "\">" . ucfirst($user->acronym) . "</a></p>";
 		}
 
 		// Render form.
