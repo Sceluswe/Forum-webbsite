@@ -9,6 +9,8 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 {
 	use \Anax\DI\TInjectable;
 
+
+
     /**
 	* Returns the name of the Class which is also the name of the database table.
     *
