@@ -63,7 +63,7 @@ class Comment extends \Anax\MVC\CDatabaseModel
 
 		$table = $this->getSource();
 
-		if(empty($table))
+		if(!empty($table))
 		{
 			$this->db->dropTableIfExists($table)->execute();
 
@@ -118,11 +118,16 @@ class Comment extends \Anax\MVC\CDatabaseModel
 		return $boolean;
 	}
 
+    /**
+    * Create the comment table.
+    *
+    * @return void.
+    */
 	public function createCommentTable()
 	{
 		$table = $this->getSource();
 
-		if(is_string($table))
+		if(!empty($table))
 		{
 			$this->db->dropTableIfExists($table)->execute();
 
