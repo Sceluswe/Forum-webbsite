@@ -54,11 +54,9 @@ class CommentController implements \Anax\DI\IInjectionAware
 	{
 		if($this->comments->initializeTable())
 		{
-			$all = $this->comments->findAll();
-
 			$this->theme->setTitle("All comments");
 			$this->views->add('comment/comments-list-all', [
-				'comments' => $all,
+				'comments' => $this->comments->findAll(),
 				'title' => "Comment section reset!",
 				'redirect' => $this->redirects()
 			]);
