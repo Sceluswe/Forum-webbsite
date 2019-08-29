@@ -34,12 +34,12 @@ class CommentController implements \Anax\DI\IInjectionAware
 	*/
 	public function redirects()
 	{
-		return $values = [
-            'Comment/removeAll',
-            'Comment/setup',
-            'Comment/update/',
-            'Comment/delete/',
-            'Comment/add'
+		return [
+            "setup"     => "Comment/setup",
+            "create"    => "Comment/create",
+            "update"    => "Comment/update/",
+            "delete"    => "Comment/delete/",
+            "deleteAll" => "Comment/deleteAll"
 		];
 	}
 
@@ -90,7 +90,7 @@ class CommentController implements \Anax\DI\IInjectionAware
     *
     * @return void.
     */
-    public function addAction()
+    public function createAction()
     {
 		// Render form.
         $this->utility->renderDefaultPage("Create a Comment", $this->getCommentForm());
@@ -151,7 +151,7 @@ class CommentController implements \Anax\DI\IInjectionAware
     *
     * @return void.
     */
-    public function removeAllAction()
+    public function deleteAllAction()
     {
         $this->comments->createCommentTable();
 
