@@ -57,7 +57,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 	public function loginAction()
 	{
         (!$this->users->isUserLoggedIn())
-            ? $this->utility->renderDefaultPage("Login", $this->getLoginForm());
+            ? $this->utility->renderDefaultPage("Login", $this->getLoginForm())
             : $this->utility->createRedirect('Users/Logout');
 	}
 
