@@ -1,15 +1,16 @@
 <?php
 /**
- * Autoloader for Anax environment, including composer autoloader, if available.
- *
- */
+* Autoloader for Anax environment, including composer autoloader, if available.
+*
+*/
 
 /**
- * Autoloader for classes using Anax-base names.
- *
- * @param string $class The fully-qualified class name.
- * @return void
- */
+* Autoloader for classes using Anax-base names.
+*
+* @param string $class The fully-qualified class name.
+*
+* @return void
+*/
 spl_autoload_register(function ($class) {
     $path = ANAX_SOURCE_PATH . "/{$class}/{$class}.php";
     if(is_file($path)) {
@@ -24,19 +25,19 @@ spl_autoload_register(function ($class) {
 
 
 /**
- * PSR-0 autoloader for classes supporting namespaces, adapted to Anax environment.
- *
- * @link http://www.php-fig.org/psr/psr-0/
- * @param string $class The fully-qualified class name.
- * @return void
- */
+* PSR-0 autoloader for classes supporting namespaces, adapted to Anax environment.
+*
+* @link http://www.php-fig.org/psr/psr-0/
+* @param string $class The fully-qualified class name.
+* @return void
+*/
 spl_autoload_register(function ($className) {
 
     $path      = ANAX_SOURCE_PATH . DIRECTORY_SEPARATOR;
     $className = ltrim($className, '\\');
     $fileName  = $path;
     $namespace = '';
-    
+
     if ($lastNsPos = strrpos($className, '\\')) {
         $namespace  = substr($className, 0, $lastNsPos);
         $className  = substr($className, $lastNsPos + 1);
@@ -52,12 +53,12 @@ spl_autoload_register(function ($className) {
 
 
 /**
- * PSR-4 autoloader for Anax environment.
- *
- * @link http://www.php-fig.org/psr/psr-4/
- * @param string $class The fully-qualified class name.
- * @return void
- */
+* PSR-4 autoloader for Anax environment.
+*
+* @link http://www.php-fig.org/psr/psr-4/
+* @param string $class The fully-qualified class name.
+* @return void
+*/
 spl_autoload_register(function ($class) {
 
     // project-specific namespace prefix
@@ -86,5 +87,3 @@ spl_autoload_register(function ($class) {
         require $file;
     }
 });
-
-
