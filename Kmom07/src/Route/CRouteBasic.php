@@ -46,10 +46,7 @@ class CRouteBasic
      */
     public function match($query)
     {
-        if ($this->rule === $query) {
-            return true;
-        }
-        return false;
+        return ($this->rule === $query) ? true : false;
     }
 
 
