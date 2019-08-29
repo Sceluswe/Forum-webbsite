@@ -3,12 +3,14 @@
 namespace Anax\Utility;
 
 /**
- * Class containing functions for commonly occuring code.
- *
- */
+* Class containing functions for commonly occuring code.
+*
+*/
 class CUtility implements \Anax\DI\IInjectionAware
 {
 	use \Anax\DI\TInjectable;
+
+
 
     /**
     * Render a default page with title and content.
@@ -27,6 +29,8 @@ class CUtility implements \Anax\DI\IInjectionAware
         ]);
     }
 
+
+
     /**
     * Creates a URL and redirects the user to it.
     *
@@ -41,6 +45,8 @@ class CUtility implements \Anax\DI\IInjectionAware
         // Redirect user to URL.
         $this->response->redirect($url);
     }
+
+
 
     /**
     * Calculates the sum of an array of objects rating property.
