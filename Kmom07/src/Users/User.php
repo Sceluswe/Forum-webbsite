@@ -2,13 +2,16 @@
 namespace Anax\Users;
 
 /**
- * Model for Users.
- *
- * Contains interactions with the database.
- */
+* Model for Users.
+*
+* Contains interactions with the database.
+*/
 class User extends \Anax\MVC\CDatabaseModel
 {
-	/*
+
+
+
+	/**
 	* Function that checks if a user is an admin based on the provided $condition.
 	*
 	* @param $user, string, A string with the current users name.
@@ -23,7 +26,7 @@ class User extends \Anax\MVC\CDatabaseModel
 
 
 
-	/*
+	/**
 	* Function that validates a user based on acronym and password.
 	*
 	* $return boolean, false or true depending on result.
@@ -52,7 +55,7 @@ class User extends \Anax\MVC\CDatabaseModel
 
 
 
-	/*
+	/**
 	* Function that saves the logged in user in session.
 	*
 	* @param $user, the user to be logged in.
@@ -71,7 +74,7 @@ class User extends \Anax\MVC\CDatabaseModel
 
 
 
-	/*
+	/**
 	* Function that unsets the logged in user in session.
 	*
 	*/
@@ -82,7 +85,7 @@ class User extends \Anax\MVC\CDatabaseModel
 
 
 
-	/*
+	/**
 	* Returns the current user from session, if one exists.
 	*
 	* @return string, returns the currently logged in user.
@@ -94,7 +97,7 @@ class User extends \Anax\MVC\CDatabaseModel
 
 
 
-	/*
+	/**
 	* Checks if a user is logged in or not.
 	*
 	* @return boolean, returns if the user is logged in or not.
@@ -106,7 +109,7 @@ class User extends \Anax\MVC\CDatabaseModel
 
 
 
-	/*
+	/**
 	* Test function to initialize a database table.
 	*
 	* @return boolean.
