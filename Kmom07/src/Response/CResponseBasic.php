@@ -19,12 +19,12 @@ class CResponseBasic
 
 
     /**
-     * Set headers.
-     *
-     * @param string $header type of header to set
-     *
-     * @return $this
-     */
+    * Set headers.
+    *
+    * @param string $header type of header to set
+    *
+    * @return $this
+    */
     public function setHeader($header)
     {
         $this->headers[] = $header;
@@ -33,12 +33,12 @@ class CResponseBasic
 
 
     /**
-     * Check if headers are already sent and throw exception if it is.
-     *
-     * @return void
-     *
-     * @throws \Exception
-     */
+    * Check if headers are already sent and throw exception if it is.
+    *
+    * @return void
+    *
+    * @throws \Exception
+    */
     public function checkIfHeadersAlreadySent()
     {
         if (headers_sent($file, $line)) {
@@ -49,10 +49,10 @@ class CResponseBasic
 
 
     /**
-     * Send headers.
-     *
-     * @return $this
-     */
+    * Send headers.
+    *
+    * @return $this
+    */
     public function sendHeaders()
     {
         if (empty($this->headers)) {
@@ -86,12 +86,12 @@ class CResponseBasic
 
 
     /**
-     * Redirect to another page.
-     *
-     * @param string $url to redirect to
-     *
-     * @return void
-     */
+    * Redirect to another page.
+    *
+    * @param string $url to redirect to
+    *
+    * @return void
+    */
     public function redirect($url)
     {
         $this->checkIfHeadersAlreadySent();
