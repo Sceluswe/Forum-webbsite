@@ -37,7 +37,7 @@ class CommentController implements \Anax\DI\IInjectionAware
 		return [
             "setup"     => "Comment/setup",
             "create"    => "Comment/create",
-            "update"    => "Comment/update/",
+            "add"       => "Comment/add/",
             "delete"    => "Comment/delete/",
             "deleteAll" => "Comment/deleteAll"
 		];
@@ -90,7 +90,7 @@ class CommentController implements \Anax\DI\IInjectionAware
     *
     * @return void.
     */
-    public function createAction()
+    public function addAction()
     {
 		// Render form.
         $this->utility->renderDefaultPage("Create a Comment", $this->getCommentForm());

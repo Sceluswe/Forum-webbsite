@@ -27,4 +27,4 @@
 </div>
 <?php endforeach; ?>
 
-<a class="commentbutton" href="<?=$this->url->create($redirect["create"])?>"><i class="fa fa-commenting"></i> Create comment</a>
+<a class="commentbutton" href="<?=$this->url->create($redirect["add"])?>"><i class="fa fa-commenting"></i> Create comment</a>
