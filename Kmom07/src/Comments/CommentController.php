@@ -74,16 +74,12 @@ class CommentController implements \Anax\DI\IInjectionAware
     {
 		$this->initialize();
 		$this->comments->setSource($this->request->getRoute());
-
-		// Get all comments.
-		$all = $this->comments->findAll();
-
 		$this->comments->setRedirect($this->request->getRoute());
 
         $this->views->add('comment/comments-list-all', [
-            'comments' 	=> $all,
-			'title' => "All Comments",
-			'redirect'	=> $this->redirects(),
+            'comments'  => $this->comments->findAll(),
+			'title'     => "All Comments",
+			'redirect'	=> $this->redirects()
         ]);
     }
 
