@@ -3,27 +3,27 @@
 namespace Anax;
 
 /**
- * Trait implementing reading from config-file and storing options in $this->config.
- *
- */
+* Trait implementing reading from config-file and storing options in $this->config.
+*
+*/
 trait TConfigure
 {
 
     /**
-     * Properties
-     *
-     */
+    * Properties
+    *
+    */
     private $config = [];  // Store all config as an array
 
 
 
     /**
-     * Read configuration from file or array'.
-     *
-     * @param array/string $what is an array with key/value config options or a file
-     *      to be included which returns such an array.
-     * @return $this for chaining.
-     */
+    * Read configuration from file or array'.
+    *
+    * @param array/string $what is an array with key/value config options or a file
+    *      to be included which returns such an array.
+    * @return $this for chaining.
+    */
     public function configure($what)
     {
         if (is_array($what)) {
@@ -33,7 +33,7 @@ trait TConfigure
             $options = include $what;
         }
         else {
-            throw new Exception("Configure item '" . htmlentities($what) 
+            throw new Exception("Configure item '" . htmlentities($what)
                 . "' is not an array nor a readable file.");
         }
 
