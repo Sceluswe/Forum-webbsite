@@ -1,4 +1,5 @@
 <?php
+
 namespace Anax\Users;
 
 /**
@@ -9,6 +10,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 {
     use \Anax\DI\TInjectable,
 		\Anax\MVC\TRedirectHelpers;
+
+
 
 	/**
 	* Initialize the controller.
