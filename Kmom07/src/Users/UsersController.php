@@ -2,9 +2,9 @@
 namespace Anax\Users;
 
 /**
- * A controller for users and admin related events.
- *
- */
+* A controller for users and admin related events.
+*
+*/
 class UsersController implements \Anax\DI\IInjectionAware
 {
     use \Anax\DI\TInjectable,
@@ -131,10 +131,10 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 
 	/**
-	 * List all users.
-	 *
-	 * @return void
-	 */
+    * List all users.
+    *
+    * @return void
+    */
 	public function listAction()
 	{
 		$this->initialize();
@@ -288,7 +288,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 
 
-	/*
+	/**
 	* Soft delete User.
 	*
 	* @param integer, id of the user to soft-delete.
@@ -356,7 +356,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 
 
-	/*
+	/**
 	* Get a form for logging in a user.
 	*
 	* @return the HTML code of the form.
