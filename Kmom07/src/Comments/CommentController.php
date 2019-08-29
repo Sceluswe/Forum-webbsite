@@ -108,13 +108,11 @@ class CommentController implements \Anax\DI\IInjectionAware
 	public function updateAction($id = null)
 	{
 		if(!isset($id))
-		{
 			die("Missing id.");
-		}
 
 		$comment = $this->comments->find($id);
 
-		// Add values for a comment
+		// Add values for a comment.
 		$values = [
 			'name' 		=> $comment->name,
 			'email'		=> $comment->email,
@@ -139,11 +137,9 @@ class CommentController implements \Anax\DI\IInjectionAware
     public function deleteAction($id = null)
     {
 		if(!isset($id))
-		{
 			die("Missing id.");
-		}
 
-		$res = $this->comments->delete($id);
+		$this->comments->delete($id);
 
         $this->utility->createRedirect($this->comments->getRedirect());
     }
@@ -206,10 +202,10 @@ class CommentController implements \Anax\DI\IInjectionAware
 				'value' 	 => !empty($values['content']) ? $values['content'] : ''
 			],
 			'submit' => [
-			'type' 		=> 'submit',
-			'class' 	=> 'cform-submit',
-			'callback'  => [$this, 'callbackSubmit'],
-			'value'		=> 'Submit user'
+    			'type' 		=> 'submit',
+    			'class' 	=> 'cform-submit',
+    			'callback'  => [$this, 'callbackSubmit'],
+    			'value'		=> 'Submit user'
 			]
 		]);
 
