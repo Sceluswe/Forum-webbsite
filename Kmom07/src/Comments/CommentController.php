@@ -238,15 +238,14 @@ class CommentController implements \Anax\DI\IInjectionAware
     {
 		// Save form.
 		$form->saveInSession = true;
-		$now = gmdate('Y-m-d H:i:s');
-			$this->comments->save([
-				'name' 		=> $form->Value('name'),
-				'email' 	=> $form->Value('email'),
-				'web' 		=> $form->Value('web'),
-				'content'	=> $form->Value('content'),
-				'timestamp' => $now,
-				'ip'		=> $this->request->getServer('REMOTE_ADDR')
-			]);
+		$this->comments->save([
+			'name' 		=> $form->Value('name'),
+			'email' 	=> $form->Value('email'),
+			'web' 		=> $form->Value('web'),
+			'content'	=> $form->Value('content'),
+			'timestamp' => gmdate('Y-m-d H:i:s'),
+			'ip'		=> $this->request->getServer('REMOTE_ADDR')
+		]);
 
         $this->utility->createRedirect($this->comments->getRedirect());
 
