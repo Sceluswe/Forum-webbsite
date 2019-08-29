@@ -13,9 +13,9 @@ class CRouterBasic implements \Anax\DI\IInjectionAware
 
 
     /**
-     * Properties
-     *
-     */
+    * Properties
+    *
+    */
     private $routes         = [];    // All the routes
     private $internalRoutes = [];    // All internal routes
     private $defaultRoute   = null;  // A default rout to catch all
@@ -23,10 +23,10 @@ class CRouterBasic implements \Anax\DI\IInjectionAware
 
 
     /**
-     * Get all routes.
-     *
-     * @return array with all routes.
-     */
+    * Get all routes.
+    *
+    * @return array with all routes.
+    */
     public function getAll()
     {
         return $this->routes;
@@ -35,10 +35,10 @@ class CRouterBasic implements \Anax\DI\IInjectionAware
 
 
     /**
-     * Get all internal routes.
-     *
-     * @return array with internal routes.
-     */
+    * Get all internal routes.
+    *
+    * @return array with internal routes.
+    */
     public function getInternal()
     {
         return $this->internalRoutes;
@@ -47,13 +47,13 @@ class CRouterBasic implements \Anax\DI\IInjectionAware
 
 
     /**
-     * Add a route to the router.
-     *
-     * @param string $rule   for this route
-     * @param mixed  $action null, string or callable to implement a controller for the route
-     *
-     * @return class as new route
-     */
+    * Add a route to the router.
+    *
+    * @param string $rule   for this route
+    * @param mixed  $action null, string or callable to implement a controller for the route
+    *
+    * @return class as new route
+    */
     public function add($rule, $action = null)
     {
         $route = $this->di->get('route');
@@ -64,20 +64,20 @@ class CRouterBasic implements \Anax\DI\IInjectionAware
         if ($rule == "*") {
             $this->defaultRoute = $route;
         }
-        
+
         return $route;
     }
 
 
 
     /**
-     * Add an internal (not exposed to url-matching) route to the router.
-     *
-     * @param string $rule   for this route
-     * @param mixed  $action null, string or callable to implement a controller for the route
-     *
-     * @return class as new route
-     */
+    * Add an internal (not exposed to url-matching) route to the router.
+    *
+    * @param string $rule   for this route
+    * @param mixed  $action null, string or callable to implement a controller for the route
+    *
+    * @return class as new route
+    */
     public function addInternal($rule, $action = null)
     {
         $route = $this->di->get('route');
@@ -89,13 +89,13 @@ class CRouterBasic implements \Anax\DI\IInjectionAware
 
 
     /**
-     * Add an internal (not exposed to url-matching) route to the router.
-     *
-     * @param string $rule   for this route
-     * @param mixed  $action null, string or callable to implement a controller for the route
-     *
-     * @return class as new route
-     */
+    * Add an internal (not exposed to url-matching) route to the router.
+    *
+    * @param string $rule   for this route
+    * @param mixed  $action null, string or callable to implement a controller for the route
+    *
+    * @return class as new route
+    */
     public function handleInternal($rule)
     {
         if (isset($this->internalRoutes[$rule])) {
@@ -109,10 +109,10 @@ class CRouterBasic implements \Anax\DI\IInjectionAware
 
 
     /**
-     * Handle the routes and match them towards the request, dispatch them when a match is made.
-     *
-     * @return $this
-     */
+    * Handle the routes and match them towards the request, dispatch them when a match is made.
+    *
+    * @return $this
+    */
     public function handle()
     {
         try {
@@ -155,7 +155,7 @@ class CRouterBasic implements \Anax\DI\IInjectionAware
 
             // No route was matched
             $this->handleInternal('404');
-        
+
         } catch (\Exception $e) {
 
             // Exception codes can match a route for a http status code
@@ -165,7 +165,7 @@ class CRouterBasic implements \Anax\DI\IInjectionAware
 
                 $this->di->flash->setMessage($e->getMessage());
                 $this->handleInternal($code);
-            
+
             } else {
                 throw $e;
             }
