@@ -1,19 +1,19 @@
 <?php
 /**
- * Bootstrapping functions, essential and needed for Anax to work together with some common helpers. 
- *
- */
+* Bootstrapping functions, essential and needed for Anax to work together with some common helpers.
+*
+*/
 
 
 
 /**
- * Utility for debugging.
- *
- * @param mixed $array values to print out
- *
- * @return void
- */
-function dump($array) 
+* Utility for debugging.
+*
+* @param mixed $array values to print out
+*
+* @return void
+*/
+function dump($array)
 {
     echo "<pre>" . htmlentities(print_r($array, 1)) . "</pre>";
 }
@@ -21,16 +21,16 @@ function dump($array)
 
 
 /**
- * Sort array but maintain index when compared items are equal.
- * http://www.php.net/manual/en/function.usort.php#38827
- *
- * @param array    &$array       input array
- * @param callable $cmp_function custom function to compare values
- *
- * @return void
- *
- */
-function mergesort(&$array, $cmp_function) 
+* Sort array but maintain index when compared items are equal.
+* http://www.php.net/manual/en/function.usort.php#38827
+*
+* @param array    &$array       input array
+* @param callable $cmp_function custom function to compare values
+*
+* @return void
+*
+*/
+function mergesort(&$array, $cmp_function)
 {
     // Arrays of size < 2 require no action.
     if (count($array) < 2) return;
@@ -62,16 +62,18 @@ function mergesort(&$array, $cmp_function)
     return;
 }
 
+
+
 /**
 * Format a unix timestamp to display its age (5 days ago, 1 day ago, just now etc.).
 *
 * @param   int     $timestamp,  unix timestamp
 * @return  string
 */
-function elapsedTime($timestamp) 
+function elapsedTime($timestamp)
 {
 	$elapsedTime = ""; // returnvalue
-	
+
 	$time = time() - $timestamp;
 	$years = ($time / 31556926) >= 1 ? floor($time / 31556926) : 0;
 	if($years > 1)
@@ -84,7 +86,7 @@ function elapsedTime($timestamp)
 		$time = $time - 31556926;
 		$elapsedTime .= "{$years} year ";
 	}
-	
+
 	$months = ($time / 2629743) >= 1 ? floor($time / 2629743) : 0;
 	if($months > 1)
 	{
@@ -96,7 +98,7 @@ function elapsedTime($timestamp)
 		$time = $time - 2629743;
 		$elapsedTime .= "{$months} month";
 	}
-	
+
 	$days =	($time / 86400) >= 1 ? floor($time / 86400) : 0;
 	if($days > 1)
 	{
@@ -108,7 +110,7 @@ function elapsedTime($timestamp)
 		$time = $time - 86400;
 		$elapsedTime .= "{$days} day ";
 	}
-	
+
 	$hours = floor($time / 3600) >= 1 ? floor($time / 3600) : 0;
 	if($hours > 1)
 	{
@@ -120,7 +122,7 @@ function elapsedTime($timestamp)
 		$time = $time - 3600;
 		$elapsedTime .= "{$hours} hour ";
 	}
-	
+
 	$minutes = ($time / 60) >= 1 ? floor($time / 60) : 0;
 	if($minutes > 1)
 	{
@@ -131,7 +133,7 @@ function elapsedTime($timestamp)
 		$time = $time - 60;
 		$elapsedTime .= "{$minutes} minute ";
 	}
-	
+
 	if($years == 0 && $months == 0 && $days == 0 && $hours == 0 && $minutes == 0)
 	{
 		$elapsedTime = "Just now.";

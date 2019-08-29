@@ -3,9 +3,9 @@
 namespace Anax\ThemeEngine;
 
 /**
- * Anax base class for wrapping sessions.
- *
- */
+* Anax base class for wrapping sessions.
+*
+*/
 class CThemeBasic implements IThemeEngine, \Anax\DI\IInjectionAware
 {
     use \Anax\TConfigure,
@@ -14,20 +14,20 @@ class CThemeBasic implements IThemeEngine, \Anax\DI\IInjectionAware
 
 
     /**
-     * Properties
-     *
-     */
+    * Properties
+    *
+    */
     protected $data = []; // Array with variables to provide to template files.
 
 
 
     /**
-     * Shortcut to set title.
-     *
-     * @param string $value of the variable.
-     *
-     * @return $this
-     */
+    * Shortcut to set title.
+    *
+    * @param string $value of the variable.
+    *
+    * @return $this
+    */
     public function setTitle($value)
     {
         return $this->setVariable('title', $value);
@@ -36,12 +36,12 @@ class CThemeBasic implements IThemeEngine, \Anax\DI\IInjectionAware
 
 
     /**
-     * Set a base title which is appended to the page title.
-     *
-     * @param string $value of the variable.
-     *
-     * @return $this
-     */
+    * Set a base title which is appended to the page title.
+    *
+    * @param string $value of the variable.
+    *
+    * @return $this
+    */
     public function setBaseTitle($value)
     {
         return $this->setVariable('title_append', $value);
@@ -50,13 +50,13 @@ class CThemeBasic implements IThemeEngine, \Anax\DI\IInjectionAware
 
 
     /**
-     * Set a variable which will be exposed to the template files during render.
-     *
-     * @param string $which variable to set value of.
-     * @param mixed  $value of the variable.
-     *
-     * @return $this
-     */
+    * Set a variable which will be exposed to the template files during render.
+    *
+    * @param string $which variable to set value of.
+    * @param mixed  $value of the variable.
+    *
+    * @return $this
+    */
     public function setVariable($which, $value)
     {
         $this->data[$which] = $value;
@@ -66,13 +66,13 @@ class CThemeBasic implements IThemeEngine, \Anax\DI\IInjectionAware
 
 
     /**
-     * Get a value of a variable which will be exposed to the template files 
-     * during render.
-     *
-     * @param string $which variable to get value of.
-     *
-     * @return mixed as value of variable, or null if value is not set.
-     */
+    * Get a value of a variable which will be exposed to the template files
+    * during render.
+    *
+    * @param string $which variable to get value of.
+    *
+    * @return mixed as value of variable, or null if value is not set.
+    */
     public function getVariable($which)
     {
         if (isset($this->data[$which])) {
@@ -87,12 +87,12 @@ class CThemeBasic implements IThemeEngine, \Anax\DI\IInjectionAware
 
 
     /**
-     * Add a stylesheet.
-     *
-     * @param string $uri to add.
-     *
-     * @return $this
-     */
+    * Add a stylesheet.
+    *
+    * @param string $uri to add.
+    *
+    * @return $this
+    */
     public function addStylesheet($uri)
     {
         $this->config['data']['stylesheets'][] = $uri;
@@ -102,12 +102,12 @@ class CThemeBasic implements IThemeEngine, \Anax\DI\IInjectionAware
 
 
     /**
-     * Add a javascript asset.
-     *
-     * @param string $uri to add.
-     *
-     * @return $this
-     */
+    * Add a javascript asset.
+    *
+    * @param string $uri to add.
+    *
+    * @return $this
+    */
     public function addJavaScript($uri)
     {
         $this->config['data']['javascript_include'][] = $uri;
@@ -117,10 +117,10 @@ class CThemeBasic implements IThemeEngine, \Anax\DI\IInjectionAware
 
 
     /**
-     * Render the theme by applying the variables onto the template files.
-     * 
-     * @return void
-     */
+    * Render the theme by applying the variables onto the template files.
+    *
+    * @return void
+    */
     public function render()
     {
         // Prepare details

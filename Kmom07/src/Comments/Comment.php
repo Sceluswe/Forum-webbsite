@@ -1,13 +1,17 @@
 <?php
+
 namespace Anax\Comments;
 
 /**
- * Model for Users.
- *
- * Contains interactions with the database.
- */
+* Model for Users.
+*
+* Contains interactions with the database.
+*/
 class Comment extends \Anax\MVC\CDatabaseModel
 {
+
+
+
 	/**
 	* Set table to store comment in.
 	*

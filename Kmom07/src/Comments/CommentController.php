@@ -1,4 +1,5 @@
 <?php
+
 namespace Anax\Comments;
 
 /**
@@ -9,7 +10,9 @@ class CommentController implements \Anax\DI\IInjectionAware
 {
     use \Anax\DI\TInjectable,
 		\Anax\MVC\TRedirectHelpers;
-	
+
+
+
 	/**
 	* Initialize the controller.
 	*
@@ -21,48 +24,47 @@ class CommentController implements \Anax\DI\IInjectionAware
 		$this->comments = $obj;
 		$this->comments->setDI($this->di);
 	}
-    
-    
-    
+
+
+
 	/**
 	* Create redirects and return them.
-	* 
+	*
 	* @return array containing redirects.
 	*/
 	public function redirects()
 	{
-		return $values = [
-            'Comment/removeAll', 
-            'Comment/setup', 
-            'Comment/update/', 
-            'Comment/delete/',
-            'Comment/add'
+		return [
+            "setup"     => "Comment/setup",
+            "create"    => "Comment/create",
+            "add"       => "Comment/add/",
+            "delete"    => "Comment/delete/",
+            "deleteAll" => "Comment/deleteAll"
 		];
 	}
-    
+
+
 
     /**
 	* Reset a comment section.
-	* 
+	*
 	* @return void.
 	*/
 	public function setupAction()
-	{			
+	{
 		if($this->comments->initializeTable())
 		{
-			$all = $this->comments->findAll();
-			
 			$this->theme->setTitle("All comments");
 			$this->views->add('comment/comments-list-all', [
-				'comments' => $all,
+				'comments' => $this->comments->findAll(),
 				'title' => "Comment section reset!",
 				'redirect' => $this->redirects()
 			]);
 		}
 	}
-	
-    
-    
+
+
+
     /**
 	* View all comments.
 	*
@@ -72,37 +74,33 @@ class CommentController implements \Anax\DI\IInjectionAware
     {
 		$this->initialize();
 		$this->comments->setSource($this->request->getRoute());
-
-		// Get all comments.
-		$all = $this->comments->findAll();
-		
 		$this->comments->setRedirect($this->request->getRoute());
-		
+
         $this->views->add('comment/comments-list-all', [
-            'comments' 	=> $all,
-			'title' => "All Comments",
-			'redirect'	=> $this->redirects(),
+            'comments'  => $this->comments->findAll(),
+			'title'     => "All Comments",
+			'redirect'	=> $this->redirects()
         ]);
     }
-	
-    
-    
+
+
+
 	/**
     * Add a comment.
     *
     * @return void.
     */
     public function addAction()
-    {	
+    {
 		// Render form.
         $this->utility->renderDefaultPage("Create a Comment", $this->getCommentForm());
     }
-	
-    
-    
+
+
+
 	/**
 	* Update a comment.
-	* 
+	*
     * @param int, the database id of the comment to update.
     *
 	* @return void.
@@ -110,13 +108,11 @@ class CommentController implements \Anax\DI\IInjectionAware
 	public function updateAction($id = null)
 	{
 		if(!isset($id))
-		{
 			die("Missing id.");
-		}
-		
+
 		$comment = $this->comments->find($id);
-		
-		// Add values for a comment
+
+		// Add values for a comment.
 		$values = [
 			'name' 		=> $comment->name,
 			'email'		=> $comment->email,
@@ -124,13 +120,13 @@ class CommentController implements \Anax\DI\IInjectionAware
 			'content' 	=> $comment->content,
 			'timestamp' => $comment->timestamp
 		];
-		
+
 		// Render form.
         $this->utility->renderDefaultPage("Edit Comment", $this->getCommentForm($values));
 	}
-	
-    
-    
+
+
+
 	/**
     * Remove a comment.
     *
@@ -141,31 +137,29 @@ class CommentController implements \Anax\DI\IInjectionAware
     public function deleteAction($id = null)
     {
 		if(!isset($id))
-		{
 			die("Missing id.");
-		}
-		
-		$res = $this->comments->delete($id);
-		
+
+		$this->comments->delete($id);
+
         $this->utility->createRedirect($this->comments->getRedirect());
     }
-    
-    
-    
+
+
+
 	/**
     * Remove all comments.
     *
     * @return void.
     */
-    public function removeAllAction()
+    public function deleteAllAction()
     {
         $this->comments->createCommentTable();
-		
+
         $this->utility->createRedirect($this->comments->getRedirect());
     }
-    
-	
-    
+
+
+
 	/**
 	* Get a form for creating and updating a comment.
 	*
@@ -177,7 +171,7 @@ class CommentController implements \Anax\DI\IInjectionAware
 	{
 		// Initiate object instance.
 		$form = new \Mos\HTMLForm\CForm();
-		
+
 		// Create form.
 		$form = $form->create([], [
 			'name' => [
@@ -208,21 +202,21 @@ class CommentController implements \Anax\DI\IInjectionAware
 				'value' 	 => !empty($values['content']) ? $values['content'] : ''
 			],
 			'submit' => [
-			'type' 		=> 'submit',
-			'class' 	=> 'cform-submit',
-			'callback'  => [$this, 'callbackSubmit'],
-			'value'		=> 'Submit user'
+    			'type' 		=> 'submit',
+    			'class' 	=> 'cform-submit',
+    			'callback'  => [$this, 'callbackSubmit'],
+    			'value'		=> 'Submit user'
 			]
 		]);
-		
+
 		// Check the status of the form
 		$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
-				
+
 		return $form->getHTML();
 	}
-	
-    
-    
+
+
+
 	/**
     * Callback for submit-button success.
     *
@@ -231,21 +225,20 @@ class CommentController implements \Anax\DI\IInjectionAware
     * @return boolean true.
     */
 	public function callbackSubmit($form)
-    {			
+    {
 		// Save form.
 		$form->saveInSession = true;
-		$now = gmdate('Y-m-d H:i:s');
-			$this->comments->save([
-				'name' 		=> $form->Value('name'),
-				'email' 	=> $form->Value('email'),
-				'web' 		=> $form->Value('web'),
-				'content'	=> $form->Value('content'),
-				'timestamp' => $now,
-				'ip'		=> $this->request->getServer('REMOTE_ADDR')
-			]);
+		$this->comments->save([
+			'name' 		=> $form->Value('name'),
+			'email' 	=> $form->Value('email'),
+			'web' 		=> $form->Value('web'),
+			'content'	=> $form->Value('content'),
+			'timestamp' => gmdate('Y-m-d H:i:s'),
+			'ip'		=> $this->request->getServer('REMOTE_ADDR')
+		]);
 
         $this->utility->createRedirect($this->comments->getRedirect());
-		
+
         return true;
     }
 }

@@ -7,6 +7,9 @@ namespace Anax\Forum;
  */
 class CFormatUnixTime
 {
+
+
+    
     /**
     * Function to format the unix timestamp property of one object.
     *
