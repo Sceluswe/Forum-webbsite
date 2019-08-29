@@ -135,9 +135,9 @@ class CViewContainerBasic implements \Anax\DI\IInjectionAware
     */
     public function setBasePath($path)
     {
-        if (!is_dir($path)) {
+        if (!is_dir($path))
             throw new \Exception("Base path for views is not a directory: " . $path);
-        }
+
         $this->path = rtrim($path, '/') . '/';
     }
 
@@ -166,17 +166,15 @@ class CViewContainerBasic implements \Anax\DI\IInjectionAware
     */
     public function render($region = 'main')
     {
-        if (!isset($this->views[$region])) {
+        if (!isset($this->views[$region]))
             return $this;
-        }
 
         mergesort($this->views[$region], function ($a, $b) {
             $sa = $a->sortOrder();
             $sb = $b->sortOrder();
 
-            if ($sa == $sb) {
+            if ($sa == $sb)
                 return 0;
-            }
 
             return $sa < $sb ? -1 : 1;
         });
