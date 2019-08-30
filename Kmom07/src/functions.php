@@ -65,82 +65,25 @@ function mergesort(&$array, $cmp_function)
 
 
 /**
-* Format a unix timestamp to display its age (5 days ago, 1 day ago, just now etc.).
+* Calculates the sum of an array of objects rating property.
 *
-* @param   int     $timestamp,  unix timestamp
-* @return  string
+* @param array of objects, the objects containing the property.
+*
+* @return int, the sum of all ratings.
 */
-function elapsedTime($timestamp)
+function calculateScore($arrObj)
 {
-	$elapsedTime = ""; // returnvalue
+    $count = count($arrObj);
+    $ratingSum = 0;
 
-	$time = time() - $timestamp;
-	$years = ($time / 31556926) >= 1 ? floor($time / 31556926) : 0;
-	if($years > 1)
-	{
-		$time = $time - $years * 31556926;
-		$elapsedTime .= "{$years} years ";
-	}
-	else if($years == 1)
-	{
-		$time = $time - 31556926;
-		$elapsedTime .= "{$years} year ";
-	}
+    foreach($arrObj as $item)
+    {
+        $ratingSum += $item->rating;
+    }
 
-	$months = ($time / 2629743) >= 1 ? floor($time / 2629743) : 0;
-	if($months > 1)
-	{
-		$time = $time - $months * 2629743;
-		$elapsedTime .= "{$months} months";
-	}
-	else if($months == 1)
-	{
-		$time = $time - 2629743;
-		$elapsedTime .= "{$months} month";
-	}
-
-	$days =	($time / 86400) >= 1 ? floor($time / 86400) : 0;
-	if($days > 1)
-	{
-		$time = $time - $days * 86400;
-		$elapsedTime .= "{$days} days ";
-	}
-	else if($days == 1)
-	{
-		$time = $time - 86400;
-		$elapsedTime .= "{$days} day ";
-	}
-
-	$hours = floor($time / 3600) >= 1 ? floor($time / 3600) : 0;
-	if($hours > 1)
-	{
-		$time = $time - $hours * 3600;
-		$elapsedTime .= "{$hours} hours ";
-	}
-	else if($hours == 1)
-	{
-		$time = $time - 3600;
-		$elapsedTime .= "{$hours} hour ";
-	}
-
-	$minutes = ($time / 60) >= 1 ? floor($time / 60) : 0;
-	if($minutes > 1)
-	{
-		$elapsedTime .= "{$minutes} minutes ";
-	}
-	else if($minutes == 1)
-	{
-		$time = $time - 60;
-		$elapsedTime .= "{$minutes} minute ";
-	}
-
-	if($years == 0 && $months == 0 && $days == 0 && $hours == 0 && $minutes == 0)
-	{
-		$elapsedTime = "Just now.";
-	}
-	else
-	{
-		$elapsedTime .= "ago.";
-	}
-	return $elapsedTime;
+    return [
+        "count" => $count,
+        "rating" => $ratingSum,
+        "sum" => $count + $ratingSum
+    ];
 }

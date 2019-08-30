@@ -45,25 +45,4 @@ class CUtility implements \Anax\DI\IInjectionAware
         // Redirect user to URL.
         $this->response->redirect($url);
     }
-
-
-
-    /**
-    * Calculates the sum of an array of objects rating property.
-    *
-    * @param array of objects, the objects containing the property.
-    *
-    * @return int, the sum of all ratings.
-    */
-    public function ratingSum($arrObj)
-    {
-        $ratingSum = 0;
-
-        foreach($arrObj as $item)
-        {
-            $ratingSum += $item->rating;
-        }
-
-        return $ratingSum;
-    }
 }
