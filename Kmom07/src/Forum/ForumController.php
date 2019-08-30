@@ -186,7 +186,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 
             // Get comments to the question (if any) and format timestamp.
 			$questionComments = $this->comments->findQuestionComments($id);
-			$questionComments = ($questionComments) ? $this->time->formatUnixProperties($questionComments) : array();
+			$questionComments = ($questionComments) ? $this->time->formatUnixProperties($questionComments) : [];
 
             switch ($sort)
             {
@@ -260,7 +260,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 			'title2' => "Most active users",
 			'users' => $users,
 			'title3' => "Popular tags",
-			'tags' => $tags,
+			'tags' => $tags
 		]);
 	}
 
@@ -279,37 +279,27 @@ class ForumController implements \Anax\DI\IInjectionAware
 		//Get id from current user.
 		$userid = htmlentities($id);
 
-		$questions = $this->questions->findByColumn('userid', $userid);
-		$answers = $this->answers->findByColumn('userid', $userid);
-		$comments = $this->comments->findByColumn('userid', $userid);
-
         // Calculate QAC score.
-		$qRating = $this->utility->ratingSum($questions);
-		$aRating = $this->utility->ratingSum($answers);
-		$cRating = $this->utility->ratingSum($comments);
-
-		$nrOfQ = count($questions);
-		$nrOfA = count($answers);
-		$nrOfC = count($comments);
-		$sumQ = $qRating + $nrOfQ;
-		$sumA = $aRating + $nrOfA;
-		$totalScore = $sumQ + $sumA + $nrOfC;
+        $q = calculateScore($this->questions->findByColumn("userid", $userid));
+        $a = calculateScore($this->answers->findByColumn("userid", $userid));
+        $c = calculateScore($this->comments->findByColumn("userid", $userid));
+        $totalScore = $q["sum"] + $a["sum"] + $c["sum"];
 
         // Create score table.
         $table = $this->table->createTable([
-            'class' => 'width45',
-            ['', 'Amount', 'Rating', 'Sum', 'class' => 'menu-table-header'],
-            ['Q', $nrOfQ, $qRating, $sumQ],
-            ['A', $nrOfA, $aRating, $sumA],
-            ['C', $nrOfC, $cRating, $nrOfC]
+            "class" => "width45",
+            ["", "Amount", "Rating", "Sum", "class" => "menu-table-header"],
+            ["Q", $q["count"], $q["rating"], $q["sum"]],
+            ["A", $a["count"], $a["rating"], $a["sum"]],
+            ["C", $c["count"], $c["rating"], $c["sum"]],
         ]);
         $table .= "<br><br><br><br><br><p><b>User rating:</b> {$totalScore}</p>";
 
 		// Update the users score.
 		$this->users->id = $id;
 		$this->users->update([
-			'score'	=> $totalScore
-		]);
+            "score" => $totalScore
+        ]);
 
 		// Render form.
         $this->utility->renderDefaultPage("Rating", $table);
@@ -328,7 +318,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		$this->views->add('forum/forum-tagMenu', [
 			'title'		=> "Tags",
 			'redirect' 	=> $this->redirects(),
-			'tags'		=> $this->tags->query('DISTINCT tag')->execute(),
+			'tags'		=> $this->tags->query('DISTINCT tag')->execute()
 		]);
 	}
 
@@ -347,7 +337,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 			'title'		=> "Tags",
 			'redirect' 	=> $this->redirects(),
 			'tags'		=> $this->tags->query('DISTINCT tag')->execute(),
-			'questionid'=> $this->questions->getQuestion(),
+			'questionid'=> $this->questions->getQuestion()
 		]);
 	}
 
@@ -363,7 +353,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	public function tagCreateAction($tag=null)
 	{
 		$values = (!empty($tag))
-			? $values = ['tag' => $this->escaper->escapeHTML($tag)]
+			? ['tag' => $this->escaper->escapeHTML($tag)]
             : [];
 
 		// Render form.
@@ -466,7 +456,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     {
         // Update it with an increase of 1.
         $data->update([
-            'rating'=> $data->find($id)->rating + $number,
+            'rating' => $data->find($id)->rating + $number,
         ]);
     }
 
