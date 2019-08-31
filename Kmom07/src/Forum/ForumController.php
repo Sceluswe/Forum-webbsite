@@ -28,12 +28,15 @@ class ForumController implements \Anax\DI\IInjectionAware
 		$this->comments = new \Anax\Forum\Comment();
 		$this->comments->setDI($this->di);
 
-		$this->users = new \Anax\Users\User();
-		$this->users->setDI($this->di);
-		$this->di->session();
-
 		$this->tags = new \Anax\Forum\Tag();
 		$this->tags->setDI($this->di);
+
+        $this->questionTags = new \Anax\Forum\QuestionTags();
+        $this->questionTags->setDI($this->di);
+
+        $this->users = new \Anax\Users\User();
+        $this->users->setDI($this->di);
+        $this->di->session();
 
         $this->time = new \Anax\Forum\CFormatUnixTime();
 
@@ -184,12 +187,10 @@ class ForumController implements \Anax\DI\IInjectionAware
             switch ($sort)
             {
                 case 'timestamp':
-                    $this->answers->query()->where('questionid= ?')->orderBy('timestamp DESC');
-                    $answers = $this->answers->execute([$id]);
+                    $answers = $this->answers->query()->where('questionid= ?')->orderBy('timestamp DESC')->execute([$id]);
                     break;
                 case 'rating':
-                    $this->answers->query()->where('questionid= ?')->orderBy('rating DESC');
-                    $answers = $this->answers->execute([$id]);
+                    $answers = $this->answers->query()->where('questionid= ?')->orderBy('rating DESC')->execute([$id]);
                     break;
                 default:
                     $answers = $this->answers->findByColumn('questionid', $id);
