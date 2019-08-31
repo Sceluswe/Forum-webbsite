@@ -40,9 +40,7 @@ class CUtility implements \Anax\DI\IInjectionAware
     */
     public function createRedirect($redirectAdress)
     {
-        // Create the URL to redirect to.
-        $url = $this->url->create($redirectAdress);
         // Redirect user to URL.
-        $this->response->redirect($url);
+        $this->response->redirect($this->url->create($redirectAdress));
     }
 }
