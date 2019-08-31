@@ -8,27 +8,8 @@ namespace Anax\Forum;
  */
 class Answer extends \Anax\MVC\CDatabaseModel
 {
-	/*
-	* Set route to redirect to in session.
-	*
-	* @param string, route to redirect to.
-	*
-	* @return string.
-	*/
-	public function setRedirect($key)
-	{
-		$this->session->set('redirecta', $key);
-	}
+    use \Anax\Forum\TForumModel;
 
 
-    
-	/*
-	* Get route to redirect to from session.
-	*
-	* @return string.
-	*/
-	public function getRedirect()
-	{
-		return $this->session->get('redirecta');
-	}
+
 }

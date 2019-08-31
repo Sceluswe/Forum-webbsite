@@ -8,6 +8,10 @@ namespace Anax\Forum;
  */
 class Question extends \Anax\MVC\CDatabaseModel
 {
+    use \Anax\Forum\TForumModel;
+
+
+
 	/**
 	*	Save the previous question in session.
 	*/
@@ -24,31 +28,5 @@ class Question extends \Anax\MVC\CDatabaseModel
 	public function getQuestion()
 	{
 		return $this->session->get('savedQuestion');
-	}
-
-
-
-	/*
-	* Set route to redirect to in session.
-	*
-	* @param string, route to redirect to.
-	*
-	* @return string.
-	*/
-	public function setRedirect($key)
-	{
-		$this->session->set('redirect', $key);
-	}
-
-
-    
-	/*
-	* Get route to redirect to from session.
-	*
-	* @return string.
-	*/
-	public function getRedirect()
-	{
-		return $this->session->get('redirect');
 	}
 }
