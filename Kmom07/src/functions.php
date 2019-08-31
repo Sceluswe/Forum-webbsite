@@ -84,6 +84,6 @@ function calculateScore($arrObj)
     return [
         "count" => $count,
         "rating" => $ratingSum,
-        "sum" => $count + $ratingSum
+        "sum" => ($count + $ratingSum)
     ];
 }
