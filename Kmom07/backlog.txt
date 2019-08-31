@@ -11,6 +11,8 @@ Make sure users can only update the score of a question once.
     Just to elaborate: explode turns the string into an array, splitting it at each ',' in this case.
     Then, in_array checks if the string '13' is in the resulting array somewhere.
 
+ForumController & Question.php: rename setQuestion and getQuestion to setQuestionId & getQuestionId for clarity.
+
 UserController: make sure that the webpage redirects to the menu again after a user has been deleted.
 User: change isUserAdmin() to use $SESSION['currentUser'] instead of taking the currentUser as param.
 
