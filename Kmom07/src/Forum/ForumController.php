@@ -96,27 +96,18 @@ class ForumController implements \Anax\DI\IInjectionAware
 	/**
 	* Function that displays all questions on the database or by sorted value.
 	*
-	* @param, string, the tag name to sort by.
+	* @param, string, the unique tag id to sort by.
     *
     * @return void.
 	*/
-	public function menuAction($tagName=null)
+	public function menuAction($tagId=null)
 	{
 		$result = array();
-		if(!empty($tagName))
+		if(!empty($tagId))
 		{
-			$res = $this->tags->findByColumn('tag', $tagName);
-
 			// Check if there are any questions with this tag.
-			if(!empty($res))
-			{
-				foreach($res as $key => $item)
-				{
-					$this->questions->query()->where('id = ?');
-                    $question = $this->questions->execute([$item->questionid])[0];
-                    $result[] = $this->time->formatUnixProperty($question);
-				}
-			}
+			if(!empty($this->tags->findByColumn('id', $tagId)))
+                $result = $this->time->formatUnixProperties($this->questionTags->selectByTag($tagId));
 		}
         else
 		{	// Get all questions.
@@ -243,26 +234,17 @@ class ForumController implements \Anax\DI\IInjectionAware
 	public function homeAction()
 	{
 		// Get the recently posted questions.
-		$this->questions->query()->orderBy('timestamp DESC LIMIT 6');
-		$questions = $this->questions->execute();
+        $questions = $this->questions->getRecentQuestions();
         $questions = (!empty($questions)) ? $this->time->formatUnixProperties($questions) : array();
-
-		// Get the most popular tags.
-		$this->tags->query('tag, COUNT(1) AS num')->groupBy('tag')->orderBy('num DESC LIMIT 12');
-		$tags = $this->tags->execute();
-
-		// Get the highest rated users.
-		$this->users->query()->orderBy('score DESC LIMIT 6');
-		$users = $this->users->execute();
 
 		$this->views->add('forum/forum-home', [
 			'questions' => $questions,
 			'title1' => "Recent Questions",
 			'redirect' => $this->redirects(),
 			'title2' => "Most active users",
-			'users' => $users,
+			'users' => $this->users->getTopRatedUsers(),
 			'title3' => "Popular tags",
-			'tags' => $tags
+			'tags' => $this->tags->getPopularTags()
 		]);
 	}
 
@@ -320,7 +302,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		$this->views->add('forum/forum-tagMenu', [
 			'title'		=> "Tags",
 			'redirect' 	=> $this->redirects(),
-			'tags'		=> $this->tags->query('DISTINCT tag')->execute()
+			'tags'		=> $this->tags->findAll()
 		]);
 	}
 
@@ -355,7 +337,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	public function tagCreateAction($tag=null)
 	{
 		$values = (!empty($tag))
-			? ['tag' => $this->escaper->escapeHTML($tag)]
+            ? ['name' => $this->escaper->escapeHTML($tag)]
             : [];
 
 		// Render form.
@@ -382,13 +364,13 @@ class ForumController implements \Anax\DI\IInjectionAware
 				'type' 		=> !empty($values) ? 'hidden' : 'text',
 				'required' 	=> true,
 				'validation'=> ['not_empty'],
-				'value' 	=> !empty($values) ? $values['tag'] : '',
+				'value' 	=> !empty($values) ? $values['name'] : '',
 			],
 			'submit' => [
 				'type' 		=> 'submit',
 				'class' 	=> 'cform-submit',
 				'callback'  => [$this, 'callbackCreateTag'],
-				'value'		=> !empty($values) ? "Add tag: {$values['tag']}" : "Create tag"
+				'value'		=> !empty($values) ? "Add tag: {$values['name']}" : "Create tag"
 			]
 		]);
 
@@ -411,32 +393,35 @@ class ForumController implements \Anax\DI\IInjectionAware
     {
 		$result = false;
 		// Clean the variables.
-		$id = htmlentities($this->questions->getQuestion());
-		$tag = htmlentities($form->Value('tag'));
+		$questionId = htmlentities($this->questions->getQuestion());
+		$tag = htmlentities($form->Value('name'));
 
 		// Check if question exists.
-		$questionCheck = $this->questions->find($id);
+		$questionCheck = $this->questions->find($questionId);
 
 		if(isset($questionCheck))
-		{	// If question exists, check if tag already exists for that question.
-			$this->tags->query()->where('questionid = ?')->andWhere('tag = ?');
-			$checkTag = $this->tags->execute([$id, $tag]);
-
-			if(empty($checkTag))
+		{
+            // If question exists, check if tag already exists for that question.
+			if($this->questionTags->questionHasTag($questionId, $tag))
 			{	// If tag does not exist.
 				$form->saveInSession = true;
 
                 // Create a tag to that question.
 				$this->tags->create([
-					'tag'		=> $tag,
-					'questionid'=> $id,
+					'name' => $tag
 				]);
+
+                // Create a row that links the question  to the tag.
+                $this->questionTags->create([
+                    "questionId" => $questionId,
+                    "tagId" => $this->tag->id
+                ]);
 
 				$result = true;
 			}
 
 			// Use the previous questionid to create a redirect link back to that question.
-            $this->utility->createRedirect("Forum/id/" . $id);
+            $this->utility->createRedirect("Forum/id/" . $questionId);
 		}
 
         return $result;

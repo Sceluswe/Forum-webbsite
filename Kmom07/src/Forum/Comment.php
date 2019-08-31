@@ -8,7 +8,8 @@ namespace Anax\Forum;
  */
 class Comment extends \Anax\MVC\CDatabaseModel
 {
-    use \Anax\Forum\TForumModel;
+    use \Anax\Forum\TForumModel,
+        \Anax\Forum\TQACModel;
 
 
 
@@ -21,7 +22,9 @@ class Comment extends \Anax\MVC\CDatabaseModel
     */
 	public function findQuestionComments($id)
 	{
-		return $this->query()->where("commentparent='Q'")->andWhere("qaid = ?")->execute([$id]);
+		return $this->query()->where("commentparent='Q'")
+            ->andWhere("qaid = ?")
+            ->execute([$id]);
 	}
 
 
@@ -35,6 +38,8 @@ class Comment extends \Anax\MVC\CDatabaseModel
     */
 	public function findAnswerComments($id)
 	{
-		return $this->query()->where("commentparent='A'")->andWhere("qaid = ?")->execute([$id]);
+		return $this->query()->where("commentparent='A'")
+            ->andWhere("qaid = ?")
+            ->execute([$id]);
 	}
 }

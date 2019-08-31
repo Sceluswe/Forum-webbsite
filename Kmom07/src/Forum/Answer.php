@@ -8,7 +8,8 @@ namespace Anax\Forum;
  */
 class Answer extends \Anax\MVC\CDatabaseModel
 {
-    use \Anax\Forum\TForumModel;
+    use \Anax\Forum\TForumModel,
+        \Anax\Forum\TQACModel;
 
 
 
