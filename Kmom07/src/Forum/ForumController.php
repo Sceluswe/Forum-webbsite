@@ -280,9 +280,9 @@ class ForumController implements \Anax\DI\IInjectionAware
 		$userid = htmlentities($id);
 
         // Calculate QAC score.
-        $q = calculateScore($this->questions->findByColumn("userid", $userid));
-        $a = calculateScore($this->answers->findByColumn("userid", $userid));
-        $c = calculateScore($this->comments->findByColumn("userid", $userid));
+        $q = $this->questions->calculateScore($userid);
+        $a = $this->answers->calculateScore($userid);
+        $c = $this->comments->calculateScore($userid);
         $totalScore = $q["sum"] + $a["sum"] + $c["sum"];
 
         // Create score table.
