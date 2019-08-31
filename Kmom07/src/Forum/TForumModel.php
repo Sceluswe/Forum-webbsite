@@ -1,7 +1,9 @@
 <?php
 namespace Anax\Forum;
 
-trait ForumModel {
+trait TForumModel {
+
+
 
     /*
 	* Set route to redirect to in session.
