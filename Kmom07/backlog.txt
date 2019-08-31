@@ -14,6 +14,8 @@ Make sure users can only update the score of a question once.
 UserController: make sure that the webpage redirects to the menu again after a user has been deleted.
 User: change isUserAdmin() to use $SESSION['currentUser'] instead of taking the currentUser as param.
 
+make all redirects() private since they don't have to be public.
+
 Consider creating a HTMLList class that creates a list or possibly HTMLlink to create links
 
 Make sure the Administrator can't delete nor softdelete himself or be deleted by anyone for that matter.
