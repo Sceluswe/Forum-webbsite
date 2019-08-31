@@ -2,7 +2,7 @@
 namespace Anax\Forum;
 
 /**
- * Model for Users.
+ * Model for Answers.
  *
  * Contains interactions with the database.
  */
