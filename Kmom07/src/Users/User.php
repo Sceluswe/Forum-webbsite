@@ -109,6 +109,14 @@ class User extends \Anax\MVC\CDatabaseModel
 
 
 
+    public function getTopRatedUsers()
+    {
+        // Get the highest rated users.
+        return $this->query()->orderBy('score DESC LIMIT 6')->execute();
+    }
+
+
+
 	/**
 	* Test function to initialize a database table.
 	*
