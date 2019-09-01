@@ -51,8 +51,8 @@
 <!---------------- Tags ----------------->
 <div class="clear">
 	<h2 class="homeHeader"><?=$title3?></h2>
-	
+
 	<?php foreach($tags as $tag):?>
-		<p class="tag-list"><?=$tag->tag?> x <?=$tag->num?></p>
+		<p class="tag-list"><?=$tag->name?> x <?=$tag->num?></p>
 	<?php endforeach;?>
 </div>

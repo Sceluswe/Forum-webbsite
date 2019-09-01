@@ -12,12 +12,8 @@ You can login with the username 'admin' and the password 'admin'.
 
 ## Requirements
 1. A local environment that supports PHP (at least version 5.6.0).
-2. A environment capable of hosting a local server (like xampp): https://www.apachefriends.org/index.html. 
+2. A environment capable of hosting a local server (like xampp): https://www.apachefriends.org/index.html.
 3. A command line with Composer installed: https://getcomposer.org/
 
 ## License
 You may use my code in any way that you want just make sure that you respect the creator of the Anax-frameworks license. It can be found in the readme inside the Kmom07 folder.
-
-
-
-

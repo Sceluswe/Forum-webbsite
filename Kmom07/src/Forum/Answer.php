@@ -2,13 +2,14 @@
 namespace Anax\Forum;
 
 /**
- * Model for Users.
+ * Model for Answers.
  *
  * Contains interactions with the database.
  */
 class Answer extends \Anax\MVC\CDatabaseModel
 {
-    use \Anax\Forum\TForumModel;
+    use \Anax\Forum\TForumModel,
+        \Anax\Forum\TQACModel;
 
 
 

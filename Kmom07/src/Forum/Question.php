@@ -2,13 +2,14 @@
 namespace Anax\Forum;
 
 /**
- * Model for Users.
+ * Model for Questions.
  *
  * Contains interactions with the database.
  */
 class Question extends \Anax\MVC\CDatabaseModel
 {
-    use \Anax\Forum\TForumModel;
+    use \Anax\Forum\TForumModel,
+        \Anax\Forum\TQACModel;
 
 
 
@@ -29,4 +30,16 @@ class Question extends \Anax\MVC\CDatabaseModel
 	{
 		return $this->session->get('savedQuestion');
 	}
+
+
+
+    /**
+	*	Get the 6 most recent questions.
+    *
+    *   @return array with resultset.
+	*/
+    public function getRecentQuestions()
+    {
+        return $this->query()->orderBy('timestamp DESC LIMIT 6')->execute();
+    }
 }
