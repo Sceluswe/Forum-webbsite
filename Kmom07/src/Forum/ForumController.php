@@ -321,7 +321,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		$this->views->add('forum/forum-tagQuestion', [
 			'title'		=> "Tags",
 			'redirect' 	=> $this->redirects(),
-			'tags'		=> $this->tags->query('DISTINCT tag')->execute(),
+			'tags'		=> $this->tags->query()->execute(),
 			'questionid'=> $this->questions->getQuestion()
 		]);
 	}
@@ -361,7 +361,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 		// Create tag form.
 		$form = $form->create([], [
-			'tag' => [
+			'name' => [
 				'type' 		=> !empty($values) ? 'hidden' : 'text',
 				'required' 	=> true,
 				'validation'=> ['not_empty'],
