@@ -10,9 +10,9 @@ namespace Anax\Forum;
  */
 class QuestionTags extends \Anax\MVC\CDatabaseModel
 {
-    public function questionHasTag($id, $tag)
+    public function questionHasTag($questionId, $tagId)
     {
-        return empty($this->query()->where('questionId = ?')->andWhere('tagId = ?')->execute([$id, $tag]));
+        return !empty($this->query()->where('questionId = ?')->andWhere('tagId = ?')->execute([$id, $tag]));
     }
 
 
