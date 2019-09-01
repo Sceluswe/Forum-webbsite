@@ -321,7 +321,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		$this->views->add('forum/forum-tagQuestion', [
 			'title'		=> "Tags",
 			'redirect' 	=> $this->redirects(),
-			'tags'		=> $this->tags->findAll();,
+			'tags'		=> $this->tags->findAll(),
 			'questionid'=> $this->questions->getQuestion()
 		]);
 	}
