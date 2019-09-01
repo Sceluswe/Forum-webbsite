@@ -11,7 +11,13 @@ Make sure users can only update the score of a question once.
     Just to elaborate: explode turns the string into an array, splitting it at each ',' in this case.
     Then, in_array checks if the string '13' is in the resulting array somewhere.
 
+TForumModel.php: Look over if QACT actually uses this model. Q does, but what about ACT?
+
 ForumController & Question.php: rename setQuestion and getQuestion to setQuestionId & getQuestionId for clarity.
+ForumController: reduce code by moving database queries away from the controller into the model.
+ForumController: possibly move unix time formatting into the model  as well (not sure about this).
+ForumController: Create link tables for questions answers and comments too? (Will require more research)
+ForumController: editVote() could be moved to the TForumModel trait.
 
 UserController: make sure that the webpage redirects to the menu again after a user has been deleted.
 User: change isUserAdmin() to use $SESSION['currentUser'] instead of taking the currentUser as param.
