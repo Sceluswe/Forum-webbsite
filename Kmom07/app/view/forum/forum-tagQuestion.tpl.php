@@ -1,7 +1,7 @@
 <h1>Tag a question</h1>
 <!---------------- All already created tags ---------------->
 <?php foreach($tags as $tag):?>
-	<a href="<?=$this->url->create("{$redirect['tagCreate']}{$tag->tag}");?>" class="tag"><?=$tag->tag?></a>
+	<a href="<?=$this->url->create("{$redirect['tagCreate']}{$tag->name}");?>" class="tag"><?=$tag->name?></a>
 <?php endforeach;?>
 
 <h2>Or create a new tag for your question</h2>
