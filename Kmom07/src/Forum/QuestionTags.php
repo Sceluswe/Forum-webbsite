@@ -12,7 +12,9 @@ class QuestionTags extends \Anax\MVC\CDatabaseModel
 {
     public function questionHasTag($questionId, $tagId)
     {
-        return !empty($this->query()->where('questionId = ?')->andWhere('tagId = ?')->execute([$id, $tag]));
+        return !empty($this->query()->where('questionId = ?')
+            ->andWhere('tagId = ?')
+            ->execute([$questionId, $tagId]));
     }
 
 
@@ -22,9 +24,9 @@ class QuestionTags extends \Anax\MVC\CDatabaseModel
 
         $this->db->select()->from("{$source}, Question")
             ->where("{$source}.tagId = ?")
-            ->andWhere("{$source}.questionId = Question.id");
+            ->andWhere("{$source}.questionId = Question.id")
+            ->execute([$tagId]);
 
-        $this->db->execute([$tagId]);
         return $this->db->fetchAll();
     }
 }
