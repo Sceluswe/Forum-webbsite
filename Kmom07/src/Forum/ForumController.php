@@ -108,7 +108,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		$result = array();
 		if(!empty($tagId))
 		{
-			// Check if there are any questions with this tag.
+			// Check if the tag exists.
 			if(!empty($this->tags->findByColumn('id', $tagId)))
                 $result = $this->time->formatUnixProperties($this->questionTags->selectByTag($tagId));
 		}
