@@ -81,12 +81,12 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 		if($this->users->isUserLoggedIn())
 		{
-			$user = $this->users->findByColumn('acronym', $this->users->currentUser())[0];
+			$user = $this->users->findByAcronym($this->users->currentUser())[0];
 
             // Create a link to the currently logged in user.
 			$userlink = "<p>You are currently logged in as: <a href=\""
-				. $this->url->create("Users/id/{$user->id}")
-				. "\">" . ucfirst($user->acronym) . "</a></p>";
+                . $this->url->create("Users/id/{$user->id}") . "\">"
+                . ucfirst($user->acronym) . "</a></p>";
 		}
 
 		// Render form.
@@ -109,7 +109,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		if(!empty($tagId))
 		{
 			// Check if the tag exists.
-			if(!empty($this->tags->findByColumn('id', $tagId)))
+			if(!empty($this->tags->find($tagId)))
                 $result = $this->time->formatUnixProperties($this->questionTags->selectByTag($tagId));
 		}
         else
@@ -640,7 +640,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     {
 		$result = false;
         // Get the current user from the database.
-		$user = $this->users->findByColumn('acronym', $this->users->currentUser());
+		$user = $this->users->findByAcronym($this->users->currentUser())[0];
 
 		if(!empty($user))
 		{
@@ -648,20 +648,20 @@ class ForumController implements \Anax\DI\IInjectionAware
 
             // Save form.
 			$this->answers->create([
-				'questionid'=> $form->Value('questionid'),
-				'user' 		=> $user[0]->acronym,
-				'userid' 	=> $user[0]->id,
-				'content' 	=> $form->Value('content'),
-				'timestamp' => time(),
-				'rating'	=> 0,
-				'accepted'	=> 0,
+				'questionid'    => $form->Value('questionid'),
+				'user'          => $user->acronym,
+				'userid'        => $user->id,
+				'content'       => $form->Value('content'),
+				'timestamp'     => time(),
+				'rating'        => 0,
+				'accepted'      => 0,
 			]);
 
 			//Update the question and report that it has received another answer.
 			$question = $this->questions->find($form->Value('questionid'));
 			$this->questions->update([
-				'id' => $question->id,
-				'answered' => $question->answered + 1,
+				'id'        => $question->id,
+				'answered'  => $question->answered + 1,
 			]);
 
 			$result = true;
@@ -740,20 +740,20 @@ class ForumController implements \Anax\DI\IInjectionAware
     {
 		$result = false;
 		// Get the current user from the database.
-		$user = $this->users->findByColumn('acronym', $this->users->currentUser());
+		$user = $this->users->findByAcronym($this->users->currentUser())[0];
 
 		if(!empty($user))
 		{
 			$form->saveInSession = true;
 			// Save form.
 			$this->comments->create([
-				'user' 		=> $user[0]->acronym,
-				'commentparent'	=> $form->Value('commentparent'),
-				'qaid'		=> $form->Value('qaid'),
-				'userid' 	=> $user[0]->id,
-				'content' 	=> $form->Value('content'),
-				'timestamp' => time(),
-				'rating'	=> 0,
+				'user'          => $user->acronym,
+				'commentparent' => $form->Value('commentparent'),
+				'qaid'          => $form->Value('qaid'),
+				'userid'        => $user->id,
+				'content'       => $form->Value('content'),
+				'timestamp'     => time(),
+				'rating'        => 0,
 			]);
 
 			$result = true;
@@ -818,7 +818,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     {
 		$result = false;
 		// Get the current user from the database.
-		$user = $this->users->findByColumn('acronym', $this->users->currentUser());
+		$user = $this->users->findByAcronym($this->users->currentUser())[0];
 
 		if(!empty($user))
 		{
@@ -826,8 +826,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 
             // Save form.
 			$this->questions->create([
-				'user' 		=> $user[0]->acronym,
-				'userid' 	=> $user[0]->id,
+				'user' 		=> $user->acronym,
+				'userid' 	=> $user->id,
 				'title' 	=> $form->Value('title'),
 				'content' 	=> $form->Value('content'),
 				'timestamp' => time(),
