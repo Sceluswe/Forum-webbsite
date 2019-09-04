@@ -117,7 +117,7 @@ class ForumController implements \Anax\DI\IInjectionAware
             if(!empty($tag))
                 $result = $this->time->formatUnixProperties($this->questionTags->selectByTag($tag->id));
 		}
-        
+
         $this->dispatcher->forwardTo('Forum', 'userStatus');
         $this->dispatcher->forwardTo('Forum', 'tagMenu');
 
