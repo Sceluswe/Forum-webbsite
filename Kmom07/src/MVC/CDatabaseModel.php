@@ -220,7 +220,8 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 	*/
 	public function find($id)
 	{
-        $this->query()->where("id = ?")->execute([$id]);
+        $this->query()->where("id = ?");
+        $this->db->execute([$id]);
         return $this->db->fetchInto($this);
 	}
 
