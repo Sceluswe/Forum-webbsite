@@ -24,9 +24,9 @@ class QuestionTags extends \Anax\MVC\CDatabaseModel
 
         $this->db->select()->from("{$source}, Question")
             ->where("{$source}.tagId = ?")
-            ->andWhere("{$source}.questionId = Question.id")
-            ->execute([$tagId]);
+            ->andWhere("{$source}.questionId = Question.id");
 
+        $this->db->execute([$tagId]);
         return $this->db->fetchAll();
     }
 }
