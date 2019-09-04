@@ -16,7 +16,7 @@ class Question extends \Anax\MVC\CDatabaseModel
 	/**
 	*	Save the previous question in session.
 	*/
-	public function setQuestion($question)
+	public function setQuestionId($question)
 	{
 		$this->session->set('savedQuestion', htmlentities($question));
 	}
@@ -26,7 +26,7 @@ class Question extends \Anax\MVC\CDatabaseModel
 	/**
 	*	Get the previous object from session.
 	*/
-	public function getQuestion()
+	public function getQuestionId()
 	{
 		return $this->session->get('savedQuestion');
 	}

@@ -170,7 +170,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		$question = $this->questions->find(htmlentities($id));
 
         // Save the question in session for easy access elsewhere.
-		$this->questions->setQuestion($question->id);
+		$this->questions->setQuestionId($question->id);
         $answers = array();
         $questionComments = array();
         $answerComments = array();
@@ -322,7 +322,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 			'title'		=> "Tags",
 			'redirect' 	=> $this->redirects(),
 			'tags'		=> $this->tags->findAll(),
-			'questionid'=> $this->questions->getQuestion()
+			'questionid'=> $this->questions->getQuestionId()
 		]);
 	}
 
@@ -394,19 +394,21 @@ class ForumController implements \Anax\DI\IInjectionAware
     {
 		$result = false;
 		// Clean the variables.
-		$questionId = htmlentities($this->questions->getQuestion());
+		$questionId = $this->questions->getQuestionId();
 		$tag = htmlentities($form->Value('name'));
 
 		// Check if question exists.
-		if(!empty($this->questions->find($questionId)))
+		if($this->questions->find($questionId))
 		{
-            // If tag exists, check if the question already has the tag.
+            // If question exists check if it doesn't have the tag.
 			if(!$this->questionTags->questionHasTag($questionId, $tag))
 			{
 				$form->saveInSession = true;
+                $tagColumn = $this->tags->findByColumn("name", $tag);
+                $this->tags->setProperties(["id" => $tagColumn->id]);
 
                 // Create the tag.
-                if(!empty($this->tags->findByColumn("name", $tag)))
+                if(empty($tagColumn))
                 {
     				$this->tags->create([
     					'name' => $tag
@@ -481,7 +483,7 @@ class ForumController implements \Anax\DI\IInjectionAware
                         break;
                 }
 
-                $this->utility->createRedirect("Forum/id/" . $this->questions->getQuestion());
+                $this->utility->createRedirect("Forum/id/" . $this->questions->getQuestionId());
             }
             else
             {
@@ -519,7 +521,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 			]);
 
             // Get the questions id.
-			$qid = $this->questions->getQuestion();
+			$qid = $this->questions->getQuestionId();
 
             // Create redirect link using the questions id.
             $this->utility->createRedirect("Forum/Id/{$qid}");
