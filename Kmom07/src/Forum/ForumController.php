@@ -519,11 +519,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 				'accepted' => 1
 			]);
 
-            // Get the questions id.
-			$qid = $this->questions->getQuestionId();
-
             // Create redirect link using the questions id.
-            $this->utility->createRedirect("Forum/Id/{$qid}");
+            $this->utility->createRedirect("Forum/Id/" . $this->questions->getQuestionId());
 		}
 		else
 		{
@@ -574,9 +571,9 @@ class ForumController implements \Anax\DI\IInjectionAware
 	public function addCommentAction($questionid, $qaid, $parent)
 	{
 		$values = [
-    		'questionid'      =>	$questionid,
-    		'qaid'            =>	$qaid,
-    		'commentparent'   =>  $parent
+    		'questionid'      => $questionid,
+    		'qaid'            => $qaid,
+    		'commentparent'   => $parent
 		];
 
         // Render form.
@@ -735,29 +732,29 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
     * @return boolean, true if comment was created.
     */
-	public function callbackCreateComment($form)
+    public function callbackCreateComment($form)
     {
-		$result = false;
-		// Get the current user from the database.
-		$user = $this->users->findByAcronym($this->users->currentUser())[0];
+    	$result = false;
+    	// Get the current user from the database.
+    	$user = $this->users->findByAcronym($this->users->currentUser())[0];
 
-		if(!empty($user))
-		{
-			$form->saveInSession = true;
-			// Save form.
-			$this->comments->create([
-				'user'          => $user->acronym,
-				'commentparent' => $form->Value('commentparent'),
-				'qaid'          => $form->Value('qaid'),
-				'userid'        => $user->id,
-				'content'       => $form->Value('content'),
-				'timestamp'     => time(),
-				'rating'        => 0,
-			]);
+    	if(!empty($user))
+    	{
+    		$form->saveInSession = true;
+    		// Save form.
+    		$this->comments->create([
+    			'user'          => $user->acronym,
+    			'commentparent' => $form->Value('commentparent'),
+    			'qaid'          => $form->Value('qaid'),
+    			'userid'        => $user->id,
+    			'content'       => $form->Value('content'),
+    			'timestamp'     => time(),
+    			'rating'        => 0,
+    		]);
 
-			$result = true;
+    		$result = true;
             $this->utility->createRedirect("Forum/id/" . $form->Value('questionid'));
-		}
+    	}
 
         return $result;
     }
@@ -813,30 +810,30 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
     * @return boolean, true if comment was created.
     */
-	public function callbackCreateQuestion($form)
+    public function callbackCreateQuestion($form)
     {
-		$result = false;
-		// Get the current user from the database.
-		$user = $this->users->findByAcronym($this->users->currentUser())[0];
+    	$result = false;
+    	// Get the current user from the database.
+    	$user = $this->users->findByAcronym($this->users->currentUser())[0];
 
-		if(!empty($user))
-		{
-			$form->saveInSession = true;
+    	if(!empty($user))
+    	{
+    		$form->saveInSession = true;
 
             // Save form.
-			$this->questions->create([
-				'user'      => $user->acronym,
-				'userid'    => $user->id,
-				'title'     => $form->Value('title'),
-				'content'   => $form->Value('content'),
-				'timestamp' => time(),
-				'rating'    => 0,
-				'answered'  => 0,
-			]);
+    		$this->questions->create([
+    			'user'      => $user->acronym,
+    			'userid'    => $user->id,
+    			'title'     => $form->Value('title'),
+    			'content'   => $form->Value('content'),
+    			'timestamp' => time(),
+    			'rating'    => 0,
+    			'answered'  => 0,
+    		]);
 
-			$result = true;
+    		$result = true;
             $this->utility->createRedirect('Questions');
-		}
+    	}
 
         return $result;
     }
