@@ -393,14 +393,13 @@ class ForumController implements \Anax\DI\IInjectionAware
 	public function callbackCreateTag($form)
     {
 		$result = false;
-		// Clean the variables.
 		$questionId = $this->questions->getQuestionId();
 		$tag = htmlentities($form->Value('name'));
 
 		// Check if question exists.
 		if($this->questions->find($questionId))
 		{
-            // If question exists check if it doesn't have the tag.
+            // If question exists check if it has a tag.
 			if(!$this->questionTags->questionHasTag($questionId, $tag))
 			{
 				$form->saveInSession = true;
