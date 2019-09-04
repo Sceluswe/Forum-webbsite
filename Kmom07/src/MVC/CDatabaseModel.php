@@ -211,65 +211,16 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 
 
     /**
-	* Prepare and execute a find by column statement.
-    *
-    * @param string $columns which columns to select.
-    * @param string $id identifier in the column.
-    *
-	* @return array.
-	*/
-	private function executeByColumn($column, $id)
-	{
-		$this->query()->where("? = ?");
-		$this->db->execute([$column, $id]);
-	}
-
-
-
-    /**
 	* Find single row by id-column and return.
     *
-    * @param string $columns which columns to select.
     * @param string $id identifier in the column.
     *
 	* @return array.
 	*/
 	public function find($id)
 	{
-        $this->executeByColumn("id = ?");
+        $this->query()->where("id = ?")->execute([$id]);
         return $this->db->fetchInto($this);
-	}
-
-
-
-    /**
-	* Find single row by column and return.
-    *
-    * @param string $columns which columns to select.
-    * @param string $id identifier in the column.
-    *
-	* @return object.
-	*/
-	public function findByColumn($column, $id)
-	{
-        $this->executeByColumn($column, $id);
-		return $this->db->fetchInto($this);
-	}
-
-
-
-    /**
-	* Find all rows by column and return.
-    *
-    * @param string $columns which columns to select.
-    * @param string $id identifier in the column.
-    *
-	* @return array.
-	*/
-	public function findAllByColumn($column, $id)
-	{
-        $this->executeByColumn($column, $id);
-		return $this->db->fetchAll();
 	}
 
 
