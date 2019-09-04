@@ -117,7 +117,7 @@ class ForumController implements \Anax\DI\IInjectionAware
             if(!empty($tag))
                 $result = $this->time->formatUnixProperties($this->questionTags->selectByTag($tag->id));
 		}
-        
+
         $this->dispatcher->forwardTo('Forum', 'userStatus');
         $this->dispatcher->forwardTo('Forum', 'tagMenu');
 
@@ -400,17 +400,16 @@ class ForumController implements \Anax\DI\IInjectionAware
 		// Check if question exists.
 		if($this->questions->find($questionId))
 		{
-            // If question exists check if it has a tag.
-			if(!$this->questionTags->questionHasTag($questionId, $tagName))
+            // If the questions exists, check or create the tag.
+            if(empty($this->tags->findByName($tagName)))
+                $this->tags->create([
+                        'name' => $tagName
+                ]);
+            $tag = $this->tags->findByName($tagName)[0];
+
+			if(!$this->questionTags->questionHasTag($questionId, $tag->id))
 			{   // If the question doesn't have tag, apply it:
 				$form->saveInSession = true;
-                $tag = $this->tags->findByName($tagName)[0];
-
-                // Create the tag if it doesn't exist.
-                if(empty($tag))
-    				$this->tags->create([
-    					'name' => $tagName
-    				]);
 
                 // Create a row that links the question to the tag.
                 $this->questionTags->create([
