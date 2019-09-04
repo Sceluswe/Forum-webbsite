@@ -181,51 +181,7 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 
 
     /**
-	* Find single User and return.
-    *
-	* @return array.
-	*/
-	public function find($id)
-	{
-		$this->db->select()->from($this->getSource())->where("id = ?");
-		$this->db->execute([$id]);
-		return $this->db->fetchInto($this);
-	}
-
-
-
-	/**
-	* Find and return all.
-    *
-	* @return array.
-	*/
-	public function findAll()
-	{
-		$this->db->select()->from($this->getSource());
-		$this->db->execute();
-		$this->db->setFetchModeClass(__CLASS__);
-		return $this->db->fetchAll();
-	}
-
-
-
-    /**
-	* Find row by column name and return.
-    *
-	* @return array.
-	*/
-	public function findByColumn($column, $id)
-	{
-		$this->db->select()->from($this->getSource())->where("{$column} = ?");
-
-		$this->db->execute([$id]);
-		return $this->db->fetchAll();
-	}
-
-
-
-	/**
-	* Build a select-query.
+	* Read. Build a select-query.
 	*
 	* @param string $columns which columns to select.
 	*
@@ -236,6 +192,84 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 		$this->db->select($columns)->from($this->getSource());
 
 		return $this;
+	}
+
+
+
+    /**
+	* Find and return all.
+    *
+	* @return array.
+	*/
+	public function findAll()
+	{
+		$this->query()->execute();
+		$this->db->setFetchModeClass(__CLASS__);
+		return $this->db->fetchAll();
+	}
+
+
+
+    /**
+	* Prepare and execute a find by column statement.
+    *
+    * @param string $columns which columns to select.
+    * @param string $id identifier in the column.
+    *
+	* @return array.
+	*/
+	private function executeByColumn($column, $id)
+	{
+		$this->query()->where("? = ?");
+		$this->db->execute([$column, $id]);
+	}
+
+
+
+    /**
+	* Find single row by id-column and return.
+    *
+    * @param string $columns which columns to select.
+    * @param string $id identifier in the column.
+    *
+	* @return array.
+	*/
+	public function find($id)
+	{
+        $this->executeByColumn("id = ?");
+        return $this->db->fetchInto($this);
+	}
+
+
+
+    /**
+	* Find single row by column and return.
+    *
+    * @param string $columns which columns to select.
+    * @param string $id identifier in the column.
+    *
+	* @return object.
+	*/
+	public function findByColumn($column, $id)
+	{
+        $this->executeByColumn($column, $id);
+		return $this->db->fetchInto($this);
+	}
+
+
+
+    /**
+	* Find all rows by column and return.
+    *
+    * @param string $columns which columns to select.
+    * @param string $id identifier in the column.
+    *
+	* @return array.
+	*/
+	public function findAllByColumn($column, $id)
+	{
+        $this->executeByColumn($column, $id);
+		return $this->db->fetchAll();
 	}
 
 
