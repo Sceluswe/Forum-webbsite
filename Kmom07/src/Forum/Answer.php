@@ -13,4 +13,15 @@ class Answer extends \Anax\MVC\CDatabaseModel
 
 
 
+    /**
+    * Find rows by column questionid.
+    *
+    * @param string, $questionid the questionid of the tag.
+    *
+    * @return array, returns a resultset.
+    */
+    public function findByQuestionId($questionid)
+    {
+        return $this->query()->where("questionid = ?")->execute([$questionid]);
+    }
 }

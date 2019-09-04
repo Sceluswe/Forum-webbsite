@@ -193,7 +193,7 @@ class ForumController implements \Anax\DI\IInjectionAware
                     $answers = $this->answers->query()->where('questionid= ?')->orderBy('rating DESC')->execute([$id]);
                     break;
                 default:
-                    $answers = $this->answers->findByColumn('questionid', $id);
+                    $answers = $this->answers->findByQuestionId($id);
             }
 
 			if(!empty($answers))
