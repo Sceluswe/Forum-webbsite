@@ -203,7 +203,8 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 	*/
 	public function findAll()
 	{
-		$this->query()->execute();
+        $this->db->select()->from($this->getSource());
+        $this->db->execute();
 		$this->db->setFetchModeClass(__CLASS__);
 		return $this->db->fetchAll();
 	}
