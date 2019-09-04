@@ -394,23 +394,23 @@ class ForumController implements \Anax\DI\IInjectionAware
     {
 		$result = false;
 		$questionId = $this->questions->getQuestionId();
-		$tag = htmlentities($form->Value('name'));
+		$tagName = htmlentities($form->Value('name'));
 
 		// Check if question exists.
 		if($this->questions->find($questionId))
 		{
             // If question exists check if it has a tag.
-			if(!$this->questionTags->questionHasTag($questionId, $tag))
+			if(!$this->questionTags->questionHasTag($questionId, $tagName))
 			{
 				$form->saveInSession = true;
-                $tagColumn = $this->tags->findByColumn("name", $tag);
+                $tagColumn = $this->tags->findByName($tagName);
                 $this->tags->setProperties(["id" => $tagColumn->id]);
 
                 // Create the tag.
                 if(empty($tagColumn))
                 {
     				$this->tags->create([
-    					'name' => $tag
+    					'name' => $tagName
     				]);
                 }
 

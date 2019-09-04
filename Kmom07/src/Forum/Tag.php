@@ -10,6 +10,20 @@ class Tag extends \Anax\MVC\CDatabaseModel
 {
     use \Anax\Forum\TForumModel;
 
+
+
+    /**
+    * Find rows by column name.
+    *
+    * @param string, $name the name of the tag.
+    *
+    * @return array, returns a resultset.
+    */
+    public function findByName($name)
+    {
+        return $this->query()->where("name = ?")->execute([$name]);
+    }
+
     public function getPopularTags()
     {
         return $this->query('name, COUNT(1) AS num')
