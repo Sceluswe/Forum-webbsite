@@ -13,10 +13,24 @@ class Question extends \Anax\MVC\CDatabaseModel
 
 
 
+    /**
+    * Find rows by column userid.
+    *
+    * @param string, $userid the userid of the tag.
+    *
+    * @return array, returns a resultset.
+    */
+    public function findByUserId($userid)
+    {
+        return $this->query()->where("userid = ?")->execute([$userid]);
+    }
+
+
+
 	/**
 	*	Save the previous question in session.
 	*/
-	public function setQuestion($question)
+	public function setQuestionId($question)
 	{
 		$this->session->set('savedQuestion', htmlentities($question));
 	}
@@ -26,7 +40,7 @@ class Question extends \Anax\MVC\CDatabaseModel
 	/**
 	*	Get the previous object from session.
 	*/
-	public function getQuestion()
+	public function getQuestionId()
 	{
 		return $this->session->get('savedQuestion');
 	}

@@ -2,9 +2,9 @@
 namespace Anax\MVC;
 
 /**
- * Model for Users.
- *
- */
+* Model for Users.
+*
+*/
 class CDatabaseModel implements \Anax\DI\IInjectionAware
 {
 	use \Anax\DI\TInjectable;
@@ -61,6 +61,38 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 
 
     /**
+    * Execute the query built.
+    *
+    * @param string $query custom query.
+    *
+    * @return $this
+    */
+    public function execute($params = [])
+    {
+        $this->db->execute($this->db->getSQL(), $params);
+        $this->db->setFetchModeClass(__CLASS__);
+
+        return $this->db->fetchAll();
+    }
+
+
+
+    /**
+    * Execute a select-query with arguments and return all resultset.
+    *
+    * @param string  $query      the SQL query with ?.
+    * @param array   $params     array which contains the argument to replace ?.
+    *
+    * @return array with resultset.
+    */
+	public function executeFetchAll($query, $params)
+	{
+        return $this->db->executeFetchAll($query, $params);;
+    }
+
+
+
+    /**
 	* Create User.
 	*
 	* @param array values with which to initiate User.
@@ -108,6 +140,26 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 
 
     /**
+	* Delete User.
+	*
+	* @param integer, id of the User to delete.
+	*
+	* @return void.
+	*/
+	public function delete($id = null)
+	{
+		if(!isset($id))
+			$id = $this->id;
+
+        // Delete in $this->getSource (table) where id = ?
+		$this->db->delete($this->getSource(), 'id = ?');
+
+		return $this->db->execute([$id]);
+	}
+
+
+
+    /**
     * Save current object/row.
     *
     * @param array $values key/values to save or empty to use object properties.
@@ -128,58 +180,8 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 
 
 
-	/**
-	* Find and return all.
-    *
-	* @return array.
-	*/
-	public function findAll()
-	{
-		$this->db->select()->from($this->getSource());
-		$this->db->execute();
-		$this->db->setFetchModeClass(__CLASS__);
-		return $this->db->fetchAll();
-	}
-
-
-
-	/**
-	* Find single User and return.
-    *
-	* @return array.
-	*/
-	public function find($id)
-	{
-		$this->db->select()->from($this->getSource())->where("id = ?");
-
-		$this->db->execute([$id]);
-		return $this->db->fetchInto($this);
-	}
-
-
-
-	/**
-	* Delete User.
-	*
-	* @param integer, id of the User to delete.
-	*
-	* @return void.
-	*/
-	public function delete($id = null)
-	{
-		if(!isset($id))
-			$id = $this->id;
-
-        // Delete in $this->getSource (table) where id = ?
-		$this->db->delete($this->getSource(), 'id = ?');
-
-		return $this->db->execute([$id]);
-	}
-
-
-
-	/**
-	* Build a select-query.
+    /**
+	* Read. Build a select-query.
 	*
 	* @param string $columns which columns to select.
 	*
@@ -190,6 +192,36 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 		$this->db->select($columns)->from($this->getSource());
 
 		return $this;
+	}
+
+
+
+    /**
+	* Find and return all.
+    *
+	* @return array.
+	*/
+	public function findAll()
+	{
+        $this->db->select()->from($this->getSource());
+        $this->db->execute();
+		$this->db->setFetchModeClass(__CLASS__);
+		return $this->db->fetchAll();
+	}
+
+
+
+    /**
+	* Find single row by id-column and return.
+    *
+    * @param string $id identifier in the column.
+    *
+	* @return array.
+	*/
+	public function find($id)
+	{
+        $this->query()->where("id = ?")->execute([$id]);
+        return $this->db->fetchInto($this);
 	}
 
 
@@ -226,38 +258,6 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 
 
 
-	/**
-	* Execute the query built.
-	*
-	* @param string $query custom query.
-	*
-	* @return $this
-	*/
-	public function execute($params = [])
-	{
-		$this->db->execute($this->db->getSQL(), $params);
-		$this->db->setFetchModeClass(__CLASS__);
-
-		return $this->db->fetchAll();
-	}
-
-
-
-	/**
-	* Find row by column name and return.
-    *
-	* @return array.
-	*/
-	public function findByColumn($column, $id)
-	{
-		$this->db->select()->from($this->getSource())->where("{$column} = ?");
-
-		$this->db->execute([$id]);
-		return $this->db->fetchAll();
-	}
-
-
-
     /**
     * Build the order by part.
     *
@@ -286,20 +286,5 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
         $this->db->groupBy($condition);
 
         return $this;
-    }
-
-
-
-    /**
-    * Execute a select-query with arguments and return all resultset.
-    *
-    * @param string  $query      the SQL query with ?.
-    * @param array   $params     array which contains the argument to replace ?.
-    *
-    * @return array with resultset.
-    */
-	public function executeFetchAll($query, $params)
-	{
-        return $this->db->executeFetchAll($query, $params);;
     }
 }

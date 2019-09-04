@@ -10,6 +10,20 @@ class User extends \Anax\MVC\CDatabaseModel
 {
 
 
+    
+    /**
+    * Find rows by column acronym.
+    *
+    * @param string, $acronym the acronym of the user.
+    *
+    * @return array, returns a resultset.
+    */
+    public function findByAcronym($acronym)
+	{
+        return $this->query()->where("acronym = ?")->execute([$acronym]);
+	}
+
+
 
 	/**
 	* Function that checks if a user is an admin based on the provided $condition.
