@@ -97,25 +97,28 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 //---------------- Menu actions ----------------
 	/**
-	* Function that displays all questions on the database or by sorted value.
+	* Displays all questions in the database or sorted by tag.
 	*
-	* @param, string, the unique tag id to sort by.
+	* @param, string, the unique tag name to sort by.
     *
     * @return void.
 	*/
-	public function menuAction($tagId=null)
+	public function menuAction($tagName=null)
 	{
-		$result = array();
-		if(!empty($tagId))
+		$result = array("default" => "value");
+		if(empty($tagName))
 		{
-			// Check if the tag exists.
-			if(!empty($this->tags->find($tagId)))
-                $result = $this->time->formatUnixProperties($this->questionTags->selectByTag($tagId));
+            // Get all questions.
+            $result = $this->time->formatUnixProperties($this->questions->findAll());
 		}
         else
-		{	// Get all questions.
-			$result = $this->time->formatUnixProperties($this->questions->findAll());
+		{   // Check if the tag exists.
+            $tag = $this->tags->findByName($tagName)[0];
+            if(!empty($tag))
+                $result = $this->time->formatUnixProperties($this->questionTags->selectByTag($tag->id));
 		}
+
+        var_dump($result);
 
         $this->dispatcher->forwardTo('Forum', 'userStatus');
         $this->dispatcher->forwardTo('Forum', 'tagMenu');
@@ -365,7 +368,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 				'type'          => ($values) ? 'hidden' : 'text',
 				'required'      => true,
 				'validation'    => ['not_empty'],
-				'value'         => ($values) ? $values['name'] : '',
+				'value'         => ($values) ? $values['name'] : ''
 			],
 			'submit' => [
 				'type'      => 'submit',
@@ -401,23 +404,20 @@ class ForumController implements \Anax\DI\IInjectionAware
 		{
             // If question exists check if it has a tag.
 			if(!$this->questionTags->questionHasTag($questionId, $tagName))
-			{
+			{   // If the question doesn't have tag, apply it:
 				$form->saveInSession = true;
-                $tagColumn = $this->tags->findByName($tagName);
-                $this->tags->setProperties(["id" => $tagColumn->id]);
+                $tag = $this->tags->findByName($tagName)[0];
 
-                // Create the tag.
-                if(empty($tagColumn))
-                {
+                // Create the tag if it doesn't exist.
+                if(empty($tag))
     				$this->tags->create([
     					'name' => $tagName
     				]);
-                }
 
                 // Create a row that links the question to the tag.
                 $this->questionTags->create([
                     "questionId"    => $questionId,
-                    "tagId"         => $this->tags->id
+                    "tagId"         => $tag->id
                 ]);
 
 				$result = true;
