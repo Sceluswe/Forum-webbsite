@@ -53,18 +53,18 @@ class ForumController implements \Anax\DI\IInjectionAware
 	public function redirects()
 	{
 		return [
-			'menu'			=> 'Forum/menu/',
-			'addQuestion' 	=> 'Forum/addQuestion/',
-			'addAnswer'	  	=> 'Forum/addAnswer/',
-            'addComment' 	=> 'Forum/addComment/',
-			'rateQuestion'	=> 'Forum/vote/Q/',
-			'rateAnswer'	=> 'Forum/vote/A/',
-			'rateComment'	=> 'Forum/vote/C/',
-			'user' 			=> 'Users/id/',
-			'question' 		=> 'Forum/id/',
-			'accepted'		=> 'Forum/accepted/',
-			'tagButton'		=> 'Forum/tag/',
-			'tagCreate'		=> 'Forum/tagCreate/',
+            'menu'          => 'Forum/menu/',
+            'addQuestion'   => 'Forum/addQuestion/',
+            'addAnswer'     => 'Forum/addAnswer/',
+            'addComment'    => 'Forum/addComment/',
+            'rateQuestion'  => 'Forum/vote/Q/',
+            'rateAnswer'    => 'Forum/vote/A/',
+            'rateComment'   => 'Forum/vote/C/',
+            'user'          => 'Users/id/',
+            'question'      => 'Forum/id/',
+            'accepted'      => 'Forum/accepted/',
+            'tagButton'     => 'Forum/tag/',
+            'tagCreate'     => 'Forum/tagCreate/',
 		];
 	}
 
@@ -123,10 +123,10 @@ class ForumController implements \Anax\DI\IInjectionAware
         $conditions = ['admin', $this->users->currentUser()];
 		$this->theme->setTitle("All Questions");
 		$this->views->add('forum/forum-menu', [
-			'admin'		=> $this->users->isUserAdmin($this->users->currentUser(), $conditions),
-			'questions' => $result,
-			'title' 	=> "All questions",
-			'redirect' 	=> $this->redirects(),
+			'admin'      => $this->users->isUserAdmin($this->users->currentUser(), $conditions),
+			'questions'  => $result,
+			'title'      => "All questions",
+			'redirect'   => $this->redirects(),
 		]);
 	}
 
@@ -148,8 +148,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 			$this->theme->setTitle("All Questions");
 			$this->views->add('forum/forum-menu', [
 				'questions' => $this->time->formatUnixProperties($result),
-				'title' => "Questions asked by this user",
-				'redirect' => $this->redirects()
+				'title'     => "Questions asked by this user",
+				'redirect'  => $this->redirects()
 			]);
 		}
 	}
@@ -214,13 +214,13 @@ class ForumController implements \Anax\DI\IInjectionAware
             // Set the title of the browser tab.
 			$this->theme->setTitle($question->title);
 			$this->views->add('forum/forum-question', [
-				'admin'				=> $this->users->isUserLoggedIn(),
-				'questionAdmin'		=> $this->users->isUserAdmin($this->users->currentUser(), $condition),
-				'redirect' 			=> $this->redirects(),
-				'question'  		=> $question,
+				'admin'             => $this->users->isUserLoggedIn(),
+				'questionAdmin'     => $this->users->isUserAdmin($this->users->currentUser(), $condition),
+				'redirect'          => $this->redirects(),
+				'question'          => $question,
 				'questionComments'  => $questionComments,
-				'answers'		 	=> $answers,
-				'answerComments' 	=> $answerComments
+				'answers'           => $answers,
+				'answerComments'    => $answerComments
 			]);
 		}
 	}
@@ -239,13 +239,13 @@ class ForumController implements \Anax\DI\IInjectionAware
         $questions = (!empty($questions)) ? $this->time->formatUnixProperties($questions) : [];
 
 		$this->views->add('forum/forum-home', [
-			'questions' => $questions,
-			'title1' => "Recent Questions",
-			'redirect' => $this->redirects(),
-			'title2' => "Most active users",
-			'users' => $this->users->getTopRatedUsers(),
-			'title3' => "Popular tags",
-			'tags' => $this->tags->getPopularTags()
+			'questions'=> $questions,
+			'title1'     => "Recent Questions",
+			'redirect'   => $this->redirects(),
+			'title2'     => "Most active users",
+			'users'      => $this->users->getTopRatedUsers(),
+			'title3'     => "Popular tags",
+			'tags'       => $this->tags->getPopularTags()
 		]);
 	}
 
@@ -301,9 +301,9 @@ class ForumController implements \Anax\DI\IInjectionAware
 	public function tagMenuAction()
 	{
 		$this->views->add('forum/forum-tagMenu', [
-			'title'		=> "Tags",
-			'redirect' 	=> $this->redirects(),
-			'tags'		=> $this->tags->findAll()
+			'title'      => "Tags",
+			'redirect'   => $this->redirects(),
+			'tags'       => $this->tags->findAll()
 		]);
 	}
 
@@ -319,10 +319,10 @@ class ForumController implements \Anax\DI\IInjectionAware
 		// Create a menu with all unique tags that can be applied to the question.
 		$this->theme->setTitle("Tag a question");
 		$this->views->add('forum/forum-tagQuestion', [
-			'title'		=> "Tags",
-			'redirect' 	=> $this->redirects(),
-			'tags'		=> $this->tags->findAll(),
-			'questionid'=> $this->questions->getQuestionId()
+			'title'      => "Tags",
+			'redirect'   => $this->redirects(),
+			'tags'       => $this->tags->findAll(),
+			'questionid' => $this->questions->getQuestionId()
 		]);
 	}
 
@@ -362,16 +362,16 @@ class ForumController implements \Anax\DI\IInjectionAware
 		// Create tag form.
 		$form = $form->create([], [
 			'name' => [
-				'type' 		=> !empty($values) ? 'hidden' : 'text',
-				'required' 	=> true,
-				'validation'=> ['not_empty'],
-				'value' 	=> !empty($values) ? $values['name'] : '',
+				'type'          => ($values) ? 'hidden' : 'text',
+				'required'      => true,
+				'validation'    => ['not_empty'],
+				'value'         => ($values) ? $values['name'] : '',
 			],
 			'submit' => [
-				'type' 		=> 'submit',
-				'class' 	=> 'cform-submit',
+				'type'      => 'submit',
+				'class'     => 'cform-submit',
 				'callback'  => [$this, 'callbackCreateTag'],
-				'value'		=> !empty($values) ? "Add tag: {$values['name']}" : "Create tag"
+				'value'     => ($values) ? "Add tag: {$values['name']}" : "Create tag"
 			]
 		]);
 
@@ -416,8 +416,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 
                 // Create a row that links the question to the tag.
                 $this->questionTags->create([
-                    "questionId" => $questionId,
-                    "tagId" => $this->tags->id
+                    "questionId"    => $questionId,
+                    "tagId"         => $this->tags->id
                 ]);
 
 				$result = true;
@@ -574,9 +574,9 @@ class ForumController implements \Anax\DI\IInjectionAware
 	public function addCommentAction($questionid, $qaid, $parent)
 	{
 		$values = [
-    		'questionid'	=>	$questionid,
-    		'qaid'			=>	$qaid,
-    		'commentparent' =>  $parent
+    		'questionid'      =>	$questionid,
+    		'qaid'            =>	$qaid,
+    		'commentparent'   =>  $parent
 		];
 
         // Render form.
@@ -600,23 +600,23 @@ class ForumController implements \Anax\DI\IInjectionAware
 		// Create answer form.
 		$form = $form->create([], [
 			'questionid' => [
-				'type' 		=> 'hidden',
-				'required' 	=> true,
-				'validation'=> ['not_empty'],
-				'value' 	=> $values['questionid'],
+				'type'          => 'hidden',
+				'required'      => true,
+				'validation'    => ['not_empty'],
+				'value'         => $values['questionid'],
 			],
 			'content' => [
-				'type'       => 'textarea',
-				'required'   => true,
-				'class' 	 => 'cform-textarea',
-				'validation' => ['not_empty'],
-				'value' 	 => ''
+				'type'          => 'textarea',
+				'required'      => true,
+				'class'         => 'cform-textarea',
+				'validation'    => ['not_empty'],
+				'value'         => ''
 			],
 			'submit' => [
-				'type' 		=> 'submit',
-				'class' 	=> 'cform-submit',
+				'type'      => 'submit',
+				'class'     => 'cform-submit',
 				'callback'  => [$this, 'callbackCreateAnswer'],
-				'value'		=> 'Post answer'
+				'value'     => 'Post answer'
 			]
 		]);
 
@@ -688,35 +688,35 @@ class ForumController implements \Anax\DI\IInjectionAware
 		// Create form.
 		$form = $form->create([], [
 			'questionid' => [
-				'type' 		=> 'hidden',
-				'required' 	=> true,
-				'validation'=> ['not_empty'],
-				'value' 	=> $values['questionid'],
+			    'type'          => 'hidden',
+				'required'      => true,
+				'validation'    => ['not_empty'],
+				'value'         => $values['questionid'],
 			],
 			'qaid' => [
-				'type' 		=> 'hidden',
-				'required' 	=> true,
-				'validation'=> ['not_empty'],
-				'value' 	=> $values['qaid'],
+				'type'          => 'hidden',
+				'required'      => true,
+				'validation'    => ['not_empty'],
+				'value'         => $values['qaid'],
 			],
 			'commentparent' => [
-				'type' 		=> 'hidden',
-				'required' 	=> true,
-				'validation'=> ['not_empty'],
-				'value' 	=> $values['commentparent'],
+				'type'          => 'hidden',
+				'required'      => true,
+				'validation'    => ['not_empty'],
+				'value'         => $values['commentparent'],
 			],
 			'content' => [
-				'type'       => 'textarea',
-				'required'   => true,
-				'class' 	 => 'cform-textarea',
-				'validation' => ['not_empty'],
-				'value' 	 => ''
+				'type'          => 'textarea',
+				'required'      => true,
+				'class'         => 'cform-textarea',
+				'validation'    => ['not_empty'],
+				'value'         => ''
 			],
 			'submit' => [
-				'type' 		=> 'submit',
-				'class' 	=> 'cform-submit',
+				'type'      => 'submit',
+				'class'     => 'cform-submit',
 				'callback'  => [$this, 'callbackCreateComment'],
-				'value'		=> 'Post comment'
+				'value'     => 'Post comment'
 			]
 		]);
 
@@ -777,24 +777,24 @@ class ForumController implements \Anax\DI\IInjectionAware
 		// Create form.
 		$form = $form->create([], [
 			'title' => [
-				'type' 		=> 'text',
-				'required' 	=> true,
-				'class' 	=> 'cform-textbox',
-				'validation'=> ['not_empty'],
-				'value' 	=> ''
+				'type'          => 'text',
+				'required'      => true,
+				'class'         => 'cform-textbox',
+				'validation'    => ['not_empty'],
+				'value'         => ''
 			],
 			'content' => [
-				'type'       => 'textarea',
-				'required'   => true,
-				'class' 	 => 'cform-textarea',
-				'validation' => ['not_empty'],
-				'value' 	 => ''
+				'type'          => 'textarea',
+				'required'      => true,
+				'class'         => 'cform-textarea',
+				'validation'    => ['not_empty'],
+				'value'         => ''
 			],
 			'submit' => [
-    			'type' 		=> 'submit',
-    			'class' 	=> 'cform-submit',
-    			'callback'  => [$this, 'callbackCreateQuestion'],
-    			'value'		=> 'Post question'
+    			'type'       => 'submit',
+    			'class'      => 'cform-submit',
+    			'callback'   => [$this, 'callbackCreateQuestion'],
+    			'value'      => 'Post question'
 			]
 		]);
 
@@ -825,13 +825,13 @@ class ForumController implements \Anax\DI\IInjectionAware
 
             // Save form.
 			$this->questions->create([
-				'user' 		=> $user->acronym,
-				'userid' 	=> $user->id,
-				'title' 	=> $form->Value('title'),
-				'content' 	=> $form->Value('content'),
+				'user'      => $user->acronym,
+				'userid'    => $user->id,
+				'title'     => $form->Value('title'),
+				'content'   => $form->Value('content'),
 				'timestamp' => time(),
-				'rating'	=> 0,
-				'answered' 	=> 0,
+				'rating'    => 0,
+				'answered'  => 0,
 			]);
 
 			$result = true;
