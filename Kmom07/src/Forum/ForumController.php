@@ -236,7 +236,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	{
 		// Get the recently posted questions.
         $questions = $this->questions->getRecentQuestions();
-        $questions = (!empty($questions)) ? $this->time->formatUnixProperties($questions) : array();
+        $questions = (!empty($questions)) ? $this->time->formatUnixProperties($questions) : [];
 
 		$this->views->add('forum/forum-home', [
 			'questions' => $questions,
