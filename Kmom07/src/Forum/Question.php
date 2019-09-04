@@ -13,6 +13,20 @@ class Question extends \Anax\MVC\CDatabaseModel
 
 
 
+    /**
+    * Find rows by column userid.
+    *
+    * @param string, $userid the userid of the tag.
+    *
+    * @return array, returns a resultset.
+    */
+    public function findByUserId($userid)
+    {
+        return $this->query()->where("userid = ?")->execute([$userid]);
+    }
+
+
+
 	/**
 	*	Save the previous question in session.
 	*/

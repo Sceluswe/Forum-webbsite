@@ -141,7 +141,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function userQuestionsAction($id)
 	{
-		$result = $this->questions->findByColumn('userid', htmlentities($id));
+		$result = $this->questions->findByUserId(htmlentities($id));
 
 		if(!empty($result))
 		{
