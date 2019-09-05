@@ -64,7 +64,7 @@ class ForumController implements \Anax\DI\IInjectionAware
             'question'      => 'Forum/id/',
             'accepted'      => 'Forum/accepted/',
             'tagButton'     => 'Forum/tag/',
-            'tagCreate'     => 'Forum/tagCreate/',
+            'tagCreate'     => 'Forum/tagCreate/'
 		];
 	}
 
@@ -105,7 +105,9 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function menuAction($tagName=null)
 	{
+        $tagName = urldecode($tagName);
 		$result = array("default" => "value");
+
 		if(empty($tagName))
 		{
             // Get all questions.
@@ -113,9 +115,11 @@ class ForumController implements \Anax\DI\IInjectionAware
 		}
         else
 		{   // Check if the tag exists.
-            $tag = $this->tags->findByName($tagName)[0];
+            $tag = $this->tags->findByName($tagName);
             if(!empty($tag))
-                $result = $this->time->formatUnixProperties($this->questionTags->selectByTag($tag->id));
+            {
+                $result = $this->time->formatUnixProperties($this->questionTags->selectByTag($tag[0]->id));
+            }
 		}
 
         $this->dispatcher->forwardTo('Forum', 'userStatus');
@@ -127,7 +131,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 			'admin'      => $this->users->isUserAdmin($this->users->currentUser(), $conditions),
 			'questions'  => $result,
 			'title'      => "All questions",
-			'redirect'   => $this->redirects(),
+			'redirect'   => $this->redirects()
 		]);
 	}
 
@@ -400,7 +404,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		// Check if question exists.
 		if($this->questions->find($questionId))
 		{
-            // If the questions exists, check or create the tag.
+            // If the question exists, check or create the tag.
             if(empty($this->tags->findByName($tagName)))
                 $this->tags->create([
                         'name' => $tagName
@@ -420,7 +424,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 				$result = true;
 			}
 
-			// Use the previous questionid to create a redirect link back to that question.
+            // Use questionId to create a redirect link back to that question.
             $this->utility->createRedirect("Forum/id/" . $questionId);
 		}
 
@@ -443,7 +447,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     {
         // Update it with an increase of 1.
         $data->update([
-            'rating' => $data->find($id)->rating + $number,
+            'rating' => $data->find($id)->rating + $number
         ]);
     }
 
