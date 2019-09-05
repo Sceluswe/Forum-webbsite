@@ -8,7 +8,6 @@ namespace Anax\Forum;
  */
 class Tag extends \Anax\MVC\CDatabaseModel
 {
-    use \Anax\Forum\TForumModel;
 
 
 
@@ -26,9 +25,9 @@ class Tag extends \Anax\MVC\CDatabaseModel
 
     public function getPopularTags()
     {
-        return $this->query('name, COUNT(1) AS num')
-            ->groupBy('name')
-            ->orderBy('num DESC LIMIT 12')
+        return $this->query("name, COUNT(1) AS num")
+            ->groupBy("name")
+            ->orderBy("num DESC LIMIT 12")
             ->execute();
     }
 }
