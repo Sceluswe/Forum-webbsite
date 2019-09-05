@@ -10,6 +10,17 @@ namespace Anax\Forum;
  */
 class QuestionTags extends \Anax\MVC\CDatabaseModel
 {
+
+
+    
+    /**
+    * Checks if a question has a tag.
+    *
+    * @param string, the id of the question.
+    * @param string, the id of the tag to look for.
+    *
+    * @return boolean, true of false.
+    */
     public function questionHasTag($questionId, $tagId)
     {
         return !empty($this->query()->where('questionId = ?')
@@ -18,6 +29,14 @@ class QuestionTags extends \Anax\MVC\CDatabaseModel
     }
 
 
+
+    /**
+    * Checks if a question has a tag.
+    *
+    * @param string, the id of the tag to select by.
+    *
+    * @return array, a resultset.
+    */
     public function selectByTag($tagId)
     {
         $source = $this->getSource();
