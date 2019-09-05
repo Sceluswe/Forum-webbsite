@@ -269,30 +269,33 @@ class ForumController implements \Anax\DI\IInjectionAware
 		//Get id from current user.
 		$userid = htmlentities($id);
 
-        // Calculate QAC score.
-        $q = $this->questions->calculateScore($userid);
-        $a = $this->answers->calculateScore($userid);
-        $c = $this->comments->calculateScore($userid);
-        $totalScore = $q["sum"] + $a["sum"] + $c["sum"];
+        if(is_numeric($userid))
+        {
+            // Calculate QAC score.
+            $q = $this->questions->calculateScore($userid);
+            $a = $this->answers->calculateScore($userid);
+            $c = $this->comments->calculateScore($userid);
+            $totalScore = $q["sum"] + $a["sum"] + $c["sum"];
 
-        // Create score table.
-        $table = $this->table->createTable([
-            "class" => "width45",
-            ["", "Amount", "Rating", "Sum", "class" => "menu-table-header"],
-            ["Q", $q["count"], $q["rating"], $q["sum"]],
-            ["A", $a["count"], $a["rating"], $a["sum"]],
-            ["C", $c["count"], $c["rating"], $c["sum"]],
-        ]);
-        $table .= "<br><br><br><br><br><p><b>User rating:</b> {$totalScore}</p>";
+            // Create score table.
+            $table = $this->table->createTable([
+                "class" => "width45",
+                ["", "Amount", "Rating", "Sum", "class" => "menu-table-header"],
+                ["Q", $q["count"], $q["rating"], $q["sum"]],
+                ["A", $a["count"], $a["rating"], $a["sum"]],
+                ["C", $c["count"], $c["rating"], $c["sum"]],
+            ]);
+            $table .= "<br><br><br><br><br><p><b>User rating:</b> {$totalScore}</p>";
 
-		// Update the users score.
-		$this->users->id = $id;
-		$this->users->update([
-            "score" => $totalScore
-        ]);
+    		// Update the users score.
+    		$this->users->id = $id;
+    		$this->users->update([
+                "score" => $totalScore
+            ]);
 
-		// Render form.
-        $this->utility->renderDefaultPage("Rating", $table);
+    		// Render form.
+            $this->utility->renderDefaultPage("Rating", $table);
+        }
 	}
 
 
