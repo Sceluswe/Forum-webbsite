@@ -40,30 +40,32 @@ class CUrl
     */
     public function create($uri = null)
     {
-        if (empty($uri)) {
-
+        if (empty($uri))
+        {
             // Empty uri means baseurl
             return $this->baseUrl
-                . (($this->urlType == self::URL_APPEND)
+                    . (($this->urlType == self::URL_APPEND)
                     ? "/$this->scriptName"
                     : null);
-
-        } elseif (substr($uri, 0, 7) == "http://" || substr($uri, 0, 2) == "//") {
-
+        }
+        elseif (substr($uri, 0, 7) == "http://" || substr($uri, 0, 2) == "//")
+        {
             // Fully qualified, just leave as is.
             return rtrim($uri, '/');
-
-        } elseif ($uri[0] == '/') {
-
+        }
+        elseif ($uri[0] == '/')
+        {
             // Absolute url, prepend with siteUrl
             return rtrim($this->siteUrl . rtrim($uri, '/'), '/');
-
         }
 
         $uri = rtrim($uri, '/');
-        if ($this->urlType == self::URL_CLEAN) {
+        if ($this->urlType == self::URL_CLEAN)
+        {
             return $this->baseUrl . '/' . $uri;
-        } else {
+        }
+        else
+        {
             return $this->baseUrl . '/' . $this->scriptName . '/' . $uri;
         }
     }
