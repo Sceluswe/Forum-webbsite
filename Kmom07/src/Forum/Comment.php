@@ -8,8 +8,7 @@ namespace Anax\Forum;
  */
 class Comment extends \Anax\MVC\CDatabaseModel
 {
-    use \Anax\Forum\TForumModel,
-        \Anax\Forum\TQACModel;
+    use \Anax\Forum\TQACModel;
 
 
 

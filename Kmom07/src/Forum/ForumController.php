@@ -64,7 +64,7 @@ class ForumController implements \Anax\DI\IInjectionAware
             'question'      => 'Forum/id/',
             'accepted'      => 'Forum/accepted/',
             'tagButton'     => 'Forum/tag/',
-            'tagCreate'     => 'Forum/tagCreate/',
+            'tagCreate'     => 'Forum/tagCreate/'
 		];
 	}
 
@@ -105,7 +105,9 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function menuAction($tagName=null)
 	{
+        $tagName = urldecode($tagName);
 		$result = array("default" => "value");
+
 		if(empty($tagName))
 		{
             // Get all questions.
@@ -113,9 +115,11 @@ class ForumController implements \Anax\DI\IInjectionAware
 		}
         else
 		{   // Check if the tag exists.
-            $tag = $this->tags->findByName($tagName)[0];
+            $tag = $this->tags->findByName($tagName);
             if(!empty($tag))
-                $result = $this->time->formatUnixProperties($this->questionTags->selectByTag($tag->id));
+            {
+                $result = $this->time->formatUnixProperties($this->questionTags->selectByTag($tag[0]->id));
+            }
 		}
 
         $this->dispatcher->forwardTo('Forum', 'userStatus');
@@ -127,7 +131,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 			'admin'      => $this->users->isUserAdmin($this->users->currentUser(), $conditions),
 			'questions'  => $result,
 			'title'      => "All questions",
-			'redirect'   => $this->redirects(),
+			'redirect'   => $this->redirects()
 		]);
 	}
 
@@ -265,30 +269,33 @@ class ForumController implements \Anax\DI\IInjectionAware
 		//Get id from current user.
 		$userid = htmlentities($id);
 
-        // Calculate QAC score.
-        $q = $this->questions->calculateScore($userid);
-        $a = $this->answers->calculateScore($userid);
-        $c = $this->comments->calculateScore($userid);
-        $totalScore = $q["sum"] + $a["sum"] + $c["sum"];
+        if(is_numeric($userid))
+        {
+            // Calculate QAC score.
+            $q = $this->questions->calculateScore($userid);
+            $a = $this->answers->calculateScore($userid);
+            $c = $this->comments->calculateScore($userid);
+            $totalScore = $q["sum"] + $a["sum"] + $c["sum"];
 
-        // Create score table.
-        $table = $this->table->createTable([
-            "class" => "width45",
-            ["", "Amount", "Rating", "Sum", "class" => "menu-table-header"],
-            ["Q", $q["count"], $q["rating"], $q["sum"]],
-            ["A", $a["count"], $a["rating"], $a["sum"]],
-            ["C", $c["count"], $c["rating"], $c["sum"]],
-        ]);
-        $table .= "<br><br><br><br><br><p><b>User rating:</b> {$totalScore}</p>";
+            // Create score table.
+            $table = $this->table->createTable([
+                "class" => "width45",
+                ["", "Amount", "Rating", "Sum", "class" => "menu-table-header"],
+                ["Q", $q["count"], $q["rating"], $q["sum"]],
+                ["A", $a["count"], $a["rating"], $a["sum"]],
+                ["C", $c["count"], $c["rating"], $c["sum"]],
+            ]);
+            $table .= "<br><br><br><br><br><p><b>User rating:</b> {$totalScore}</p>";
 
-		// Update the users score.
-		$this->users->id = $id;
-		$this->users->update([
-            "score" => $totalScore
-        ]);
+    		// Update the users score.
+    		$this->users->id = $id;
+    		$this->users->update([
+                "score" => $totalScore
+            ]);
 
-		// Render form.
-        $this->utility->renderDefaultPage("Rating", $table);
+    		// Render form.
+            $this->utility->renderDefaultPage("Rating", $table);
+        }
 	}
 
 
@@ -400,7 +407,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		// Check if question exists.
 		if($this->questions->find($questionId))
 		{
-            // If the questions exists, check or create the tag.
+            // If the question exists, check or create the tag.
             if(empty($this->tags->findByName($tagName)))
                 $this->tags->create([
                         'name' => $tagName
@@ -420,7 +427,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 				$result = true;
 			}
 
-			// Use the previous questionid to create a redirect link back to that question.
+            // Use questionId to create a redirect link back to that question.
             $this->utility->createRedirect("Forum/id/" . $questionId);
 		}
 
@@ -443,7 +450,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     {
         // Update it with an increase of 1.
         $data->update([
-            'rating' => $data->find($id)->rating + $number,
+            'rating' => $data->find($id)->rating + $number
         ]);
     }
 
