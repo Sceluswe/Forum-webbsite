@@ -433,25 +433,6 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 
 //---------------- Ratings ----------------
-    /**
-    * Function finds the correct dataobject and updates its rating.
-    *
-    * @param object, the data in which the targeted dataobject exists.
-    * @param string, the unique id of the row to use in the table/data.
-    * @param string, a positive or negative number to add to the rating score.
-    *
-    * @return void.
-    */
-    private function editVote(object $data, $id, $number)
-    {
-        // Update it with an increase of 1.
-        $data->update([
-            'rating' => $data->find($id)->rating + $number
-        ]);
-    }
-
-
-
 	/**
 	* Function to edit the rating of a question, answer or comment.
 	*
@@ -465,20 +446,19 @@ class ForumController implements \Anax\DI\IInjectionAware
 	{
 		if($this->users->isUserLoggedIn())
 		{
-            // Use the two parameters to find the correct database table
-            // and change the rating of the row in that table.
+            // Find database table and change the rating of the row in that table.
             if(is_numeric($rowid) && ($number == 1 || $number == -1))
             {
                 switch ($table)
                 {
                     case 'Q':
-                        $this->editVote($this->questions, $rowid, $number);
+                        $this->questions->editVote($rowid, $number);
                         break;
                     case 'A':
-                        $this->editVote($this->answers, $rowid, $number);
+                        $this->answers->editVote($rowid, $number);
                         break;
                     case 'C':
-                        $this->editVote($this->comments, $rowid, $number);
+                        $this->comments->editVote($rowid, $number);
                         break;
                 }
 
