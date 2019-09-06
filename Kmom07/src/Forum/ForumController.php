@@ -171,7 +171,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	public function idAction($id, $sort=null)
 	{
 		// Clean the $id and get the question.
-		$question = $this->questions->find(htmlentities($id));
+		$question = $this->questions->find($id);
 
         // Save the question in session for easy access elsewhere.
 		$this->questions->setQuestionId($question->id);
@@ -259,21 +259,18 @@ class ForumController implements \Anax\DI\IInjectionAware
     /**
 	* Calculate the overall score of a user.
     *
-    * @param int, the id of the user to calculate score for.
+    * @param string, the id of the user to calculate score for.
     *
     * @return void.
 	*/
 	public function scoreAction($id)
 	{
-		//Get id from current user.
-		$userid = htmlentities($id);
-
-        if(is_numeric($userid))
+        if(is_numeric($id))
         {
             // Calculate QAC score.
-            $q = $this->questions->calculateScore($userid);
-            $a = $this->answers->calculateScore($userid);
-            $c = $this->comments->calculateScore($userid);
+            $q = $this->questions->calculateScore($id);
+            $a = $this->answers->calculateScore($id);
+            $c = $this->comments->calculateScore($id);
             $totalScore = $q["sum"] + $a["sum"] + $c["sum"];
 
             // Create score table.
