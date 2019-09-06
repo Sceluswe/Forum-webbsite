@@ -15,18 +15,13 @@ Check if you can't use Comments\Comment.php as the comment model in Forum\ as we
 Comment.php model in forum. Not sure about this, will have to think about it.
 
 
-ForumController.php: reduce code by moving database queries away from the controller into the model.
 
+
+ForumController.php: create functionality so that a user can un-accept an answer.
 ForumController.php: find out if you can't move the user functions into UsersController.php.
-ForumController.php: possibly move unix time formatting into the model  as well (not sure about this).
 ForumController.php: Create database link tables (questionTags) for questions answers and comments too? (Will require more research)
-ForumController.php: editVote() could be moved to the TForumModel trait.
-ForumController.php.tagCreateAction(): check if this really needs to allow $tag to be null.
-ForumController.php: Check in callbackCreateTag() the tag value is being cleaned, does it need the escaper?
 ForumController.php: Start using type declarations in function parameter lists to reduce type checks.
-ForumController.php: See if you can split it up into several controllers, one for tag one for... and so on.
-ForumController.php.voteAction() clean the variable $number.
-ForumController.php: Replace the cleaning of parameters with Escaper where necessary
+ForumController.php: See if you can split it up into several controllers? one for tag one for... and so on.
 ForumController.php: Potentially reduce size by splitting up answer, question and comment management into three new objects
 ForumController.php: have tagCreateAction() include a cancel button in  case the user doesn't want to create a tag.
 
@@ -58,6 +53,8 @@ Design: Display added tags below a posted question.
 Design: Fix the design when displaying a user profile. The lightblue box should be aligned to the left.
 Design: Make sure the size of a user box remains the same in the user menu, even if buttons are displayed
 or not.
+Design: make it so that the user that placed a comment is always displayed below the comment text, so that the
+button and time of placement never moves.
 
 
 
@@ -66,6 +63,21 @@ Fix: Remove all each() function errors. The function is deprecated.
 
 
 -------- Completed --------
+-------- 2019-09-06:
+ForumController.php: Replace the cleaning of parameters with Escaper where necessary
+ForumController.php.voteAction() clean the variable $number.
+ForumController.php.callbackCreateTag(): the tag param is being cleaned, does it need the escaper? It shouldn't
+have to be cleaned. The PHP prepared statements should prevent any SQL injection.
+ForumController.php: editVote() could be moved to the TForumModel trait.
+ForumController.php: check if you can't use find() instead of the array index solution. It was possible with
+the following changes:
+    User.php: have findByAcronym fetch into the model instead of returning an array.
+    Tag.php: have findByName fetch into the model instead of returning an array.
+ForumController.php: reduce code by moving database queries away from the controller into the model.
+ForumController.php.tagCreateAction(): should this really allow $tag param to be null? It's absolutely necessary.
+    tagCreateAction is used without a parameter to display the tag creation form.
+ForumController.php.acceptedAction(): check if id must be set before a call to update. It must be set, id is the WHERE identifier
+
 -------- 2019-09-05:
 ForumController.menuAction(): decode GET param to allow tags to have several words.
 TForumModel.php: Look over if QACT actually uses this model. Q does, but what about ACT?
