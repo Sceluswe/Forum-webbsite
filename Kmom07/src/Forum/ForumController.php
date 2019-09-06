@@ -81,7 +81,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 		if($this->users->isUserLoggedIn())
 		{
-			$user = $this->users->findByAcronym($this->users->currentUser())[0];
+			$user = $this->users->findByAcronym($this->users->currentUser());
 
             // Create a link to the currently logged in user.
 			$userlink = "<p>You are currently logged in as: <a href=\""
@@ -634,18 +634,17 @@ class ForumController implements \Anax\DI\IInjectionAware
 	public function callbackCreateAnswer($form)
     {
 		$result = false;
-        // Get the current user from the database.
-		$user = $this->users->findByAcronym($this->users->currentUser())[0];
 
-		if(!empty($user))
+        // Check if user exists and load into model if so.
+		if(!empty($this->users->findByAcronym($this->users->currentUser())))
 		{
 			$form->saveInSession = true;
 
             // Save form.
-			$this->answers->create([
+			$createResult = $this->answers->create([
 				'questionid'    => $form->Value('questionid'),
-				'user'          => $user->acronym,
-				'userid'        => $user->id,
+				'user'          => $this->users->acronym,
+				'userid'        => $this->users->id,
 				'content'       => $form->Value('content'),
 				'timestamp'     => time(),
 				'rating'        => 0,
@@ -653,11 +652,19 @@ class ForumController implements \Anax\DI\IInjectionAware
 			]);
 
 			// Update the question and report that it has received another answer.
-			$this->questions->update([
+			$updateResult = $this->questions->update([
 				'answered'  => $this->questions->find($form->Value('questionid'))->answered + 1,
 			]);
 
-			$result = true;
+            if($createResult && $updateResult)
+            {
+			    $result = true;
+            }
+            else
+            {
+                die("ForumController.callbackCreateAnswer: Creation of answer or update of question failed.");
+            }
+
 			// Use the questionid to create a redirect link back to the question.
             $this->utility->createRedirect("Forum/id/" . $form->Value('questionid'));
 		}
@@ -732,18 +739,17 @@ class ForumController implements \Anax\DI\IInjectionAware
     public function callbackCreateComment($form)
     {
     	$result = false;
-    	// Get the current user from the database.
-    	$user = $this->users->findByAcronym($this->users->currentUser())[0];
 
-    	if(!empty($user))
+    	// Check if user exists and load into model if so.
+    	if(!empty($this->users->findByAcronym($this->users->currentUser())))
     	{
     		$form->saveInSession = true;
     		// Save form.
     		$this->comments->create([
-    			'user'          => $user->acronym,
+    			'user'          => $this->users->acronym,
     			'commentparent' => $form->Value('commentparent'),
     			'qaid'          => $form->Value('qaid'),
-    			'userid'        => $user->id,
+    			'userid'        => $this->users->id,
     			'content'       => $form->Value('content'),
     			'timestamp'     => time(),
     			'rating'        => 0,
@@ -810,17 +816,16 @@ class ForumController implements \Anax\DI\IInjectionAware
     public function callbackCreateQuestion($form)
     {
     	$result = false;
-    	// Get the current user from the database.
-    	$user = $this->users->findByAcronym($this->users->currentUser())[0];
 
-    	if(!empty($user))
+        // Check if user exists and load into model if so.
+    	if(!empty($this->users->findByAcronym($this->users->currentUser())))
     	{
     		$form->saveInSession = true;
 
             // Save form.
-    		$this->questions->create([
-    			'user'      => $user->acronym,
-    			'userid'    => $user->id,
+    		$result = $this->questions->create([
+    			'user'      => $this->users->acronym,
+    			'userid'    => $this->users->id,
     			'title'     => $form->Value('title'),
     			'content'   => $form->Value('content'),
     			'timestamp' => time(),
@@ -828,7 +833,6 @@ class ForumController implements \Anax\DI\IInjectionAware
     			'answered'  => 0,
     		]);
 
-    		$result = true;
             $this->utility->createRedirect('Questions');
     	}
 

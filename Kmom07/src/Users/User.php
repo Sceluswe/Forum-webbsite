@@ -10,7 +10,7 @@ class User extends \Anax\MVC\CDatabaseModel
 {
 
 
-    
+
     /**
     * Find rows by column acronym.
     *
@@ -20,7 +20,9 @@ class User extends \Anax\MVC\CDatabaseModel
     */
     public function findByAcronym($acronym)
 	{
-        return $this->query()->where("acronym = ?")->execute([$acronym]);
+        $this->query()->where("acronym = ?");
+        $this->db->execute([$acronym]);
+        return $this->db->fetchInto($this);
 	}
 
 
@@ -72,7 +74,7 @@ class User extends \Anax\MVC\CDatabaseModel
 	/**
 	* Function that saves the logged in user in session.
 	*
-	* @param $user, the user to be logged in.
+	* @param $user, acronym of the user to be logged in.
 	*/
 	public function loginUser($user)
 	{

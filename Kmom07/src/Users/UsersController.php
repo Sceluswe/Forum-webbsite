@@ -410,15 +410,10 @@ class UsersController implements \Anax\DI\IInjectionAware
 		// Ask the module if user is valid.
 		if($this->users->validateUser($acronym, $password))
 		{
-			//$form->saveInSession = true;
+            // Fetch the user into model and update active time.
+            $this->users->findByAcronym($form->Value('acronym'));
 
-            // Get the user id from db.
-            $this->users->id = $this->users->findByAcronym($form->Value('acronym'))[0]->id;
-			$updated = $this->users->update([
-				'active' 	=> gmdate('Y-m-d H:i:s')
-			]);
-
-			if($updated)
+			if($this->users->update(['active' => gmdate('Y-m-d H:i:s')]))
 			{	// Save user in session.
 				$this->users->loginUser($acronym);
 				$success = true;
