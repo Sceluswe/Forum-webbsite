@@ -3,7 +3,10 @@ namespace Anax\Forum;
 
 trait TQACModel {
 
-
+    public function findByUserId($userId)
+    {
+        return $this->query()->where("userid = ?")->execute([$userId]);
+    }
 
     /**
     * Calculates the sum of an array of objects rating property.
@@ -12,9 +15,9 @@ trait TQACModel {
     *
     * @return int, the sum of all ratings.
     */
-    public function calculateScore($userid)
+    public function calculateScore($userId)
     {
-        $arrObj = parent::findByColumn("userid", $userid);
+        $arrObj = $this->findByUserId($userId);
         $count = count($arrObj);
         $ratingSum = 0;
 
