@@ -23,4 +23,18 @@ class Answer extends \Anax\MVC\CDatabaseModel
     {
         return $this->query()->where("questionid = ?")->execute([$questionid]);
     }
+
+    public function sortByRating($questionid)
+    {
+        return $this->answers->query()->where('questionid= ?')
+            ->orderBy('rating DESC')
+            ->execute([$questionid]);
+    }
+
+    public function sortByTime($questionid)
+    {
+        return $this->answers->query()->where('questionid= ?')
+            ->orderBy('timestamp DESC')
+            ->execute([$questionid]);
+    }
 }

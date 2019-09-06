@@ -192,10 +192,10 @@ class ForumController implements \Anax\DI\IInjectionAware
             switch ($sort)
             {
                 case 'timestamp':
-                    $answers = $this->answers->query()->where('questionid= ?')->orderBy('timestamp DESC')->execute([$id]);
+                    $answers = $this->answers->sortByTime($id);
                     break;
                 case 'rating':
-                    $answers = $this->answers->query()->where('questionid= ?')->orderBy('rating DESC')->execute([$id]);
+                    $answers = $this->answers->sortByRating($id);
                     break;
                 default:
                     $answers = $this->answers->findByQuestionId($id);
