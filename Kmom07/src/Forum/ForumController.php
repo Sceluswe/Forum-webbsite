@@ -287,7 +287,7 @@ class ForumController implements \Anax\DI\IInjectionAware
             ]);
             $table .= "<br><br><br><br><br><p><b>User rating:</b> {$totalScore}</p>";
 
-    		// Update the users score.
+    		// Set id of the row to update and update the rows score.
     		$this->users->id = $id;
     		$this->users->update([
                 "score" => $totalScore
@@ -514,13 +514,10 @@ class ForumController implements \Anax\DI\IInjectionAware
 		$answerid = htmlentities($id);
 		if(is_numeric($answerid))
 		{
-			// Save the id in the module Answer.
-			$this->answers->id = $answerid;
-
-            // Update answer.
+            // Set id so the db knows which row to update.
+            $this->answers->id = $answerid;
 			$this->answers->update([
-				'id' => $answerid,
-				'accepted' => 1
+				'accepted'  => 1
 			]);
 
             // Create redirect link using the questions id.
@@ -657,11 +654,9 @@ class ForumController implements \Anax\DI\IInjectionAware
 				'accepted'      => 0,
 			]);
 
-			//Update the question and report that it has received another answer.
-			$question = $this->questions->find($form->Value('questionid'));
+			// Update the question and report that it has received another answer.
 			$this->questions->update([
-				'id'        => $question->id,
-				'answered'  => $question->answered + 1,
+				'answered'  => $this->questions->find($form->Value('questionid'))->answered + 1,
 			]);
 
 			$result = true;
