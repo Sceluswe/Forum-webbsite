@@ -188,7 +188,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 			$questionComments = $this->comments->findQuestionComments($id);
 			$questionComments = ($questionComments) ? $this->time->formatUnixProperties($questionComments) : [];
 
-            switch ($sort)
+            switch($sort)
             {
                 case 'timestamp':
                     $answers = $this->answers->sortByTime($id);
@@ -341,7 +341,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function tagCreateAction($tag=null)
 	{
-		$values = !empty($tag) ? ['name' => $this->escaper->escapeHTML($tag)] : [];
+		$values = !empty($tag) ? ['name' => $this->escaper->escapeHTMLattr($tag)] : [];
 
 		// Render form.
         $this->utility->renderDefaultPage("Create Tag", $this->getTagForm($values));
@@ -446,7 +446,7 @@ class ForumController implements \Anax\DI\IInjectionAware
             // Find database table and change the rating of the row in that table.
             if(is_numeric($rowid) && ($number == 1 || $number == -1))
             {
-                switch ($table)
+                switch($table)
                 {
                     case 'Q':
                         $this->questions->editVote($rowid, $number);
@@ -484,11 +484,10 @@ class ForumController implements \Anax\DI\IInjectionAware
     */
 	public function acceptedAction($id)
 	{
-		$answerid = htmlentities($id);
-		if(is_numeric($answerid))
+		if(is_numeric($id))
 		{
             // Set id so the db knows which row to update.
-            $this->answers->id = $answerid;
+            $this->answers->id = $id;
 			$this->answers->update([
 				'accepted'  => 1
 			]);
@@ -545,9 +544,9 @@ class ForumController implements \Anax\DI\IInjectionAware
 	public function addCommentAction($questionid, $qaid, $parent)
 	{
 		$values = [
-    		'questionid'      => $questionid,
-    		'qaid'            => $qaid,
-    		'commentparent'   => $parent
+    		'questionid'      => $this->escaper->escapeHTMLattr($questionid),
+    		'qaid'            => $this->escaper->escapeHTMLattr($qaid),
+    		'commentparent'   => $this->escaper->escapeHTMLattr($parent)
 		];
 
         // Render form.
@@ -574,7 +573,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 				'type'          => 'hidden',
 				'required'      => true,
 				'validation'    => ['not_empty'],
-				'value'         => $values['questionid'],
+				'value'         => $this->escaper->escapeHTMLattr($values['questionid']),
 			],
 			'content' => [
 				'type'          => 'textarea',
