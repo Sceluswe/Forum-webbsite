@@ -399,7 +399,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     {
 		$result = false;
 		$questionId = $this->questions->getQuestionId();
-		$tagName = htmlentities($form->Value('name'));
+		$tagName = $form->Value('name');
 
 		// Check if question exists.
 		if($this->questions->find($questionId))
