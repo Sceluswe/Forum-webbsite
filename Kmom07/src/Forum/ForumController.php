@@ -115,10 +115,9 @@ class ForumController implements \Anax\DI\IInjectionAware
 		}
         else
 		{   // Check if the tag exists.
-            $tag = $this->tags->findByName($tagName);
-            if(!empty($tag))
+            if(!empty($this->tags->findByName($tagName)))
             {
-                $result = $this->time->formatUnixProperties($this->questionTags->selectByTag($tag[0]->id));
+                $result = $this->time->formatUnixProperties($this->questionTags->selectByTag($this->tags->id));
             }
 		}
 
@@ -410,18 +409,17 @@ class ForumController implements \Anax\DI\IInjectionAware
             // If the question exists, check or create the tag.
             if(empty($this->tags->findByName($tagName)))
                 $this->tags->create([
-                        'name' => $tagName
+                    'name' => $tagName
                 ]);
-            $tag = $this->tags->findByName($tagName)[0];
 
-			if(!$this->questionTags->questionHasTag($questionId, $tag->id))
+			if(!$this->questionTags->questionHasTag($questionId, $this->tags->id))
 			{   // If the question doesn't have tag, apply it:
 				$form->saveInSession = true;
 
                 // Create a row that links the question to the tag.
                 $this->questionTags->create([
                     "questionId"    => $questionId,
-                    "tagId"         => $tag->id
+                    "tagId"         => $this->tags->id
                 ]);
 
 				$result = true;

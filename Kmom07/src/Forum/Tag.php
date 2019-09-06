@@ -12,15 +12,17 @@ class Tag extends \Anax\MVC\CDatabaseModel
 
 
     /**
-    * Find rows by column name.
+    * Finds one row by column name (since name is UNIQUE) and load it into the module.
     *
-    * @param string, $name the name of the tag.
+    * @param string, $name the unique name of the tag.
     *
     * @return array, returns a resultset.
     */
     public function findByName($name)
     {
-        return $this->query()->where("name = ?")->execute([$name]);
+        $this->query()->where("name = ?");
+        $this->db->execute([$name]);
+        return $this->db->fetchInto($this);
     }
 
     public function getPopularTags()
