@@ -128,9 +128,10 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 		$keys = array_keys($values);
 		$values = array_values($values);
 
-		//remove id from $keys and use it in your WHERE-clause.
-		unset($keys['id']);
-		$values[] = $this->id;
+        // Id should never be changeable. Therefore unset it (if it exists).
+        unset($keys["id"]);
+        // add the id of the row to be updated.
+        $values[] = $this->id;
 
 		$this->db->update($this->getSource(), $keys, "id = ?");
 
