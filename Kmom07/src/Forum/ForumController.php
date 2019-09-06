@@ -344,9 +344,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function tagCreateAction($tag=null)
 	{
-		$values = (!empty($tag))
-            ? ['name' => $this->escaper->escapeHTML($tag)]
-            : [];
+		$values = !empty($tag) ? ['name' => $this->escaper->escapeHTML($tag)] : [];
 
 		// Render form.
         $this->utility->renderDefaultPage("Create Tag", $this->getTagForm($values));
