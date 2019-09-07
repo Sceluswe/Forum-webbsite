@@ -392,7 +392,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
     * @return boolean, true if tag creation is successful.
     */
-	public function callbackCreateTag($form)
+	public function callbackCreateTag(object $form)
     {
 		$result = false;
 		$questionId = $this->questions->getQuestionId();
@@ -457,6 +457,8 @@ class ForumController implements \Anax\DI\IInjectionAware
                     case 'C':
                         $this->comments->editVote($rowid, $number);
                         break;
+                    default:
+                        die("Error: invalid parameters in ForumController.voteAction().");
                 }
 
                 $this->utility->createRedirect("Forum/id/" . $this->questions->getQuestionId());
@@ -476,7 +478,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 // ---------------- Accept answer ---------------
     /**
-    * Accepts an answer to a question as THE answer.
+    * Accepts or unaccepts an answer to a question as THE answer.
     *
     * @param string, treated as int, id of the answer to be accepted.
     *
@@ -486,10 +488,10 @@ class ForumController implements \Anax\DI\IInjectionAware
 	{
 		if(is_numeric($id))
 		{
-            // Set id so the db knows which row to update.
-            $this->answers->id = $id;
+            // Find row in db and simultaneously set $this->answer->id so the db knows which row to update.
+            $this->answers->find($id);
 			$this->answers->update([
-				'accepted'  => 1
+				'accepted'  => ($this->answers->accepted == 0) ? 1 : 0
 			]);
 
             // Create redirect link using the questions id.
@@ -535,8 +537,8 @@ class ForumController implements \Anax\DI\IInjectionAware
     /**
 	* Function that adds a new answer comment to the database.
 	*
-	* @param int, the ID of the question in the database.
-    * @param int, the ID of the question or answer the comment belongs to.
+	* @param string, the ID of the question in the database.
+    * @param string, the ID of the question or answer the comment belongs to.
     * @param string, a string indicating what the comments parent is.
     *
     * @return void.
@@ -605,7 +607,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
     * @return boolean, true if answer was created.
     */
-	public function callbackCreateAnswer($form)
+	public function callbackCreateAnswer(object $form)
     {
 		$result = false;
 
@@ -710,7 +712,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
     * @return boolean, true if comment was created.
     */
-    public function callbackCreateComment($form)
+    public function callbackCreateComment(object $form)
     {
     	$result = false;
 
@@ -787,7 +789,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
     * @return boolean, true if comment was created.
     */
-    public function callbackCreateQuestion($form)
+    public function callbackCreateQuestion(object $form)
     {
     	$result = false;
 
@@ -822,7 +824,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
     * @return bool.
     */
-    public function callbackSuccess($form)
+    public function callbackSuccess(object $form)
     {
         $form->AddOutput("<p><i>Posted.</i></p>");
         return false;
@@ -837,7 +839,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
     * @return bool.
     */
-    public function callbackFail($form)
+    public function callbackFail(object $form)
     {
         $form->AddOutput("<p><i>DoSubmitFail(): Form was submitted but it failed to process/save/validate it</i></p>");
         return false;

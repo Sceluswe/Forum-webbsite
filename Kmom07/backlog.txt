@@ -17,18 +17,14 @@ Comment.php model in forum. Not sure about this, will have to think about it.
 
 
 
-ForumController.php: create functionality so that a user can un-accept an answer.
+
 ForumController.php: find out if you can't move the user functions into UsersController.php.
 ForumController.php: Create database link tables (questionTags) for questions answers and comments too? (Will require more research)
-ForumController.php: Start using type declarations in function parameter lists to reduce type checks.
 ForumController.php: See if you can split it up into several controllers? one for tag one for... and so on.
 ForumController.php: Potentially reduce size by splitting up answer, question and comment management into three new objects
 ForumController.php: have tagCreateAction() include a cancel button in  case the user doesn't want to create a tag.
+ForumController.php: see if you can't use other Cform objects to reduce code and code repetition.
 
-ForumController & UserController: either add a class or find a way to move the renderDefaultPage() out
-of ForumController so that both UserController and ForumController can use it.
-
-UserController.php: make sure that the webpage redirects to the menu again after a user has been deleted.
 User.php: code could possibly be reduced by abstracting a lot of the functions into the session trait.
 User.php: change isUserAdmin() to use $SESSION['currentUser'] instead of taking the currentUser as param.
 User.php: Allow users to delete their own questions.
@@ -38,9 +34,6 @@ make all redirects() private since they don't have to be public.
 Consider creating a HTMLList class that creates a list or possibly HTMLlink to create links
 
 Make sure the Administrator can't delete nor softdelete himself or be deleted by anyone for that matter.
-
-CDatabaseModel: Check if orderBy groupBy executeFetchAll are necessary and how they work.
-CDatabaseModel: If orderBy groupBy executeFetchAll are necessary add comments.
 
 Comment & CommentController: check if set/getRedirect is necessary or can be replaced.
 CommentController: Check if removeAllAction() should be removed. Could be a security risk.
@@ -55,6 +48,7 @@ Design: Make sure the size of a user box remains the same in the user menu, even
 or not.
 Design: make it so that the user that placed a comment is always displayed below the comment text, so that the
 button and time of placement never moves.
+Design: create a clearer separation between questions, perhaps using color variants.
 
 
 
@@ -63,6 +57,14 @@ Fix: Remove all each() function errors. The function is deprecated.
 
 
 -------- Completed --------
+-------- 2019-09-07:
+UserController.php: make sure that the webpage redirects to the menu again after a user has been deleted.
+ForumController.php: create functionality so that a user can un-accept an answer.
+ForumController.php: Start using type declarations in function parameter lists to reduce type checks.
+CDatabaseModel: Check if orderBy groupBy executeFetchAll are necessary and how they work.
+CDatabaseModel: If orderBy groupBy executeFetchAll are necessary add comments.
+UserController.php: rename idAction() profileAction() for clarity
+
 -------- 2019-09-06:
 ForumController.php: Replace the cleaning of parameters with Escaper where necessary
 ForumController.php.voteAction() clean the variable $number.
@@ -87,7 +89,8 @@ ForumController.php.scoreAction(): add if-statement that checks if $id is numeri
 QuestionTags.php: implement the link table model in ForumController.
 ForumController.php & Question.php: rename setQuestion and getQuestion to setQuestionId & getQuestionId for clarity.
 
-
+ForumController & UserController: either add a class or find a way to move the renderDefaultPage() out
+of ForumController so that both UserController and ForumController can use it.
 
 -------- Previous:
 ForumController.tagCreateAction($tag=null): Clean the $tag parameter with escaper.
