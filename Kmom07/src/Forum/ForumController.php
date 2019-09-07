@@ -392,7 +392,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
     * @return boolean, true if tag creation is successful.
     */
-	public function callbackCreateTag($form)
+	public function callbackCreateTag(object $form)
     {
 		$result = false;
 		$questionId = $this->questions->getQuestionId();
@@ -537,8 +537,8 @@ class ForumController implements \Anax\DI\IInjectionAware
     /**
 	* Function that adds a new answer comment to the database.
 	*
-	* @param int, the ID of the question in the database.
-    * @param int, the ID of the question or answer the comment belongs to.
+	* @param string, the ID of the question in the database.
+    * @param string, the ID of the question or answer the comment belongs to.
     * @param string, a string indicating what the comments parent is.
     *
     * @return void.
@@ -607,7 +607,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
     * @return boolean, true if answer was created.
     */
-	public function callbackCreateAnswer($form)
+	public function callbackCreateAnswer(object $form)
     {
 		$result = false;
 
@@ -712,7 +712,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
     * @return boolean, true if comment was created.
     */
-    public function callbackCreateComment($form)
+    public function callbackCreateComment(object $form)
     {
     	$result = false;
 
@@ -789,7 +789,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
     * @return boolean, true if comment was created.
     */
-    public function callbackCreateQuestion($form)
+    public function callbackCreateQuestion(object $form)
     {
     	$result = false;
 
@@ -824,7 +824,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
     * @return bool.
     */
-    public function callbackSuccess($form)
+    public function callbackSuccess(object $form)
     {
         $form->AddOutput("<p><i>Posted.</i></p>");
         return false;
@@ -839,7 +839,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
     * @return bool.
     */
-    public function callbackFail($form)
+    public function callbackFail(object $form)
     {
         $form->AddOutput("<p><i>DoSubmitFail(): Form was submitted but it failed to process/save/validate it</i></p>");
         return false;
