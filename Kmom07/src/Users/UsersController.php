@@ -282,6 +282,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 			die("Missing id.");
 
 		$this->users->delete($id);
+
+        $this->utility->createRedirect("Users/list");
 	}
 
 
