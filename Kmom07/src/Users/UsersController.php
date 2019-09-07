@@ -283,7 +283,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 		$this->users->delete($id);
 
-        $this->utility->createRedirect("Users/list");
+        $this->utility->createRedirect("Users/List-all");
 	}
 
 
