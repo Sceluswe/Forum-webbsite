@@ -39,7 +39,7 @@ class UsersController implements \Anax\DI\IInjectionAware
     public function redirects()
     {
         return [
-            "profile"       =>    "Users/id/",
+            "profile"       =>    "Users/profile/",
             "update"        =>    "Users/update/",
             "delete"        =>    "Users/delete/",
             "softDelete"    =>    "Users/softDelete/",
@@ -157,7 +157,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 	*
 	* @return void
 	*/
-	public function idAction($id = null)
+	public function profileAction($id = null)
 	{
 		$this->initialize();
 
