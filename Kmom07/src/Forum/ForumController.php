@@ -457,6 +457,8 @@ class ForumController implements \Anax\DI\IInjectionAware
                     case 'C':
                         $this->comments->editVote($rowid, $number);
                         break;
+                    default:
+                        die("Error: invalid parameters in ForumController.voteAction().");
                 }
 
                 $this->utility->createRedirect("Forum/id/" . $this->questions->getQuestionId());
