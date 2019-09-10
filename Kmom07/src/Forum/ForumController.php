@@ -279,7 +279,7 @@ class ForumController implements \Anax\DI\IInjectionAware
                 ["", "Amount", "Rating", "Sum", "class" => "menu-table-header"],
                 ["Q", $q["count"], $q["rating"], $q["sum"]],
                 ["A", $a["count"], $a["rating"], $a["sum"]],
-                ["C", $c["count"], $c["rating"], $c["sum"]],
+                ["C", $c["count"], $c["rating"], $c["sum"]]
             ]);
             $table .= "<br><br><br><br><br><p><b>User rating:</b> {$totalScore}</p>";
 
@@ -529,7 +529,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	public function addAnswerAction($id)
 	{
 		// Render form.
-        $this->utility->renderDefaultPage("Create Answer", $this->getAnswerForm(['questionid' => $id,]));
+        $this->utility->renderDefaultPage("Create Answer", $this->getAnswerForm(['questionid' => $id]));
 	}
 
 
@@ -575,7 +575,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 				'type'          => 'hidden',
 				'required'      => true,
 				'validation'    => ['not_empty'],
-				'value'         => $this->escaper->escapeHTMLattr($values['questionid']),
+				'value'         => $this->escaper->escapeHTMLattr($values['questionid'])
 			],
 			'content' => [
 				'type'          => 'textarea',
@@ -624,12 +624,12 @@ class ForumController implements \Anax\DI\IInjectionAware
 				'content'       => $form->Value('content'),
 				'timestamp'     => time(),
 				'rating'        => 0,
-				'accepted'      => 0,
+				'accepted'      => 0
 			]);
 
 			// Update the question and report that it has received another answer.
 			$updateResult = $this->questions->update([
-				'answered'  => $this->questions->find($form->Value('questionid'))->answered + 1,
+				'answered'  => $this->questions->find($form->Value('questionid'))->answered + 1
 			]);
 
             if($createResult && $updateResult)
@@ -668,19 +668,19 @@ class ForumController implements \Anax\DI\IInjectionAware
 			    'type'          => 'hidden',
 				'required'      => true,
 				'validation'    => ['not_empty'],
-				'value'         => $values['questionid'],
+				'value'         => $values['questionid']
 			],
 			'qaid' => [
 				'type'          => 'hidden',
 				'required'      => true,
 				'validation'    => ['not_empty'],
-				'value'         => $values['qaid'],
+				'value'         => $values['qaid']
 			],
 			'commentparent' => [
 				'type'          => 'hidden',
 				'required'      => true,
 				'validation'    => ['not_empty'],
-				'value'         => $values['commentparent'],
+				'value'         => $values['commentparent']
 			],
 			'content' => [
 				'type'          => 'textarea',
@@ -728,7 +728,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     			'userid'        => $this->users->id,
     			'content'       => $form->Value('content'),
     			'timestamp'     => time(),
-    			'rating'        => 0,
+    			'rating'        => 0
     		]);
 
     		$result = true;
@@ -806,7 +806,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     			'content'   => $form->Value('content'),
     			'timestamp' => time(),
     			'rating'    => 0,
-    			'answered'  => 0,
+    			'answered'  => 0
     		]);
 
             $this->utility->createRedirect('Questions');
