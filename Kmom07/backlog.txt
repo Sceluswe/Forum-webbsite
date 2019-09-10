@@ -26,10 +26,9 @@ ForumController.php: have tagCreateAction() include a cancel button in  case the
 ForumController.php: see if you can't use other Cform objects to reduce code and code repetition.
 
 User.php: code could possibly be reduced by abstracting a lot of the functions into the session trait.
-User.php: change isUserAdmin() to use $SESSION['currentUser'] instead of taking the currentUser as param.
 User.php: Allow users to delete their own questions.
 User.php: change so that User saved the ID of the user in session instead of using acronym.
-make all redirects() private since they don't have to be public.
+
 
 Consider creating a HTMLList class that creates a list or possibly HTMLlink to create links
 
@@ -57,6 +56,9 @@ Fix: Remove all each() function errors. The function is deprecated.
 
 
 -------- Completed --------
+-------- 2019-09-10:
+make all redirects() private since they don't have to be public.
+
 -------- 2019-09-07:
 UserController.php: make sure that the webpage redirects to the menu again after a user has been deleted.
 ForumController.php: create functionality so that a user can un-accept an answer.

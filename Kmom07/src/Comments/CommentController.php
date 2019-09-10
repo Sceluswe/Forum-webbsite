@@ -32,7 +32,7 @@ class CommentController implements \Anax\DI\IInjectionAware
 	*
 	* @return array containing redirects.
 	*/
-	public function redirects()
+	private function redirects()
 	{
 		return [
             "setup"     => "Comment/setup",

@@ -36,7 +36,7 @@ class UsersController implements \Anax\DI\IInjectionAware
     *
     * @return array containing redirects.
     */
-    public function redirects()
+    private function redirects()
     {
         return [
             "profile"       =>    "Users/profile/",
