@@ -17,6 +17,7 @@ Comment.php model in forum. Not sure about this, will have to think about it.
 Study the different view templates so you understand what each of them does. See if they can't be reduced or even
 removed completely with better code.
 
+ForumController.php: rename redirect array index "user" to "profile".
 ForumController.php: replace the redirects function with a private redirect variable instead. The function is already
 private, there's no need for it to be a function. Besides if it's a variable it can be used in more than on e place
 to make redirect link changes easier.
