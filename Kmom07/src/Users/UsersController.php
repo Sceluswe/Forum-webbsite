@@ -47,6 +47,8 @@ class UsersController implements \Anax\DI\IInjectionAware
         ];
     }
 
+
+
     /**
     * Displays the currently logged in user and links to its profile.
     *
