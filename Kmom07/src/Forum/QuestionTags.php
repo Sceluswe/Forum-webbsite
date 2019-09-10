@@ -1,18 +1,16 @@
 <?php
 namespace Anax\Forum;
 
-
-
 /**
- * Model for questions and tags link table.
- *
- * Contains interactions with the database.
- */
+* Model for questions and tags link table.
+*
+* Contains interactions with the database.
+*/
 class QuestionTags extends \Anax\MVC\CDatabaseModel
 {
 
 
-    
+
     /**
     * Checks if a question has a tag.
     *

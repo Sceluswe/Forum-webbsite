@@ -14,10 +14,23 @@ Make sure users can only update the score of a question once.
 Check if you can't use Comments\Comment.php as the comment model in Forum\ as well. Meaning the deletion of the
 Comment.php model in forum. Not sure about this, will have to think about it.
 
+Study the different view templates so you understand what each of them does. See if they can't be reduced or even
+removed completely with better code.
 
+ForumController.php: rename redirect array index "user" to "profile".
+ForumController.php: replace the redirects function with a private redirect variable instead. The function is already
+private, there's no need for it to be a function. Besides if it's a variable it can be used in more than on e place
+to make redirect link changes easier.
 
+UsersController.php: rename userStatusAction() to statusAction() ?
 
+project.php: look over this file, see if anything needs to be changed.
 
+ForumController.php: place functions in proper declarative order, top to bottom.
+UsersController.php: place functions in proper declarative order, top to bottom.
+
+ForumController.php: change idAction() to questionAction() for clarity and a clean URL
+ForumController.php: move userStatusAction() to UsersController.
 ForumController.php: find out if you can't move the user functions into UsersController.php.
 ForumController.php: Create database link tables (questionTags) for questions answers and comments too? (Will require more research)
 ForumController.php: See if you can split it up into several controllers? one for tag one for... and so on.
@@ -26,19 +39,15 @@ ForumController.php: have tagCreateAction() include a cancel button in  case the
 ForumController.php: see if you can't use other Cform objects to reduce code and code repetition.
 
 User.php: code could possibly be reduced by abstracting a lot of the functions into the session trait.
-User.php: change isUserAdmin() to use $SESSION['currentUser'] instead of taking the currentUser as param.
 User.php: Allow users to delete their own questions.
 User.php: change so that User saved the ID of the user in session instead of using acronym.
-make all redirects() private since they don't have to be public.
+
 
 Consider creating a HTMLList class that creates a list or possibly HTMLlink to create links
 
-Make sure the Administrator can't delete nor softdelete himself or be deleted by anyone for that matter.
-
-Comment & CommentController: check if set/getRedirect is necessary or can be replaced.
 CommentController: Check if removeAllAction() should be removed. Could be a security risk.
 CommentController: Check if setupAction() should be removed. Could be a security risk.
-Comments: add 3 empty lines in between functions.
+
 Comment.php: make sure it uses the new traits to reduce the code.
 
 Design: Fix the design of the number in the score of the question. It looks unaligned.
@@ -50,13 +59,18 @@ Design: make it so that the user that placed a comment is always displayed below
 button and time of placement never moves.
 Design: create a clearer separation between questions, perhaps using color variants.
 
-
-
 Fix: Remove all each() function errors. The function is deprecated.
 
 
 
 -------- Completed --------
+-------- 2019-09-10:
+make all redirects() private since they don't have to be public.
+Comments: add 3 empty lines in between functions.
+ForumController: remove unnecessary commas.
+CommentController.updateAction(): remove unnecessary assignment
+CommentController.initialize(): remove unnecessary assignment
+
 -------- 2019-09-07:
 UserController.php: make sure that the webpage redirects to the menu again after a user has been deleted.
 ForumController.php: create functionality so that a user can un-accept an answer.
@@ -64,6 +78,7 @@ ForumController.php: Start using type declarations in function parameter lists t
 CDatabaseModel: Check if orderBy groupBy executeFetchAll are necessary and how they work.
 CDatabaseModel: If orderBy groupBy executeFetchAll are necessary add comments.
 UserController.php: rename idAction() profileAction() for clarity
+Make sure the Administrator can't delete nor softdelete himself or be deleted by anyone for that matter.
 
 -------- 2019-09-06:
 ForumController.php: Replace the cleaning of parameters with Escaper where necessary

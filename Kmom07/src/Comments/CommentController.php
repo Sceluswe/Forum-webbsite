@@ -20,8 +20,7 @@ class CommentController implements \Anax\DI\IInjectionAware
 	*/
 	public function initialize($table = null)
 	{
-		$obj = new \Anax\Comments\Comment();
-		$this->comments = $obj;
+		$this->comments = new \Anax\Comments\Comment();
 		$this->comments->setDI($this->di);
 	}
 
@@ -32,7 +31,7 @@ class CommentController implements \Anax\DI\IInjectionAware
 	*
 	* @return array containing redirects.
 	*/
-	public function redirects()
+	private function redirects()
 	{
 		return [
             "setup"     => "Comment/setup",
@@ -112,17 +111,14 @@ class CommentController implements \Anax\DI\IInjectionAware
 
 		$comment = $this->comments->find($id);
 
-		// Add values for a comment.
-		$values = [
+		// Render form.
+        $this->utility->renderDefaultPage("Edit Comment", $this->getCommentForm([
 			'name' 		=> $comment->name,
 			'email'		=> $comment->email,
 			'web' 		=> $comment->web,
 			'content' 	=> $comment->content,
 			'timestamp' => $comment->timestamp
-		];
-
-		// Render form.
-        $this->utility->renderDefaultPage("Edit Comment", $this->getCommentForm($values));
+		]));
 	}
 
 

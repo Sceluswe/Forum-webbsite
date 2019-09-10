@@ -3,9 +3,9 @@
 namespace Anax\MVC;
 
 /**
- * Dispatching to controllers.
- *
- */
+* Dispatching to controllers.
+*
+*/
 class CDispatcherBasic implements \Anax\DI\IInjectionAware
 {
     use \Anax\DI\TInjectionAware;
@@ -13,9 +13,9 @@ class CDispatcherBasic implements \Anax\DI\IInjectionAware
 
 
     /**
-     * Properties
-     *
-     */
+    * Properties
+    *
+    */
     private $controllerName;    // Name of controller
     private $controller;        // Actual controller
     private $action;            // Name of action
@@ -24,12 +24,12 @@ class CDispatcherBasic implements \Anax\DI\IInjectionAware
 
 
     /**
-     * Prepare the name.
-     *
-     * @param string $name to prepare.
-     *
-     * @return string as the prepared name.
-     */
+    * Prepare the name.
+    *
+    * @param string $name to prepare.
+    *
+    * @return string as the prepared name.
+    */
     public function prepareName($name)
     {
         $name = empty($name) ? 'index' : $name;
@@ -44,12 +44,12 @@ class CDispatcherBasic implements \Anax\DI\IInjectionAware
 
 
     /**
-     * Set the name of the controller.
-     *
-     * @param string $name of the controller, defaults to 'index'.
-     *
-     * @return void
-     */
+    * Set the name of the controller.
+    *
+    * @param string $name of the controller, defaults to 'index'.
+    *
+    * @return void
+    */
     public function setControllerName($name = 'index')
     {
         $name = $this->prepareName($name) . 'Controller';
@@ -64,10 +64,10 @@ class CDispatcherBasic implements \Anax\DI\IInjectionAware
 
 
     /**
-     * Check if a controller exists with this name.
-     *
-     * @return void
-     */
+    * Check if a controller exists with this name.
+    *
+    * @return void
+    */
     public function isValidController()
     {
         return is_object($this->controller);
@@ -76,12 +76,12 @@ class CDispatcherBasic implements \Anax\DI\IInjectionAware
 
 
     /**
-     * Set the name of the action.
-     *
-     * @param string $name of the action, defaults to 'index'.
-     *
-     * @return void
-     */
+    * Set the name of the action.
+    *
+    * @param string $name of the action, defaults to 'index'.
+    *
+    * @return void
+    */
     public function setActionName($name = 'index')
     {
         $this->action = lcfirst($this->prepareName($name)) . 'Action';
@@ -90,12 +90,12 @@ class CDispatcherBasic implements \Anax\DI\IInjectionAware
 
 
     /**
-     * Set the params.
-     *
-     * @param array $params all parameters, defaults to empty.
-     *
-     * @return void
-     */
+    * Set the params.
+    *
+    * @param array $params all parameters, defaults to empty.
+    *
+    * @return void
+    */
     public function setParams($params = [])
     {
         $this->params = $params;
@@ -104,10 +104,10 @@ class CDispatcherBasic implements \Anax\DI\IInjectionAware
 
 
     /**
-     * Dispatch to a controller, action with parameters.
-     *
-     * @return bool
-     */
+    * Dispatch to a controller, action with parameters.
+    *
+    * @return bool
+    */
     public function isCallable()
     {
         $handler = [$this->controller, $this->action];
@@ -127,10 +127,10 @@ class CDispatcherBasic implements \Anax\DI\IInjectionAware
 
 
     /**
-     * Inspect if callable and throw exception if parts is not callable.
-     *
-     * @return void.
-     */
+    * Inspect if callable and throw exception if parts is not callable.
+    *
+    * @return void.
+    */
     public function isCallableOrException()
     {
         $validController = $this->isValidController();
@@ -181,10 +181,10 @@ class CDispatcherBasic implements \Anax\DI\IInjectionAware
 
 
     /**
-     * Dispatch to a controller, action with parameters.
-     *
-     * @return mixed result from dispatched controller action.
-     */
+    * Dispatch to a controller, action with parameters.
+    *
+    * @return mixed result from dispatched controller action.
+    */
     public function dispatch()
     {
         $handler = [$this->controller, 'initialize'];
@@ -197,14 +197,16 @@ class CDispatcherBasic implements \Anax\DI\IInjectionAware
         return call_user_func_array([$this->controller, $this->action], $this->params);
     }
 
+
+
     /**
-     * Check controller and action parameters.
-     *
-     * @param string details for controller.
-     * @param string details for action.
-     *
-     * @return void.
-     */
+    * Check controller and action parameters.
+    *
+    * @param string details for controller.
+    * @param string details for action.
+    *
+    * @return void.
+    */
     private function setControllerAction($controller, $action)
     {
         $checkedController = isset($controller)
@@ -219,13 +221,15 @@ class CDispatcherBasic implements \Anax\DI\IInjectionAware
         $this->setActionName($checkedAction);
     }
 
+
+
     /**
-     * Forward to a controller, action with parameters.
-     *
-     * @param array $forward with details for controller, action, parameters.
-     *
-     * @return mixed result from dispatched controller action.
-     */
+    * Forward to a controller, action with parameters.
+    *
+    * @param array $forward with details for controller, action, parameters.
+    *
+    * @return mixed result from dispatched controller action.
+    */
     public function forward($forward = [])
     {
         $this->setControllerAction($forward['controller'], $forward['action']);
@@ -239,14 +243,16 @@ class CDispatcherBasic implements \Anax\DI\IInjectionAware
         return $this->dispatch();
     }
 
+
+
     /**
-     * Forward to a controller, action with parameters.
-     *
-     * @param string details for controller.
-     * @param string details for action.
-     *
-     * @return mixed result from dispatched controller action.
-     */
+    * Forward to a controller, action with parameters.
+    *
+    * @param string details for controller.
+    * @param string details for action.
+    *
+    * @return mixed result from dispatched controller action.
+    */
     public function forwardTo($controller, $action)
     {
         $this->setControllerAction($controller, $action);

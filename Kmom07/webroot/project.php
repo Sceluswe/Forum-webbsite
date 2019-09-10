@@ -41,7 +41,7 @@ $app->router->add('Questions', function() use ($app){
 
 $app->router->add('Tag', function() use ($app){
 	$app->theme->setTitle("Questions");
-    $app->dispatcher->forwardTo('Forum', 'userStatus');
+    $app->dispatcher->forwardTo('Users', 'userStatus');
     $app->dispatcher->forwardTo('Forum', 'tagMenu');
 });
 
