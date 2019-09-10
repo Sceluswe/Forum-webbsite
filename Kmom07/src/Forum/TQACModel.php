@@ -3,6 +3,8 @@ namespace Anax\Forum;
 
 trait TQACModel {
 
+
+
     /**
     * Function finds the correct dataobject and updates its rating.
     *
@@ -20,10 +22,21 @@ trait TQACModel {
         ]);
     }
 
+
+
+    /**
+    * Find q, a or c by column userId.
+    *
+    * @param string, the id number of the q a or c rows to find.
+    *
+    * @return array with resultset.
+    */
     public function findByUserId($userId)
     {
         return parent::query()->where("userid = ?")->execute([$userId]);
     }
+
+
 
     /**
     * Calculates the sum of an array of objects rating property.
