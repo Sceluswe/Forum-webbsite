@@ -60,37 +60,12 @@ class ForumController implements \Anax\DI\IInjectionAware
             'rateQuestion'  => 'Forum/vote/Q/',
             'rateAnswer'    => 'Forum/vote/A/',
             'rateComment'   => 'Forum/vote/C/',
-            'user'          => 'Users/id/',
+            'user'          => 'Users/profile/',
             'question'      => 'Forum/id/',
             'accepted'      => 'Forum/accepted/',
             'tagButton'     => 'Forum/tag/',
             'tagCreate'     => 'Forum/tagCreate/'
 		];
-	}
-
-
-
-    /**
-    * Displays the currently logged in user and links to its profile.
-    *
-    * @return void.
-    */
-	public function userStatusAction()
-	{
-		$userlink = "<p>You are currently not logged in. <a href=\"" . $this->url->create("Users/Login") . "\">Login</a></p>";
-
-		if($this->users->isUserLoggedIn())
-		{
-			$user = $this->users->findByAcronym($this->users->currentUser());
-
-            // Create a link to the currently logged in user.
-			$userlink = "<p>You are currently logged in as: <a href=\""
-                . $this->url->create("Users/id/{$user->id}") . "\">"
-                . ucfirst($user->acronym) . "</a></p>";
-		}
-
-		// Render form.
-        $this->utility->renderDefaultPage("", $userlink);
 	}
 
 
@@ -121,7 +96,7 @@ class ForumController implements \Anax\DI\IInjectionAware
             }
 		}
 
-        $this->dispatcher->forwardTo('Forum', 'userStatus');
+        $this->dispatcher->forwardTo('Users', 'userStatus');
         $this->dispatcher->forwardTo('Forum', 'tagMenu');
 
         $conditions = ['admin', $this->users->currentUser()];

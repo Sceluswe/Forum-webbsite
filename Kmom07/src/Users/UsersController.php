@@ -47,6 +47,29 @@ class UsersController implements \Anax\DI\IInjectionAware
         ];
     }
 
+    /**
+    * Displays the currently logged in user and links to its profile.
+    *
+    * @return void.
+    */
+    public function userStatusAction()
+    {
+        $userlink = "<p>You are currently not logged in. <a href=\"" . $this->url->create("Users/Login") . "\">Login</a></p>";
+
+        if($this->users->isUserLoggedIn())
+        {
+            $user = $this->users->findByAcronym($this->users->currentUser());
+
+            // Create a link to the currently logged in user.
+            $userlink = "<p>You are currently logged in as: <a href=\""
+                . $this->url->create("Users/profile/{$user->id}") . "\">"
+                . ucfirst($user->acronym) . "</a></p>";
+        }
+
+        // Render form.
+        $this->utility->renderDefaultPage("", $userlink);
+    }
+
 
 
 	/**
@@ -70,15 +93,10 @@ class UsersController implements \Anax\DI\IInjectionAware
 	*/
 	public function logoutAction()
 	{
-		$content = "<p>You're currently logged in as: " . ucfirst($this->users->currentUser()) . "</p>";
+        $this->dispatcher->forwardTo("Users", "userStatus");
 
-		// Render form.
-		$this->theme->setTitle("Logout");
-		$this->views->add('default/page-2', [
-			'title' 	=> "Logout",
-			'content' 	=> $content,
-			'content2' 	=> $this->getLogoutForm()
-		]);
+        // Render form.
+        $this->utility->renderDefaultPage("Logout", $this->getLogoutForm());
 	}
 
 
