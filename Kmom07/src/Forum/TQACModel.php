@@ -1,12 +1,17 @@
 <?php
 namespace Anax\Forum;
 
+/**
+* Trait for shared questions(q), answers(a) and comments(c) functionality.
+*
+* Contains interactions with the database.
+*/
 trait TQACModel {
 
 
 
     /**
-    * Function finds the correct dataobject and updates its rating.
+    * Find correct q, a or c row and update its rating.
     *
     * @param object, the data in which the targeted dataobject exists.
     * @param string, the unique id of the row to use in the table/data.
@@ -39,11 +44,11 @@ trait TQACModel {
 
 
     /**
-    * Calculates the sum of an array of objects rating property.
+    * Calculate: total nr of q/a/c, respective rating and total score.
     *
-    * @param array of objects, the objects containing the property.
+    * @param string, the user id to find by.
     *
-    * @return int, the sum of all ratings.
+    * @return int, all sums.
     */
     public function calculateScore($userId)
     {
