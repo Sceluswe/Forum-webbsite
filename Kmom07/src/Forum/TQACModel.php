@@ -11,7 +11,7 @@ trait TQACModel {
 
 
     /**
-    * Find correct q, a or c row and update its rating.
+    * Find correct q, a or c row and update its rating with input number.
     *
     * @param object, the data in which the targeted dataobject exists.
     * @param string, the unique id of the row to use in the table/data.
@@ -21,7 +21,6 @@ trait TQACModel {
     */
     public function editVote($id, $number)
     {
-        // Update it with an increase of 1.
         parent::update([
             'rating' => parent::find($id)->rating + $number
         ]);
