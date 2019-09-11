@@ -21,21 +21,16 @@ removed completely with better code.
 
 
 
-UsersController.php: create private $templates to separate templates and redirect links. Possibly do this in other controllers too.
+
 UsersController.php: place functions in proper declarative order, top to bottom.
 UsersController.php: move database interactions into functions in the User.php model.
 
-
-CommentController.php: create private $templates to separate templates and redirect links. Possibly do this in other controllers too.
-
+CommentController.php: separate templates in $redirect into private $templates.
 project.php: look over this file, see if anything needs to be changed.
 
+
 ForumController.php: place functions in proper declarative order, top to bottom.
-
-
-
-ForumController.php: change idAction() to questionAction() for clarity and a clean URL
-
+ForumController.php: change idAction() to questionAction() for clarity and a clean URL?
 ForumController.php: find out if you can't move the user functions into UsersController.php.
 ForumController.php: Create database link tables (questionTags) for questions answers and comments too? (Will require more research)
 ForumController.php: See if you can split it up into several controllers? one for tag one for... and so on.
@@ -74,8 +69,10 @@ ForumController.php: replace the redirects function with a private redirect vari
 private, there's no need for it to be a function. Besides if it's a variable it can be used in more than on e place
 to make redirect link changes easier.
 ForumController.php: rename redirect array index "user" to "profile".
+ForumController.php: separate templates in $redirect into private $templates.
 UsersController.php: rename userStatusAction() to statusAction() ?
 UserController.php: replace redirects with private redirect variable.
+UsersController.php: separate templates in $redirect into private $templates.
 CommentController.php: replace redirects with private redirect variable.
 
 

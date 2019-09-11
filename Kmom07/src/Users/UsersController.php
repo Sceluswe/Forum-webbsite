@@ -23,10 +23,15 @@ class UsersController implements \Anax\DI\IInjectionAware
         "delete"        => "Users/delete/",
         "softDelete"    => "Users/softDelete/",
         "restore"       => "Users/restore/",
+        "list-all"      => "Users/List-all"
+    ];
+
+    // All templates links used.
+    private $template = [
         "list-all"      => "Users/List-all",
+        "menu"          => "Users/menu",
         "none"          => "Users/none",
-        "view"          => "Users/view",
-        "menu"          => "Users/menu"
+        "view"          => "Users/view"
     ];
 
 
@@ -98,7 +103,7 @@ class UsersController implements \Anax\DI\IInjectionAware
         $this->dispatcher->forwardTo("Users", "status");
 
         // Render form.
-        $this->utility->renderDefaultPage($this->redirect["logout"], $this->getLogoutForm());
+        $this->utility->renderDefaultPage("Logout", $this->getLogoutForm());
 	}
 
 
@@ -110,7 +115,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 	*/
 	public function menuAction()
 	{
-		$this->views->add($this->redirect["menu"], [
+		$this->views->add($this->template["menu"], [
 			'values' => ['Add', 'List-all', 'List-active', 'List-trash'],
 			'url'	 => $this->redirect["default"]
 		]);
@@ -132,7 +137,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 				$this->menuAction();
 
 				$this->theme->setTitle("Create Table");
-				$this->views->add($this->redirect["list-all"], [
+				$this->views->add($this->template["list-all"], [
 					'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
 					'users' => $this->users->findAll(),
 					'title' => "Table Successfully created!",
@@ -160,7 +165,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 		$this->menuAction();
 
 		$this->theme->setTitle("List all users");
-		$this->views->add($this->redirect["list-all"], [
+		$this->views->add($this->template["list-all"], [
 			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
 			'users' => $this->users->findAll(),
 			'title' => "View all users",
@@ -189,7 +194,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 		{
 			$this->theme->setTitle("View user with id");
 
-			$this->views->add($this->redirect["view"], [
+			$this->views->add($this->template["view"], [
 				'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin', $user->acronym]),
 				'superadmin' => $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
 				'user' => $user,
@@ -211,7 +216,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 		}
         else
         {
-            $this->views->add($this->redirect["none"], []);
+            $this->views->add($this->template["none"], []);
         }
 	}
 
