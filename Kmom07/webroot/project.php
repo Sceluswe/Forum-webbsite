@@ -54,10 +54,8 @@ $app->router->add('Users', function() use ($app){
 	$app->theme->setTitle("Users menu");
     $app->dispatcher->forwardTo('Users', 'menu');
 
-	$content = "<h1>User menu</h1><p>Choose an action.</p>";
-
     $app->views->add('me/page', [
-        'content' => $content
+        'content' => "<h1>User menu</h1><p>Choose an action.</p>"
     ]);
 });
 
