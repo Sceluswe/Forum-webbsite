@@ -23,7 +23,8 @@ removed completely with better code.
 Find a way to implement/hardcode it so that admin can never be removed, even if someone
 figures out the url links to use to remove it.
 
-UsersController.php: place functions in proper declarative order, top to bottom.
+
+UsersController.php: add a dispatch to statusAction() in loginAction()?
 
 
 project.php: look over this file, see if anything needs to be changed.
@@ -70,6 +71,7 @@ private, there's no need for it to be a function. Besides if it's a variable it 
 to make redirect link changes easier.
 ForumController.php: rename redirect array index "user" to "profile".
 ForumController.php: separate templates in $redirect into private $templates.
+UsersController.php: place functions in proper declarative order, top to bottom.
 UsersController.php: rename userStatusAction() to statusAction() ?
 UserController.php: replace redirects with private redirect variable.
 UsersController.php: separate templates in $redirect into private $templates.
