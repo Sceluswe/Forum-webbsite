@@ -60,14 +60,10 @@ $app->router->add('Users', function() use ($app){
 });
 
 $app->router->add('About', function () use ($app) {
-	$app->theme->setTitle('About');
-
 	$content = $app->fileContent->get('about.md');
 	$content = $app->textFilter->doFilter($content, 'shortcode, markdown');
 
-    $app->views->add('default/page', [
-        'content' => $content
-    ]);
+    $app->utility->renderDefaultPage("", $content);
 });
 
 $app->router->add('Setup', function() use ($app) {
