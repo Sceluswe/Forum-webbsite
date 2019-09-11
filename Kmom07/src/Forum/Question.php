@@ -8,25 +8,28 @@ namespace Anax\Forum;
  */
 class Question extends \Anax\MVC\CDatabaseModel
 {
-    use \Anax\Forum\TForumModel,
-        \Anax\Forum\TQACModel;
+    use \Anax\Forum\TQACModel;
 
 
 
-	/**
-	*	Save the previous question in session.
+    /**
+	* Save the previous object in session.
+    *
+    * @return void.
 	*/
-	public function setQuestion($question)
+	public function setQuestionId($question)
 	{
 		$this->session->set('savedQuestion', htmlentities($question));
 	}
 
 
 
-	/**
-	*	Get the previous object from session.
+    /**
+	* Get the previous object from session.
+    *
+    * @return object, the object stored in session.
 	*/
-	public function getQuestion()
+	public function getQuestionId()
 	{
 		return $this->session->get('savedQuestion');
 	}
@@ -34,9 +37,23 @@ class Question extends \Anax\MVC\CDatabaseModel
 
 
     /**
-	*	Get the 6 most recent questions.
+    * Find rows by column userid.
     *
-    *   @return array with resultset.
+    * @param string, $userid the userid of the tag.
+    *
+    * @return array, returns a resultset.
+    */
+    public function findByUserId($userid)
+    {
+        return $this->query()->where("userid = ?")->execute([$userid]);
+    }
+
+
+
+    /**
+	* Get the 6 most recent questions.
+    *
+    * @return array with resultset.
 	*/
     public function getRecentQuestions()
     {

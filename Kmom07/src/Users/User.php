@@ -11,6 +11,48 @@ class User extends \Anax\MVC\CDatabaseModel
 
 
 
+    /**
+    * Find rows by column acronym.
+    *
+    * @param string, $acronym the acronym of the user.
+    *
+    * @return array, returns a resultset.
+    */
+    public function findByAcronym($acronym)
+	{
+        $this->query()->where("acronym = ?");
+        $this->db->execute([$acronym]);
+        return $this->db->fetchInto($this);
+	}
+
+
+
+    /**
+    * Find users that have been soft deleted.
+    *
+    * @return array with resultset.
+    */
+    public function findSoftDeleted()
+    {
+        return $this->query()->where('deleted is NOT NULL')->execute();
+    }
+
+
+
+    /**
+    * Find users that have been soft deleted.
+    *
+    * @return array with resultset.
+    */
+    public function findActive()
+    {
+        return $this->query()->where('active is NOT NULL')
+            ->andWhere('deleted is NULL')
+            ->execute();
+    }
+
+
+
 	/**
 	* Function that checks if a user is an admin based on the provided $condition.
 	*
@@ -58,7 +100,7 @@ class User extends \Anax\MVC\CDatabaseModel
 	/**
 	* Function that saves the logged in user in session.
 	*
-	* @param $user, the user to be logged in.
+	* @param $user, acronym of the user to be logged in.
 	*/
 	public function loginUser($user)
 	{

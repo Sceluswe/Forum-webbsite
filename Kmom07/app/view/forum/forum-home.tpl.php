@@ -19,7 +19,7 @@
 			<td class="menu-data"><?=$item->rating?></td>
 			<td class="menu-data"><?=$item->answered?></td>
 			<td class="menu-data"><a class="nodecoration" href="<?=$this->url->create($redirect['question'] . $item->id);?>"><h3><?=$item->title?></h3></a></td>
-			<td class="menu-data"><a class="nodecoration" href="<?=$this->url->create($redirect['user'] . $item->userid);?>"><h6 class="menu-user"><?=ucfirst($item->user)?></h6></a></td>
+			<td class="menu-data"><a class="nodecoration" href="<?=$this->url->create($redirect['profile'] . $item->userid);?>"><h6 class="menu-user"><?=ucfirst($item->user)?></h6></a></td>
 			<td class="menu-data"><?=$item->timestamp?></td>
 		</tr>
 	<?php endforeach;?>
@@ -37,7 +37,7 @@
 	<td><img width="64" height="64" src="https://www.gravatar.com/avatar/<?=md5(strtolower(trim($user->email)))?>" alt="No image"></td>
 	<td class="homeData">
 	<p class="homeName">
-		<a class="nodecoration" href="<?=$this->url->create($redirect['user'] . $user->id);?>">
+		<a class="nodecoration" href="<?=$this->url->create($redirect['profile'] . $user->id);?>">
 			<h3 class="menu-user"><?=ucfirst($user->name)?></h3>
 		</a>Score:<?=$user->score?>
 	</p>

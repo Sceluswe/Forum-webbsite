@@ -11,53 +11,121 @@ Make sure users can only update the score of a question once.
     Just to elaborate: explode turns the string into an array, splitting it at each ',' in this case.
     Then, in_array checks if the string '13' is in the resulting array somewhere.
 
-TForumModel.php: Look over if QACT actually uses this model. Q does, but what about ACT?
+Check if you can't use Comments\Comment.php as the comment model in Forum\ as well. Meaning the deletion of the
+Comment.php model in forum. Not sure about this, will have to think about it.
 
-ForumController & Question.php: rename setQuestion and getQuestion to setQuestionId & getQuestionId for clarity.
-ForumController: reduce code by moving database queries away from the controller into the model.
-ForumController: possibly move unix time formatting into the model  as well (not sure about this).
-ForumController: Create link tables for questions answers and comments too? (Will require more research)
-ForumController: editVote() could be moved to the TForumModel trait.
+Study the different view templates so you understand what each of them does. See if they can't be reduced or even
+removed completely with better code.
 
-UserController: make sure that the webpage redirects to the menu again after a user has been deleted.
-User: change isUserAdmin() to use $SESSION['currentUser'] instead of taking the currentUser as param.
 
-make all redirects() private since they don't have to be public.
+
+
+Find a way to implement/hardcode it so that admin can never be removed, even if someone
+figures out the url links to use to remove it.
+
+
+
+
+
+project.php: look over this file, see if anything needs to be changed.
+
+
+ForumController.php: place functions in proper declarative order, top to bottom.
+ForumController.php: change idAction() to questionAction() for clarity and a clean URL?
+ForumController.php: find out if you can't move the user functions into UsersController.php.
+ForumController.php: Create database link tables (questionTags) for questions answers and comments too? (Will require more research)
+ForumController.php: See if you can split it up into several controllers? one for tag one for... and so on.
+ForumController.php: Potentially reduce size by splitting up answer, question and comment management into three new objects
+ForumController.php: have tagCreateAction() include a cancel button in  case the user doesn't want to create a tag.
+ForumController.php: see if you can't use other Cform objects to reduce code and code repetition.
+
+User.php: code could possibly be reduced by abstracting a lot of the functions into the session trait.
+User.php: Allow users to delete their own questions.
+User.php: change so that User saved the ID of the user in session instead of using acronym.
+
 
 Consider creating a HTMLList class that creates a list or possibly HTMLlink to create links
 
-Make sure the Administrator can't delete nor softdelete himself or be deleted by anyone for that matter.
-
-CDatabaseModel: Check if orderBy groupBy executeFetchAll are necessary and how they work.
-CDatabaseModel: If orderBy groupBy executeFetchAll are necessary add comments.
-
 CommentController: Check if removeAllAction() should be removed. Could be a security risk.
 CommentController: Check if setupAction() should be removed. Could be a security risk.
-Comments: add 3 empty lines in between functions.
+
+Comment.php: make sure it uses the new traits to reduce the code.
 
 Design: Fix the design of the number in the score of the question. It looks unaligned.
 Design: Display added tags below a posted question.
 Design: Fix the design when displaying a user profile. The lightblue box should be aligned to the left.
 Design: Make sure the size of a user box remains the same in the user menu, even if buttons are displayed
 or not.
+Design: make it so that the user that placed a comment is always displayed below the comment text, so that the
+button and time of placement never moves.
+Design: create a clearer separation between questions, perhaps using color variants.
 
-ForumController: Check in callbackCreateTag() the tag value is being cleaned, does it need the escaper?
-ForumController: Start using type declarations in function parameter lists to reduce type checks.
-ForumController: See if you can split it up into several controllers, one for tag one for... and so on.
-ForumController.voteAction() clean the variable $number.
-ForumController: Replace the cleaning of paramters with Escaper cleaning instead
-ForumController: Potentially reduce size by splitting up answer, question and comment management into three new objects
-ForumController: have tagCreateAction() include a cancel button in  case the user doesn't want to create a tag.
+Fix: Remove all each() function errors. The function is deprecated.
+Create a list of the files I've worked in for the Git README file.
+
+
+-------- Completed --------
+-------- 2019-09-11:
+ForumController.php: replace the redirects function with a private redirect variable instead. The function is already
+private, there's no need for it to be a function. Besides if it's a variable it can be used in more than on e place
+to make redirect link changes easier.
+ForumController.php: rename redirect array index "user" to "profile".
+ForumController.php: separate templates in $redirect into private $templates.
+UsersController.php: place functions in proper declarative order, top to bottom.
+UsersController.php: rename userStatusAction() to statusAction() ?
+UserController.php: replace redirects with private redirect variable.
+UsersController.php: separate templates in $redirect into private $templates.
+UsersController.php: move database interactions into functions in User.php
+UsersController.php: add a dispatch to statusAction() in loginAction()
+CommentController.php: replace redirects with private redirect variable.
+CommentController.php: separate templates in $redirect into private $templates.
+
+
+-------- 2019-09-10:
+make all redirects() private since they don't have to be public.
+Comments: add 3 empty lines in between functions.
+ForumController: remove unnecessary commas.
+ForumController.php: move userStatusAction() to UsersController.
+CommentController.updateAction(): remove unnecessary assignment
+CommentController.initialize(): remove unnecessary assignment
+
+-------- 2019-09-07:
+UserController.php: make sure that the webpage redirects to the menu again after a user has been deleted.
+ForumController.php: create functionality so that a user can un-accept an answer.
+ForumController.php: Start using type declarations in function parameter lists to reduce type checks.
+CDatabaseModel: Check if orderBy groupBy executeFetchAll are necessary and how they work.
+CDatabaseModel: If orderBy groupBy executeFetchAll are necessary add comments.
+UserController.php: rename idAction() profileAction() for clarity
+Make sure the Administrator can't delete nor softdelete himself or be deleted by anyone for that matter.
+
+-------- 2019-09-06:
+ForumController.php: Replace the cleaning of parameters with Escaper where necessary
+ForumController.php.voteAction() clean the variable $number.
+ForumController.php.callbackCreateTag(): the tag param is being cleaned, does it need the escaper? It shouldn't
+have to be cleaned. The PHP prepared statements should prevent any SQL injection.
+ForumController.php: editVote() could be moved to the TForumModel trait.
+ForumController.php: check if you can't use find() instead of the array index solution. It was possible with
+the following changes:
+    User.php: have findByAcronym fetch into the model instead of returning an array.
+    Tag.php: have findByName fetch into the model instead of returning an array.
+ForumController.php: reduce code by moving database queries away from the controller into the model.
+ForumController.php.tagCreateAction(): should this really allow $tag param to be null? It's absolutely necessary.
+    tagCreateAction is used without a parameter to display the tag creation form.
+ForumController.php.acceptedAction(): check if id must be set before a call to update. It must be set, id is the WHERE identifier
+
+-------- 2019-09-05:
+ForumController.menuAction(): decode GET param to allow tags to have several words.
+TForumModel.php: Look over if QACT actually uses this model. Q does, but what about ACT?
+ForumController.php.scoreAction(): add if-statement that checks if $id is numeric
+
+-------- 2019-09-04:
+QuestionTags.php: implement the link table model in ForumController.
+ForumController.php & Question.php: rename setQuestion and getQuestion to setQuestionId & getQuestionId for clarity.
 
 ForumController & UserController: either add a class or find a way to move the renderDefaultPage() out
 of ForumController so that both UserController and ForumController can use it.
 
-
-User: Allow users to delete their own questions.
-
-Fix: Remove all each() function errors. The function is deprecated.
-
--------- Completed --------
+-------- Previous:
 ForumController.tagCreateAction($tag=null): Clean the $tag parameter with escaper.
 ForumController: Look over why ForumController.getTagForm($values) takes an array.
 ^ Because it needs one to autofill the values of the form.
