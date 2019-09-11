@@ -209,10 +209,6 @@ class UsersController implements \Anax\DI\IInjectionAware
 				'params' 	 => ['id' => $id]
 			]);
 		}
-		else
-		{
-			$this->views->add('users/none', []);
-		}
 	}
 
 
