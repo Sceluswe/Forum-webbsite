@@ -73,7 +73,6 @@ class UsersController implements \Anax\DI\IInjectionAware
                 . ucfirst($user->acronym) . "</a></p>";
         }
 
-        // Render form.
         $this->utility->renderDefaultPage("", $userlink);
     }
 
@@ -102,7 +101,6 @@ class UsersController implements \Anax\DI\IInjectionAware
 	{
         $this->dispatcher->forwardTo("Users", "status");
 
-        // Render form.
         $this->utility->renderDefaultPage("Logout", $this->getLogoutForm());
 	}
 
@@ -235,7 +233,6 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 		$this->users->created = gmdate('Y-m-d H:i:s');
 
-		// Render form.
         $this->utility->renderDefaultPage("Create User", $this->getUserForm());
 	}
 
@@ -281,15 +278,12 @@ class UsersController implements \Anax\DI\IInjectionAware
 		$user = $this->users->find($id);
 		$this->users->updated = gmdate('Y-m-d H:i:s');
 
-		$values = [
+        $this->utility->renderDefaultPage("Update User", $this->getUserForm([
 			'acronym' 	=> $user->acronym,
 			'email'		=> $user->email,
 			'name' 		=> $user->name,
-			'password'	=> $user->password,
-		];
-
-		// Render form.
-        $this->utility->renderDefaultPage("Update User", $this->getUserForm($values));
+			'password'	=> $user->password
+		]));
 	}
 
 
@@ -336,7 +330,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 
 	/**
-	* List all active and not deleted users.
+	* List all active users (not soft deleted).
 	*
 	* $return void
 	*/
@@ -344,14 +338,10 @@ class UsersController implements \Anax\DI\IInjectionAware
 	{
 		$this->menuAction();
 
-		$all = $this->users->query()->where('active is NOT NULL')
-            ->andWhere('deleted is NULL')
-            ->execute();
-
 		$this->theme->setTitle("Users that are active");
 		$this->views->add($this->redirect["list-all"], [
 			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
-			'users' => $all,
+			'users' => $this->users->findActive(),
 			'title' => "View all users",
 			'redirect' => $this->redirect
 		]);
@@ -360,7 +350,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 
 	/**
-	* List all deleted users.
+	* List all soft deleted users.
 	*
 	* @return void
 	*/
@@ -373,7 +363,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 		$this->theme->setTitle("Users that are deleted");
 		$this->views->add($this->redirect["list-all"], [
 			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
-			'users' => $this->users->query()->where('deleted is NOT NULL')->execute(),
+			'users' => $this->users->findSoftDeleted(),
 			'title' => "View all users",
 			'redirect' => $this->redirect
 		]);
@@ -388,10 +378,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 	*/
 	private function getLoginForm()
 	{
-		// Initiate object instance.
 		$form = new \Mos\HTMLForm\CForm();
 
-		// Create form.
 		$form = $form->create([], [
 			'acronym' => [
 				'type' 		 => 'text',
@@ -491,10 +479,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 	*/
 	private function getLogoutForm()
 	{
-		// Initiate object instance.
 		$form = new \Mos\HTMLForm\CForm();
 
-		// Create form.
 		$form = $form->create([], [
 			'logout' => [
 				'type' 		 => 'submit',

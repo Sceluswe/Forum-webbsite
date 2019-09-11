@@ -27,6 +27,32 @@ class User extends \Anax\MVC\CDatabaseModel
 
 
 
+    /**
+    * Find users that have been soft deleted.
+    *
+    * @return array with resultset.
+    */
+    public function findSoftDeleted()
+    {
+        return $this->query()->where('deleted is NOT NULL')->execute();
+    }
+
+
+
+    /**
+    * Find users that have been soft deleted.
+    *
+    * @return array with resultset.
+    */
+    public function findActive()
+    {
+        return $this->query()->where('active is NOT NULL')
+            ->andWhere('deleted is NULL')
+            ->execute();
+    }
+
+
+
 	/**
 	* Function that checks if a user is an admin based on the provided $condition.
 	*
