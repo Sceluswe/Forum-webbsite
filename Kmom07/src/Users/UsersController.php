@@ -16,7 +16,6 @@ class UsersController implements \Anax\DI\IInjectionAware
     // All redirect links used.
     private $redirect = [
         "default"       => "Users/",
-        "view"          => "Users/view",
         "login"         => "Users/login",
         "logout"        => "Users/logout",
         "profile"       => "Users/profile/",
@@ -24,7 +23,10 @@ class UsersController implements \Anax\DI\IInjectionAware
         "delete"        => "Users/delete/",
         "softDelete"    => "Users/softDelete/",
         "restore"       => "Users/restore/",
-        "list-all"      => "Users/List-all"
+        "list-all"      => "Users/List-all",
+        "none"          => "Users/none",
+        "view"          => "Users/view",
+        "menu"          => "Users/menu"
     ];
 
 
@@ -108,7 +110,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 	*/
 	public function menuAction()
 	{
-		$this->views->add('users/menu', [
+		$this->views->add($this->redirect["menu"], [
 			'values' => ['Add', 'List-all', 'List-active', 'List-trash'],
 			'url'	 => $this->redirect["default"]
 		]);
@@ -207,6 +209,10 @@ class UsersController implements \Anax\DI\IInjectionAware
 				'params' 	 => ['id' => $id]
 			]);
 		}
+        else
+        {
+            $this->views->add($this->redirect["none"], []);
+        }
 	}
 
 
