@@ -27,7 +27,7 @@
                 </a>
             </td>
 			<td class="menu-data">
-                <a class="nodecoration" href="<?=$this->url->create($redirect['user'] . $item->userid);?>">
+                <a class="nodecoration" href="<?=$this->url->create($redirect['profile'] . $item->userid);?>">
                     <h6 class="menu-user"><?=ucfirst($item->user)?></h6>
                 </a>
             </td>

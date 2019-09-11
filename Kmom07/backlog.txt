@@ -17,20 +17,25 @@ Comment.php model in forum. Not sure about this, will have to think about it.
 Study the different view templates so you understand what each of them does. See if they can't be reduced or even
 removed completely with better code.
 
-ForumController.php: rename redirect array index "user" to "profile".
-ForumController.php: replace the redirects function with a private redirect variable instead. The function is already
-private, there's no need for it to be a function. Besides if it's a variable it can be used in more than on e place
-to make redirect link changes easier.
 
-UsersController.php: rename userStatusAction() to statusAction() ?
+
+
+
+UsersController.php: create private $templates to separate templates and redirect links. Possibly do this in other controllers too.
+UsersController.php: place functions in proper declarative order, top to bottom.
+UsersController.php: move database interactions into functions in the User.php model.
+
+
+CommentController.php: create private $templates to separate templates and redirect links. Possibly do this in other controllers too.
 
 project.php: look over this file, see if anything needs to be changed.
 
 ForumController.php: place functions in proper declarative order, top to bottom.
-UsersController.php: place functions in proper declarative order, top to bottom.
+
+
 
 ForumController.php: change idAction() to questionAction() for clarity and a clean URL
-ForumController.php: move userStatusAction() to UsersController.
+
 ForumController.php: find out if you can't move the user functions into UsersController.php.
 ForumController.php: Create database link tables (questionTags) for questions answers and comments too? (Will require more research)
 ForumController.php: See if you can split it up into several controllers? one for tag one for... and so on.
@@ -60,14 +65,25 @@ button and time of placement never moves.
 Design: create a clearer separation between questions, perhaps using color variants.
 
 Fix: Remove all each() function errors. The function is deprecated.
-
+Create a list of the files I've worked in for the Git README file.
 
 
 -------- Completed --------
+-------- 2019-09-11:
+ForumController.php: replace the redirects function with a private redirect variable instead. The function is already
+private, there's no need for it to be a function. Besides if it's a variable it can be used in more than on e place
+to make redirect link changes easier.
+ForumController.php: rename redirect array index "user" to "profile".
+UsersController.php: rename userStatusAction() to statusAction() ?
+UserController.php: replace redirects with private redirect variable.
+CommentController.php: replace redirects with private redirect variable.
+
+
 -------- 2019-09-10:
 make all redirects() private since they don't have to be public.
 Comments: add 3 empty lines in between functions.
 ForumController: remove unnecessary commas.
+ForumController.php: move userStatusAction() to UsersController.
 CommentController.updateAction(): remove unnecessary assignment
 CommentController.initialize(): remove unnecessary assignment
 

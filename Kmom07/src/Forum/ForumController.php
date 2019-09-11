@@ -21,7 +21,7 @@ class ForumController implements \Anax\DI\IInjectionAware
         'rateQuestion'  => 'Forum/vote/Q/',
         'rateAnswer'    => 'Forum/vote/A/',
         'rateComment'   => 'Forum/vote/C/',
-        'user'          => 'Users/profile/',
+        'profile'       => 'Users/profile/',
         "login"         => "Users/login",
         'question'      => 'Forum/id/',
         "allQuestions"  => "Questions",
