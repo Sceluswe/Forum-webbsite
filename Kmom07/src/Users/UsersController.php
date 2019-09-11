@@ -13,6 +13,22 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 
 
+    // All redirect links used.
+    private $redirect = [
+        "default"       => "Users/",
+        "view"          => "Users/view",
+        "login"         => "Users/login",
+        "logout"        => "Users/logout",
+        "profile"       => "Users/profile/",
+        "update"        => "Users/update/",
+        "delete"        => "Users/delete/",
+        "softDelete"    => "Users/softDelete/",
+        "restore"       => "Users/restore/",
+        "list-all"      => "Users/List-all"
+    ];
+
+
+
 	/**
 	* Initialize the controller.
 	*
@@ -32,31 +48,13 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 
     /**
-    * Return redirects.
-    *
-    * @return array containing redirects.
-    */
-    private function redirects()
-    {
-        return [
-            "profile"       =>    "Users/profile/",
-            "update"        =>    "Users/update/",
-            "delete"        =>    "Users/delete/",
-            "softDelete"    =>    "Users/softDelete/",
-            "restore"       =>    "Users/restore/"
-        ];
-    }
-
-
-
-    /**
     * Displays the currently logged in user and links to its profile.
     *
     * @return void.
     */
     public function statusAction()
     {
-        $userlink = "<p>You are currently not logged in. <a href=\"" . $this->url->create("Users/Login") . "\">Login</a></p>";
+        $userlink = "<p>You are currently not logged in. <a href=\"" . $this->url->create($this->redirect["login"]) . "\">Login</a></p>";
 
         if($this->users->isUserLoggedIn())
         {
@@ -64,7 +62,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 
             // Create a link to the currently logged in user.
             $userlink = "<p>You are currently logged in as: <a href=\""
-                . $this->url->create("Users/profile/{$user->id}") . "\">"
+                . $this->url->create("{$this->redirect["profile"]}{$user->id}") . "\">"
                 . ucfirst($user->acronym) . "</a></p>";
         }
 
@@ -82,8 +80,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 	public function loginAction()
 	{
         (!$this->users->isUserLoggedIn())
-            ? $this->utility->renderDefaultPage("Login", $this->getLoginForm())
-            : $this->utility->createRedirect('Users/Logout');
+            ? $this->utility->renderDefaultPage($this->redirect["login"], $this->getLoginForm())
+            : $this->utility->createRedirect($this->redirect["logout"]);
 	}
 
 
@@ -98,7 +96,7 @@ class UsersController implements \Anax\DI\IInjectionAware
         $this->dispatcher->forwardTo("Users", "status");
 
         // Render form.
-        $this->utility->renderDefaultPage("Logout", $this->getLogoutForm());
+        $this->utility->renderDefaultPage($this->redirect["logout"], $this->getLogoutForm());
 	}
 
 
@@ -112,7 +110,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 	{
 		$this->views->add('users/menu', [
 			'values' => ['Add', 'List-all', 'List-active', 'List-trash'],
-			'url'	 => 'Users/'
+			'url'	 => $this->redirect["default"]
 		]);
 	}
 
@@ -132,11 +130,11 @@ class UsersController implements \Anax\DI\IInjectionAware
 				$this->menuAction();
 
 				$this->theme->setTitle("Create Table");
-				$this->views->add('users/list-all', [
+				$this->views->add($this->redirect["list-all"], [
 					'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
 					'users' => $this->users->findAll(),
 					'title' => "Table Successfully created!",
-					'redirect' => $this->redirects()
+					'redirect' => $this->redirect
 				]);
 			}
 		}
@@ -160,11 +158,11 @@ class UsersController implements \Anax\DI\IInjectionAware
 		$this->menuAction();
 
 		$this->theme->setTitle("List all users");
-		$this->views->add('users/list-all', [
+		$this->views->add($this->redirect["list-all"], [
 			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
 			'users' => $this->users->findAll(),
 			'title' => "View all users",
-			'redirect' => $this->redirects()
+			'redirect' => $this->redirect
 		]);
 	}
 
@@ -189,12 +187,12 @@ class UsersController implements \Anax\DI\IInjectionAware
 		{
 			$this->theme->setTitle("View user with id");
 
-			$this->views->add('users/view', [
+			$this->views->add($this->redirect["view"], [
 				'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin', $user->acronym]),
 				'superadmin' => $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
 				'user' => $user,
 				'title' => "View user: " . $user->name,
-				'redirect' => $this->redirects()
+				'redirect' => $this->redirect
 			]);
 
 			$this->dispatcher->forward([
@@ -250,7 +248,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 		$user->save();
 
 		//Create a url and redirect to the updated object.
-        $this->utility->createRedirect('Users/id/' . $id);
+        $this->utility->createRedirect($this->redirect["profile"] . $id);
 	}
 
 
@@ -299,7 +297,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 		$this->users->delete($id);
 
-        $this->utility->createRedirect("Users/List-all");
+        $this->utility->createRedirect($this->redirect["list-all"]);
 	}
 
 
@@ -321,7 +319,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 		$user->save();
 
 		//Create a url and redirect to the updated object.
-        $this->utility->createRedirect('Users/id/' . $id);
+        $this->utility->createRedirect($this->redirect["profile"] . $id);
 	}
 
 
@@ -340,11 +338,11 @@ class UsersController implements \Anax\DI\IInjectionAware
             ->execute();
 
 		$this->theme->setTitle("Users that are active");
-		$this->views->add('users/list-all', [
+		$this->views->add($this->redirect["list-all"], [
 			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
 			'users' => $all,
 			'title' => "View all users",
-			'redirect' => $this->redirects()
+			'redirect' => $this->redirect
 		]);
 	}
 
@@ -362,11 +360,11 @@ class UsersController implements \Anax\DI\IInjectionAware
 		$this->menuAction();
 
 		$this->theme->setTitle("Users that are deleted");
-		$this->views->add('users/list-all', [
+		$this->views->add($this->redirect["list-all"], [
 			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
 			'users' => $this->users->query()->where('deleted is NOT NULL')->execute(),
 			'title' => "View all users",
-			'redirect' => $this->redirects()
+			'redirect' => $this->redirect
 		]);
 	}
 
@@ -437,7 +435,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 				$success = true;
 			}
 
-            $this->utility->createRedirect('Users/id/' . $this->users->id);
+            $this->utility->createRedirect($this->redirect["profile"] . $this->users->id);
 		}
 
         return $success;
@@ -521,7 +519,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 			$this->users->logoutUser();
 			$success = true;
 
-            $this->utility->createRedirect('Users/Login');
+            $this->utility->createRedirect($this->redirect["login"]);
 		}
 
         return $success;
@@ -639,7 +637,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 			'active' 	=> gmdate('Y-m-d H:i:s')
 		]);
 
-        $this->utility->createRedirect('Users/id/' . $this->users->id);
+        $this->utility->createRedirect($this->redirect["profile"] . $this->users->id);
 
         return true;
     }
