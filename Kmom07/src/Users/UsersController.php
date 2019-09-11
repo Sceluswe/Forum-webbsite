@@ -61,7 +61,7 @@ class UsersController implements \Anax\DI\IInjectionAware
     */
     public function statusAction()
     {
-        $userlink = "<p>You are currently not logged in. <a href=\"" . $this->url->create($this->redirect["login"]) . "\">Login</a></p>";
+        $userlink = "<p>You are currently not logged in: <a href=\"" . $this->url->create($this->redirect["login"]) . "\">Login</a></p>";
 
         if($this->users->isUserLoggedIn())
         {
@@ -451,6 +451,8 @@ class UsersController implements \Anax\DI\IInjectionAware
 	*/
 	public function loginAction()
 	{
+        $this->dispatcher->forwardTo("Users", "status");
+
         (!$this->users->isUserLoggedIn())
             ? $this->utility->renderDefaultPage($this->redirect["login"], $this->getLoginForm())
             : $this->utility->createRedirect($this->redirect["logout"]);
