@@ -96,7 +96,7 @@ class ForumController implements \Anax\DI\IInjectionAware
             }
 		}
 
-        $this->dispatcher->forwardTo('Users', 'userStatus');
+        $this->dispatcher->forwardTo('Users', 'status');
         $this->dispatcher->forwardTo('Forum', 'tagMenu');
 
         $conditions = ['admin', $this->users->currentUser()];

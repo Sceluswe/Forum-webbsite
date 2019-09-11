@@ -54,7 +54,7 @@ class UsersController implements \Anax\DI\IInjectionAware
     *
     * @return void.
     */
-    public function userStatusAction()
+    public function statusAction()
     {
         $userlink = "<p>You are currently not logged in. <a href=\"" . $this->url->create("Users/Login") . "\">Login</a></p>";
 
@@ -95,7 +95,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 	*/
 	public function logoutAction()
 	{
-        $this->dispatcher->forwardTo("Users", "userStatus");
+        $this->dispatcher->forwardTo("Users", "status");
 
         // Render form.
         $this->utility->renderDefaultPage("Logout", $this->getLogoutForm());
