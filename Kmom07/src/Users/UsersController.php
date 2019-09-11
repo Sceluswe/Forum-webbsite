@@ -13,6 +13,29 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 
 
+    // All redirect links used.
+    private $redirect = [
+        "default"       => "Users/",
+        "login"         => "Users/login",
+        "logout"        => "Users/logout",
+        "profile"       => "Users/profile/",
+        "update"        => "Users/update/",
+        "delete"        => "Users/delete/",
+        "softDelete"    => "Users/softDelete/",
+        "restore"       => "Users/restore/",
+        "list-all"      => "Users/List-all"
+    ];
+
+    // All templates links used.
+    private $template = [
+        "list-all"      => "Users/List-all",
+        "menu"          => "Users/menu",
+        "none"          => "Users/none",
+        "view"          => "Users/view"
+    ];
+
+
+
 	/**
 	* Initialize the controller.
 	*
@@ -32,31 +55,13 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 
     /**
-    * Return redirects.
-    *
-    * @return array containing redirects.
-    */
-    private function redirects()
-    {
-        return [
-            "profile"       =>    "Users/profile/",
-            "update"        =>    "Users/update/",
-            "delete"        =>    "Users/delete/",
-            "softDelete"    =>    "Users/softDelete/",
-            "restore"       =>    "Users/restore/"
-        ];
-    }
-
-
-
-    /**
     * Displays the currently logged in user and links to its profile.
     *
     * @return void.
     */
-    public function userStatusAction()
+    public function statusAction()
     {
-        $userlink = "<p>You are currently not logged in. <a href=\"" . $this->url->create("Users/Login") . "\">Login</a></p>";
+        $userlink = "<p>You are currently not logged in: <a href=\"" . $this->url->create($this->redirect["login"]) . "\">Login</a></p>";
 
         if($this->users->isUserLoggedIn())
         {
@@ -64,198 +69,186 @@ class UsersController implements \Anax\DI\IInjectionAware
 
             // Create a link to the currently logged in user.
             $userlink = "<p>You are currently logged in as: <a href=\""
-                . $this->url->create("Users/profile/{$user->id}") . "\">"
+                . $this->url->create("{$this->redirect["profile"]}{$user->id}") . "\">"
                 . ucfirst($user->acronym) . "</a></p>";
         }
 
-        // Render form.
         $this->utility->renderDefaultPage("", $userlink);
     }
 
 
 
-	/**
-	* Function that logs in a user and stores the currently logged in user in session.
-    *
-	* @return void
-	*/
-	public function loginAction()
-	{
-        (!$this->users->isUserLoggedIn())
-            ? $this->utility->renderDefaultPage("Login", $this->getLoginForm())
-            : $this->utility->createRedirect('Users/Logout');
-	}
-
-
-
-	/**
-	* Function presents a logout form to the user.
-    *
-	* @return void
-	*/
-	public function logoutAction()
-	{
-        $this->dispatcher->forwardTo("Users", "userStatus");
-
-        // Render form.
-        $this->utility->renderDefaultPage("Logout", $this->getLogoutForm());
-	}
-
-
-
-	/**
-	* Create an options menun view.
-	*
-	* @return void
-	*/
-	public function menuAction()
-	{
-		$this->views->add('users/menu', [
-			'values' => ['Add', 'List-all', 'List-active', 'List-trash'],
-			'url'	 => 'Users/'
-		]);
-	}
-
-
-
-	/**
-	* Create a database and initialize two users.
-	*
-	* @return void
-	*/
-	public function setupAction()
-	{
-		if($this->users->isUserAdmin($this->users->currentUser(), ['admin']))
-		{
-			if($this->users->initializeTable('user'))
-			{
-				$this->menuAction();
-
-				$this->theme->setTitle("Create Table");
-				$this->views->add('users/list-all', [
-					'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
-					'users' => $this->users->findAll(),
-					'title' => "Table Successfully created!",
-					'redirect' => $this->redirects()
-				]);
-			}
-		}
-		else
-		{
-			$this->listAction();
-		}
-	}
-
-
-
-	/**
-    * List all users.
+    /**
+    * Create an options menun view.
     *
     * @return void
     */
-	public function listAction()
-	{
-		$this->initialize();
-
-		$this->menuAction();
-
-		$this->theme->setTitle("List all users");
-		$this->views->add('users/list-all', [
-			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
-			'users' => $this->users->findAll(),
-			'title' => "View all users",
-			'redirect' => $this->redirects()
-		]);
-	}
+    public function menuAction()
+    {
+        $this->views->add($this->template["menu"], [
+            'values' => ['Add', 'List-all', 'List-active', 'List-trash'],
+            'url'	 => $this->redirect["default"]
+        ]);
+    }
 
 
 
-	/**
-	* List user with id.
-	*
-	* @param int $id of user to display
-	*
-	* @return void
-	*/
-	public function profileAction($id = null)
-	{
-		$this->initialize();
+    /**
+    * List user with id.
+    *
+    * @param int $id of user to display
+    *
+    * @return void
+    */
+    public function profileAction($id = null)
+    {
+        $this->initialize();
 
-		$this->menuAction();
+        $this->menuAction();
 
-		$user = $this->users->find($id);
+        $user = $this->users->find($id);
 
-		if(!empty($user))
-		{
-			$this->theme->setTitle("View user with id");
+        if(!empty($user))
+        {
+            $this->theme->setTitle("View user with id");
 
-			$this->views->add('users/view', [
-				'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin', $user->acronym]),
-				'superadmin' => $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
-				'user' => $user,
-				'title' => "View user: " . $user->name,
-				'redirect' => $this->redirects()
-			]);
+            $this->views->add($this->template["view"], [
+                'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin', $user->acronym]),
+                'superadmin' => $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
+                'user' => $user,
+                'title' => "View user: " . $user->name,
+                'redirect' => $this->redirect
+            ]);
 
-			$this->dispatcher->forward([
-				'controller'=> 'Forum',
-				'action'	=> 'score',
-				'params'	=> ['id' => $id]
-			]);
+            $this->dispatcher->forward([
+                'controller'=> 'Forum',
+                'action'	=> 'score',
+                'params'	=> ['id' => $id]
+            ]);
 
-			$this->dispatcher->forward([
-				'controller' => 'Forum',
-				'action'	 => 'userQuestions',
-				'params' 	 => ['id' => $id]
-			]);
-		}
-		else
-		{
-			$this->views->add('users/none', []);
-		}
-	}
+            $this->dispatcher->forward([
+                'controller' => 'Forum',
+                'action'	 => 'userQuestions',
+                'params' 	 => ['id' => $id]
+            ]);
+        }
+        else
+        {
+            $this->views->add($this->template["none"], []);
+        }
+    }
 
 
 
-	/**
+    /**
     * Cheat function to add a new user in a simplified way.
     *
     * @return void
     */
-	public function addAction()
+    public function addAction()
+    {
+        $this->initialize();
+
+        $this->menuAction();
+
+        $this->users->created = gmdate('Y-m-d H:i:s');
+
+        $this->utility->renderDefaultPage("Create User", $this->getUserForm());
+    }
+
+
+
+    /**
+    * List all users.
+    *
+    * @return void
+    */
+    public function listAction()
+    {
+        $this->initialize();
+
+        $this->menuAction();
+
+        $this->theme->setTitle("List all users");
+        $this->views->add($this->template["list-all"], [
+            'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
+            'users' => $this->users->findAll(),
+            'title' => "View all users",
+            'redirect' => $this->redirect
+        ]);
+    }
+
+
+
+    /**
+	* List all soft deleted users.
+	*
+	* @return void
+	*/
+	public function deletedAction()
 	{
 		$this->initialize();
 
 		$this->menuAction();
 
-		$this->users->created = gmdate('Y-m-d H:i:s');
-
-		// Render form.
-        $this->utility->renderDefaultPage("Create User", $this->getUserForm());
+		$this->theme->setTitle("Users that are deleted");
+		$this->views->add($this->redirect["list-all"], [
+			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
+			'users' => $this->users->findSoftDeleted(),
+			'title' => "View all users",
+			'redirect' => $this->redirect
+		]);
 	}
 
 
 
 	/**
-    * Restores a soft-deleted user to active.
-    *
-    * @id int, id of the user to restore.
+	* List all active users (not soft deleted).
+	*
+	* $return void
+	*/
+	public function activeAction()
+	{
+		$this->menuAction();
+
+		$this->theme->setTitle("Users that are active");
+		$this->views->add($this->redirect["list-all"], [
+			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
+			'users' => $this->users->findActive(),
+			'title' => "View all users",
+			'redirect' => $this->redirect
+		]);
+	}
+
+
+
+    /**
+    * Create a database and initialize two users.
     *
     * @return void
     */
-	public function restoreAction($id = null)
-	{
-		if(!isset($id))
-			die("Missing id.");
+    public function setupAction()
+    {
+        if($this->users->isUserAdmin($this->users->currentUser(), ['admin']))
+        {
+            if($this->users->initializeTable('user'))
+            {
+                $this->menuAction();
 
-		$user = $this->users->find($id);
-		$user->deleted = null;
-		$user->active = gmdate("Y-m-d H:i:s");
-		$user->save();
-
-		//Create a url and redirect to the updated object.
-        $this->utility->createRedirect('Users/id/' . $id);
-	}
+                $this->theme->setTitle("Create Table");
+                $this->views->add($this->template["list-all"], [
+                    'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
+                    'users' => $this->users->findAll(),
+                    'title' => "Table Successfully created!",
+                    'redirect' => $this->redirect
+                ]);
+            }
+        }
+        else
+        {
+            $this->listAction();
+        }
+    }
 
 
 
@@ -276,15 +269,35 @@ class UsersController implements \Anax\DI\IInjectionAware
 		$user = $this->users->find($id);
 		$this->users->updated = gmdate('Y-m-d H:i:s');
 
-		$values = [
+        $this->utility->renderDefaultPage("Update User", $this->getUserForm([
 			'acronym' 	=> $user->acronym,
 			'email'		=> $user->email,
 			'name' 		=> $user->name,
-			'password'	=> $user->password,
-		];
+			'password'	=> $user->password
+		]));
+	}
 
-		// Render form.
-        $this->utility->renderDefaultPage("Update User", $this->getUserForm($values));
+
+
+    /**
+    * Restores a soft-deleted user to active.
+    *
+    * @id int, id of the user to restore.
+    *
+    * @return void
+    */
+	public function restoreAction($id = null)
+	{
+		if(!isset($id))
+			die("Missing id.");
+
+		$user = $this->users->find($id);
+		$user->deleted = null;
+		$user->active = gmdate("Y-m-d H:i:s");
+		$user->save();
+
+		//Create a url and redirect to the updated object.
+        $this->utility->createRedirect($this->redirect["profile"] . $id);
 	}
 
 
@@ -303,7 +316,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 		$this->users->delete($id);
 
-        $this->utility->createRedirect("Users/List-all");
+        $this->utility->createRedirect($this->redirect["list-all"]);
 	}
 
 
@@ -325,98 +338,12 @@ class UsersController implements \Anax\DI\IInjectionAware
 		$user->save();
 
 		//Create a url and redirect to the updated object.
-        $this->utility->createRedirect('Users/id/' . $id);
+        $this->utility->createRedirect($this->redirect["profile"] . $id);
 	}
 
 
 
-	/**
-	* List all active and not deleted users.
-	*
-	* $return void
-	*/
-	public function activeAction()
-	{
-		$this->menuAction();
-
-		$all = $this->users->query()->where('active is NOT NULL')
-            ->andWhere('deleted is NULL')
-            ->execute();
-
-		$this->theme->setTitle("Users that are active");
-		$this->views->add('users/list-all', [
-			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
-			'users' => $all,
-			'title' => "View all users",
-			'redirect' => $this->redirects()
-		]);
-	}
-
-
-
-	/**
-	* List all deleted users.
-	*
-	* @return void
-	*/
-	public function deletedAction()
-	{
-		$this->initialize();
-
-		$this->menuAction();
-
-		$this->theme->setTitle("Users that are deleted");
-		$this->views->add('users/list-all', [
-			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
-			'users' => $this->users->query()->where('deleted is NOT NULL')->execute(),
-			'title' => "View all users",
-			'redirect' => $this->redirects()
-		]);
-	}
-
-
-
-	/**
-	* Get a form for logging in a user.
-	*
-	* @return the HTML code of the form.
-	*/
-	private function getLoginForm()
-	{
-		// Initiate object instance.
-		$form = new \Mos\HTMLForm\CForm();
-
-		// Create form.
-		$form = $form->create([], [
-			'acronym' => [
-				'type' 		 => 'text',
-				'required' 	 => true,
-				'class' 	 => 'cform-textbox',
-				'validation' => ['not_empty']
-			],
-			'password' => [
-				'type' 		 => 'password',
-				'required' 	 => true,
-				'class' 	 => 'cform-textbox',
-				'validation' => ['not_empty']
-			],
-			'submit' => [
-    			'type' 		=> 'submit',
-    			'class' 	=> 'cform-submit',
-    			'callback'  => [$this, 'loginSubmit'],
-    			'value'		=> 'Login'
-			],
-		]);
-
-		// Check the status of the form
-		$form->check([$this, 'loginSuccess'], [$this, 'loginFail']);
-
-		return $form->getHTML();
-	}
-
-
-
-	/**
+    /**
     * Callback for login-button success.
     *
     * @return boolean.
@@ -441,7 +368,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 				$success = true;
 			}
 
-            $this->utility->createRedirect('Users/id/' . $this->users->id);
+            $this->utility->createRedirect($this->redirect["profile"] . $this->users->id);
 		}
 
         return $success;
@@ -479,35 +406,61 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 
 
+    /**
+    * Get a form for logging in a user.
+    *
+    * @return the HTML code of the form.
+    */
+    private function getLoginForm()
+    {
+        $form = new \Mos\HTMLForm\CForm();
+
+        $form = $form->create([], [
+            'acronym' => [
+                'type' 		 => 'text',
+                'required' 	 => true,
+                'class' 	 => 'cform-textbox',
+                'validation' => ['not_empty']
+            ],
+            'password' => [
+                'type' 		 => 'password',
+                'required' 	 => true,
+                'class' 	 => 'cform-textbox',
+                'validation' => ['not_empty']
+            ],
+            'submit' => [
+                'type' 		=> 'submit',
+                'class' 	=> 'cform-submit',
+                'callback'  => [$this, 'loginSubmit'],
+                'value'		=> 'Login'
+            ],
+        ]);
+
+        // Check the status of the form
+        $form->check([$this, 'loginSuccess'], [$this, 'loginFail']);
+
+        return $form->getHTML();
+    }
+
+
+
 	/**
-	* Get a form for logging out a user.
-	*
-	* @return the HTML code of the form.
+	* Function that logs in a user and stores the currently logged in user in session.
+    *
+	* @return void
 	*/
-	private function getLogoutForm()
+	public function loginAction()
 	{
-		// Initiate object instance.
-		$form = new \Mos\HTMLForm\CForm();
+        $this->dispatcher->forwardTo("Users", "status");
 
-		// Create form.
-		$form = $form->create([], [
-			'logout' => [
-				'type' 		 => 'submit',
-				'class' 	 => 'cform-submit',
-				'callback'  => [$this, 'logoutSubmit'],
-				'value'		=> 'Logout'
-			]
-		]);
-
-		// Check the status of the form.
-		$form->check([$this, 'logoutSuccess'], [$this, 'logoutFail']);
-
-		return $form->getHTML();
+        (!$this->users->isUserLoggedIn())
+            ? $this->utility->renderDefaultPage($this->redirect["login"], $this->getLoginForm())
+            : $this->utility->createRedirect($this->redirect["logout"]);
 	}
 
 
 
-	/**
+    /**
     * Callback for login-button success.
     *
     * @param CForm object, the form used.
@@ -525,7 +478,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 			$this->users->logoutUser();
 			$success = true;
 
-            $this->utility->createRedirect('Users/Login');
+            $this->utility->createRedirect($this->redirect["login"]);
 		}
 
         return $success;
@@ -533,7 +486,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 
 
-	/**
+    /**
     * Callback for submit-button.
     *
     * @param CForm object, the form used.
@@ -558,6 +511,105 @@ class UsersController implements \Anax\DI\IInjectionAware
     public function logoutFail($form)
     {
         $form->AddOutput("<p><i>You're not logged in.</i></p>");
+        return false;
+    }
+
+
+
+	/**
+	* Get a form for logging out a user.
+	*
+	* @return the HTML code of the form.
+	*/
+	private function getLogoutForm()
+	{
+		$form = new \Mos\HTMLForm\CForm();
+
+		$form = $form->create([], [
+			'logout' => [
+				'type' 		 => 'submit',
+				'class' 	 => 'cform-submit',
+				'callback'  => [$this, 'logoutSubmit'],
+				'value'		=> 'Logout'
+			]
+		]);
+
+		// Check the status of the form.
+		$form->check([$this, 'logoutSuccess'], [$this, 'logoutFail']);
+
+		return $form->getHTML();
+	}
+
+
+
+	/**
+	* Function presents a logout form to the user.
+    *
+	* @return void
+	*/
+	public function logoutAction()
+	{
+        $this->dispatcher->forwardTo("Users", "status");
+
+        $this->utility->renderDefaultPage("Logout", $this->getLogoutForm());
+	}
+
+
+
+    /**
+    * Callback for submit-button success.
+    *
+    * @param CForm object, the form used.
+    *
+    * @return boolean.
+    */
+	public function callbackSubmit($form)
+    {
+		// Save form.
+		$form->saveInSession = true;
+
+		$this->users->save([
+			'acronym' 	=> strtolower($form->Value('acronym')),
+			'email' 	=> $form->Value('email'),
+			'name' 		=> $form->Value('name'),
+			'password' 	=> md5($form->Value('password')),
+			'created' 	=> $this->users->created,
+			'updated'	=> isset($this->users->updated) ? $this->users->updated : null,
+			'active' 	=> gmdate('Y-m-d H:i:s')
+		]);
+
+        $this->utility->createRedirect($this->redirect["profile"] . $this->users->id);
+
+        return true;
+    }
+
+
+
+    /**
+    * Callback for submit-button.
+    *
+    * @param CForm object, the form used.
+    *
+    * @return boolean.
+    */
+    public function callbackSuccess($form)
+    {
+        $form->AddOutput("<p><i>User Created.</i></p>");
+        return false;
+    }
+
+
+
+    /**
+    * Callback for submit-button.
+    *
+    * @param CForm object, the form used.
+    *
+    * @return boolean.
+    */
+    public function callbackFail($form)
+    {
+        $form->AddOutput("<p><i>DoSubmitFail(): Form was submitted but I failed to process/save/validate it</i></p>");
         return false;
     }
 
@@ -618,63 +670,4 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 		return $form->getHTML();
 	}
-
-
-
-	/**
-    * Callback for submit-button success.
-    *
-    * @param CForm object, the form used.
-    *
-    * @return boolean.
-    */
-	public function callbackSubmit($form)
-    {
-		// Save form.
-		$form->saveInSession = true;
-
-		$this->users->save([
-			'acronym' 	=> strtolower($form->Value('acronym')),
-			'email' 	=> $form->Value('email'),
-			'name' 		=> $form->Value('name'),
-			'password' 	=> md5($form->Value('password')),
-			'created' 	=> $this->users->created,
-			'updated'	=> isset($this->users->updated) ? $this->users->updated : null,
-			'active' 	=> gmdate('Y-m-d H:i:s')
-		]);
-
-        $this->utility->createRedirect('Users/id/' . $this->users->id);
-
-        return true;
-    }
-
-
-
-    /**
-    * Callback for submit-button.
-    *
-    * @param CForm object, the form used.
-    *
-    * @return boolean.
-    */
-    public function callbackSuccess($form)
-    {
-        $form->AddOutput("<p><i>User Created.</i></p>");
-        return false;
-    }
-
-
-
-    /**
-    * Callback for submit-button.
-    *
-    * @param CForm object, the form used.
-    *
-    * @return boolean.
-    */
-    public function callbackFail($form)
-    {
-        $form->AddOutput("<p><i>DoSubmitFail(): Form was submitted but I failed to process/save/validate it</i></p>");
-        return false;
-    }
 }

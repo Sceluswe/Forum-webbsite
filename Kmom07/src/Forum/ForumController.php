@@ -12,6 +12,35 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 
 
+    // All redirect links used.
+    private $redirect = [
+        'menu'          => 'Forum/menu/',
+        'question'      => 'Forum/id/',
+        'addQuestion'   => 'Forum/addQuestion/',
+        'addAnswer'     => 'Forum/addAnswer/',
+        'addComment'    => 'Forum/addComment/',
+        'rateQuestion'  => 'Forum/vote/Q/',
+        'rateAnswer'    => 'Forum/vote/A/',
+        'rateComment'   => 'Forum/vote/C/',
+        'profile'       => 'Users/profile/',
+        "login"         => "Users/login",
+        "allQuestions"  => "Questions",
+        'accepted'      => 'Forum/accepted/',
+        'tagButton'     => 'Forum/tag/',
+        'tagCreate'     => 'Forum/tagCreate/'
+    ];
+
+    // All template links used.
+    private $template = [
+        "home"          => "forum/forum-home",
+        "menu"          => "forum/forum-menu",
+        "question"      => "forum/forum-question",
+        "tagMenu"       => "forum/forum-tagMenu",
+        "tagQuestion"   => "forum/forum-tagQuestion"
+    ];
+
+
+
 	/**
 	* Initialize the controller.
 	*
@@ -45,31 +74,6 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 
 
-	/**
-	* Return redirects.
-	*
-	* @return array containing redirects.
-	*/
-	private function redirects()
-	{
-		return [
-            'menu'          => 'Forum/menu/',
-            'addQuestion'   => 'Forum/addQuestion/',
-            'addAnswer'     => 'Forum/addAnswer/',
-            'addComment'    => 'Forum/addComment/',
-            'rateQuestion'  => 'Forum/vote/Q/',
-            'rateAnswer'    => 'Forum/vote/A/',
-            'rateComment'   => 'Forum/vote/C/',
-            'user'          => 'Users/profile/',
-            'question'      => 'Forum/id/',
-            'accepted'      => 'Forum/accepted/',
-            'tagButton'     => 'Forum/tag/',
-            'tagCreate'     => 'Forum/tagCreate/'
-		];
-	}
-
-
-
 //---------------- Menu actions ----------------
 	/**
 	* Displays all questions in the database or sorted by tag.
@@ -96,16 +100,16 @@ class ForumController implements \Anax\DI\IInjectionAware
             }
 		}
 
-        $this->dispatcher->forwardTo('Users', 'userStatus');
+        $this->dispatcher->forwardTo('Users', 'status');
         $this->dispatcher->forwardTo('Forum', 'tagMenu');
 
         $conditions = ['admin', $this->users->currentUser()];
 		$this->theme->setTitle("All Questions");
-		$this->views->add('forum/forum-menu', [
+		$this->views->add($this->template["menu"], [
 			'admin'      => $this->users->isUserAdmin($this->users->currentUser(), $conditions),
 			'questions'  => $result,
 			'title'      => "All questions",
-			'redirect'   => $this->redirects()
+			'redirect'   => $this->redirect
 		]);
 	}
 
@@ -125,10 +129,10 @@ class ForumController implements \Anax\DI\IInjectionAware
 		if(!empty($result))
 		{
 			$this->theme->setTitle("All Questions");
-			$this->views->add('forum/forum-menu', [
+			$this->views->add($this->template["menu"], [
 				'questions' => $this->time->formatUnixProperties($result),
 				'title'     => "Questions asked by this user",
-				'redirect'  => $this->redirects()
+				'redirect'  => $this->redirect
 			]);
 		}
 	}
@@ -192,10 +196,10 @@ class ForumController implements \Anax\DI\IInjectionAware
 
             // Set the title of the browser tab.
 			$this->theme->setTitle($question->title);
-			$this->views->add('forum/forum-question', [
+			$this->views->add($this->template["question"], [
 				'admin'             => $this->users->isUserLoggedIn(),
 				'questionAdmin'     => $this->users->isUserAdmin($this->users->currentUser(), $condition),
-				'redirect'          => $this->redirects(),
+				'redirect'          => $this->redirect,
 				'question'          => $question,
 				'questionComments'  => $questionComments,
 				'answers'           => $answers,
@@ -217,10 +221,10 @@ class ForumController implements \Anax\DI\IInjectionAware
         $questions = $this->questions->getRecentQuestions();
         $questions = (!empty($questions)) ? $this->time->formatUnixProperties($questions) : [];
 
-		$this->views->add('forum/forum-home', [
+		$this->views->add($this->template["home"], [
 			'questions'=> $questions,
 			'title1'     => "Recent Questions",
-			'redirect'   => $this->redirects(),
+			'redirect'   => $this->redirect,
 			'title2'     => "Most active users",
 			'users'      => $this->users->getTopRatedUsers(),
 			'title3'     => "Popular tags",
@@ -279,9 +283,9 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function tagMenuAction()
 	{
-		$this->views->add('forum/forum-tagMenu', [
+		$this->views->add($this->template["tagMenu"], [
 			'title'      => "Tags",
-			'redirect'   => $this->redirects(),
+			'redirect'   => $this->redirect,
 			'tags'       => $this->tags->findAll()
 		]);
 	}
@@ -297,9 +301,9 @@ class ForumController implements \Anax\DI\IInjectionAware
 	{
 		// Create a menu with all unique tags that can be applied to the question.
 		$this->theme->setTitle("Tag a question");
-		$this->views->add('forum/forum-tagQuestion', [
+		$this->views->add($this->template["tagQuestion"], [
 			'title'      => "Tags",
-			'redirect'   => $this->redirects(),
+			'redirect'   => $this->redirect,
 			'tags'       => $this->tags->findAll(),
 			'questionid' => $this->questions->getQuestionId()
 		]);
@@ -360,31 +364,31 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 
 
-	/**
+    /**
     * Callback for createTag success.
     *
     * @param object, CForm object containing user inut from the create tag form.
     *
     * @return boolean, true if tag creation is successful.
     */
-	public function callbackCreateTag(object $form)
+    public function callbackCreateTag(object $form)
     {
-		$result = false;
-		$questionId = $this->questions->getQuestionId();
-		$tagName = $form->Value('name');
+        $result = false;
+        $questionId = $this->questions->getQuestionId();
+        $tagName = $form->Value('name');
 
-		// Check if question exists.
-		if($this->questions->find($questionId))
-		{
+        // Check if question exists.
+        if($this->questions->find($questionId))
+        {
             // If the question exists, check or create the tag.
             if(empty($this->tags->findByName($tagName)))
                 $this->tags->create([
                     'name' => $tagName
                 ]);
 
-			if(!$this->questionTags->questionHasTag($questionId, $this->tags->id))
-			{   // If the question doesn't have tag, apply it:
-				$form->saveInSession = true;
+            if(!$this->questionTags->questionHasTag($questionId, $this->tags->id))
+            {   // If the question doesn't have tag, apply it:
+                $form->saveInSession = true;
 
                 // Create a row that links the question to the tag.
                 $this->questionTags->create([
@@ -392,12 +396,12 @@ class ForumController implements \Anax\DI\IInjectionAware
                     "tagId"         => $this->tags->id
                 ]);
 
-				$result = true;
-			}
+                $result = true;
+            }
 
             // Use questionId to create a redirect link back to that question.
-            $this->utility->createRedirect("Forum/id/" . $questionId);
-		}
+            $this->utility->createRedirect($this->redirect["question"] . $questionId);
+        }
 
         return $result;
     }
@@ -436,7 +440,7 @@ class ForumController implements \Anax\DI\IInjectionAware
                         die("Error: invalid parameters in ForumController.voteAction().");
                 }
 
-                $this->utility->createRedirect("Forum/id/" . $this->questions->getQuestionId());
+                $this->utility->createRedirect($this->redirect["question"] . $this->questions->getQuestionId());
             }
             else
             {
@@ -445,7 +449,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		}
 		else
 		{
-            $this->utility->createRedirect("Users/Login");
+            $this->utility->createRedirect($this->redirect["login"]);
 		}
 	}
 
@@ -470,7 +474,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 			]);
 
             // Create redirect link using the questions id.
-            $this->utility->createRedirect("Forum/Id/" . $this->questions->getQuestionId());
+            $this->utility->createRedirect($this->redirect["question"] . $this->questions->getQuestionId());
 		}
 		else
 		{
@@ -575,50 +579,50 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 
 
-	/**
+    /**
     * Callback for createAnswer success.
     *
     * @param object, CForm object containing user input from the answer form.
     *
     * @return boolean, true if answer was created.
     */
-	public function callbackCreateAnswer(object $form)
+    public function callbackCreateAnswer(object $form)
     {
-		$result = false;
+        $result = false;
 
         // Check if user exists and load into model if so.
-		if(!empty($this->users->findByAcronym($this->users->currentUser())))
-		{
-			$form->saveInSession = true;
+        if(!empty($this->users->findByAcronym($this->users->currentUser())))
+        {
+            $form->saveInSession = true;
 
             // Save form.
-			$createResult = $this->answers->create([
-				'questionid'    => $form->Value('questionid'),
-				'user'          => $this->users->acronym,
-				'userid'        => $this->users->id,
-				'content'       => $form->Value('content'),
-				'timestamp'     => time(),
-				'rating'        => 0,
-				'accepted'      => 0
-			]);
+            $createResult = $this->answers->create([
+                'questionid'    => $form->Value('questionid'),
+                'user'          => $this->users->acronym,
+                'userid'        => $this->users->id,
+                'content'       => $form->Value('content'),
+                'timestamp'     => time(),
+                'rating'        => 0,
+                'accepted'      => 0
+            ]);
 
-			// Update the question and report that it has received another answer.
-			$updateResult = $this->questions->update([
-				'answered'  => $this->questions->find($form->Value('questionid'))->answered + 1
-			]);
+            // Update the question and report that it has received another answer.
+            $updateResult = $this->questions->update([
+                'answered'  => $this->questions->find($form->Value('questionid'))->answered + 1
+            ]);
 
             if($createResult && $updateResult)
             {
-			    $result = true;
+                $result = true;
             }
             else
             {
                 die("ForumController.callbackCreateAnswer: Creation of answer or update of question failed.");
             }
 
-			// Use the questionid to create a redirect link back to the question.
-            $this->utility->createRedirect("Forum/id/" . $form->Value('questionid'));
-		}
+            // Use the questionid to create a redirect link back to the question.
+            $this->utility->createRedirect($this->redirect["question"] . $form->Value('questionid'));
+        }
 
         return $result;
     }
@@ -707,7 +711,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     		]);
 
     		$result = true;
-            $this->utility->createRedirect("Forum/id/" . $form->Value('questionid'));
+            $this->utility->createRedirect($this->redirect["question"] . $form->Value('questionid'));
     	}
 
         return $result;
@@ -784,7 +788,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     			'answered'  => 0
     		]);
 
-            $this->utility->createRedirect('Questions');
+            $this->utility->createRedirect($this->redirect["allQuestions"]);
     	}
 
         return $result;

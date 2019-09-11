@@ -15,7 +15,7 @@
 
 			<div class="question-signature">
 				<?=$question->timestamp?>
-				<h3>&mdash;<a href="<?=$this->url->create($redirect['user'] . $question->userid);?>" class="nodecoration"><?=ucfirst($question->user)?></a></h3>
+				<h3>&mdash;<a href="<?=$this->url->create($redirect['profile'] . $question->userid);?>" class="nodecoration"><?=ucfirst($question->user)?></a></h3>
 			</div>
 			<?php if($questionAdmin): ?>
 				<a href="<?=$this->url->create("{$redirect['tagButton']}")?>" class='addtag right'>
@@ -40,7 +40,7 @@
 				<td class="question-comment">
 					<?=$this->textFilter->doFilter(
 					"{$item->content}  &mdash;<a href='"
-						. $this->url->create("{$redirect['user']}{$item->userid}")
+						. $this->url->create("{$redirect['profile']}{$item->userid}")
 						. "' class='bold nodecoration'>" . ucfirst($item->user)
 						."</a>, {$item->timestamp}", 'markdown')?>
 				</td>
@@ -95,7 +95,7 @@
 			<?=$this->textFilter->doFilter($answer->content, 'markdown');?>
 			<div class="question-signature">
 				<?=$answer->timestamp?>
-				<h3>&mdash;<a href="<?=$this->url->create($redirect['user'] . $answer->userid);?>" class="nodecoration"><?=ucfirst($answer->user)?></a></h3>
+				<h3>&mdash;<a href="<?=$this->url->create($redirect['profile'] . $answer->userid);?>" class="nodecoration"><?=ucfirst($answer->user)?></a></h3>
 			</div>
 			<br>
 			<h3>Comments</h3>
@@ -113,7 +113,7 @@
 				<td class="question-comment">
 					<?=$this->textFilter->doFilter(
 					"{$comment->content}  &mdash;<a href='"
-					. $this->url->create("{$redirect['user']}{$comment->userid}")
+					. $this->url->create("{$redirect['profile']}{$comment->userid}")
 					. "' class='nodecoration'>" . ucfirst($comment->user)
 					."</a>, {$comment->timestamp}", 'markdown')?>
 				</td>
