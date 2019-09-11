@@ -15,6 +15,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     // All redirect links used.
     private $redirect = [
         'menu'          => 'Forum/menu/',
+        'question'      => 'Forum/id/',
         'addQuestion'   => 'Forum/addQuestion/',
         'addAnswer'     => 'Forum/addAnswer/',
         'addComment'    => 'Forum/addComment/',
@@ -23,11 +24,19 @@ class ForumController implements \Anax\DI\IInjectionAware
         'rateComment'   => 'Forum/vote/C/',
         'profile'       => 'Users/profile/',
         "login"         => "Users/login",
-        'question'      => 'Forum/id/',
         "allQuestions"  => "Questions",
         'accepted'      => 'Forum/accepted/',
         'tagButton'     => 'Forum/tag/',
         'tagCreate'     => 'Forum/tagCreate/'
+    ];
+
+    // All template links used.
+    private $template = [
+        "home"          => "forum/forum-home",
+        "menu"          => "forum/forum-menu",
+        "question"      => "forum/forum-question",
+        "tagMenu"       => "forum/forum-tagMenu",
+        "tagQuestion"   => "forum/forum-tagQuestion"
     ];
 
 
@@ -96,7 +105,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 
         $conditions = ['admin', $this->users->currentUser()];
 		$this->theme->setTitle("All Questions");
-		$this->views->add('forum/forum-menu', [
+		$this->views->add($this->template["menu"], [
 			'admin'      => $this->users->isUserAdmin($this->users->currentUser(), $conditions),
 			'questions'  => $result,
 			'title'      => "All questions",
@@ -120,7 +129,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		if(!empty($result))
 		{
 			$this->theme->setTitle("All Questions");
-			$this->views->add('forum/forum-menu', [
+			$this->views->add($this->template["menu"], [
 				'questions' => $this->time->formatUnixProperties($result),
 				'title'     => "Questions asked by this user",
 				'redirect'  => $this->redirect
@@ -187,7 +196,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 
             // Set the title of the browser tab.
 			$this->theme->setTitle($question->title);
-			$this->views->add('forum/forum-question', [
+			$this->views->add($this->template["question"], [
 				'admin'             => $this->users->isUserLoggedIn(),
 				'questionAdmin'     => $this->users->isUserAdmin($this->users->currentUser(), $condition),
 				'redirect'          => $this->redirect,
@@ -212,7 +221,7 @@ class ForumController implements \Anax\DI\IInjectionAware
         $questions = $this->questions->getRecentQuestions();
         $questions = (!empty($questions)) ? $this->time->formatUnixProperties($questions) : [];
 
-		$this->views->add('forum/forum-home', [
+		$this->views->add($this->template["home"], [
 			'questions'=> $questions,
 			'title1'     => "Recent Questions",
 			'redirect'   => $this->redirect,
@@ -274,7 +283,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function tagMenuAction()
 	{
-		$this->views->add('forum/forum-tagMenu', [
+		$this->views->add($this->template["tagMenu"], [
 			'title'      => "Tags",
 			'redirect'   => $this->redirect,
 			'tags'       => $this->tags->findAll()
@@ -292,7 +301,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	{
 		// Create a menu with all unique tags that can be applied to the question.
 		$this->theme->setTitle("Tag a question");
-		$this->views->add('forum/forum-tagQuestion', [
+		$this->views->add($this->template["tagQuestion"], [
 			'title'      => "Tags",
 			'redirect'   => $this->redirect,
 			'tags'       => $this->tags->findAll(),
@@ -431,7 +440,7 @@ class ForumController implements \Anax\DI\IInjectionAware
                         die("Error: invalid parameters in ForumController.voteAction().");
                 }
 
-                $this->utility->createRedirect("Forum/id/" . $this->questions->getQuestionId());
+                $this->utility->createRedirect($this->redirect["question"] . $this->questions->getQuestionId());
             }
             else
             {
