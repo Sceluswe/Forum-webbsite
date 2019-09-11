@@ -13,6 +13,17 @@ class CommentController implements \Anax\DI\IInjectionAware
 
 
 
+    private $redirect = [
+        "setup"         => "Comment/setup",
+        "create"        => "Comment/create",
+        "add"           => "Comment/add/",
+        "delete"        => "Comment/delete/",
+        "deleteAll"     => "Comment/deleteAll",
+        "list-all"      => "Comment/list-all"
+    ];
+
+
+
 	/**
 	* Initialize the controller.
 	*
@@ -22,24 +33,6 @@ class CommentController implements \Anax\DI\IInjectionAware
 	{
 		$this->comments = new \Anax\Comments\Comment();
 		$this->comments->setDI($this->di);
-	}
-
-
-
-	/**
-	* Create redirects and return them.
-	*
-	* @return array containing redirects.
-	*/
-	private function redirects()
-	{
-		return [
-            "setup"     => "Comment/setup",
-            "create"    => "Comment/create",
-            "add"       => "Comment/add/",
-            "delete"    => "Comment/delete/",
-            "deleteAll" => "Comment/deleteAll"
-		];
 	}
 
 
@@ -54,10 +47,10 @@ class CommentController implements \Anax\DI\IInjectionAware
 		if($this->comments->initializeTable())
 		{
 			$this->theme->setTitle("All comments");
-			$this->views->add('comment/comments-list-all', [
+			$this->views->add($this->redirect["list-all"], [
 				'comments' => $this->comments->findAll(),
 				'title' => "Comment section reset!",
-				'redirect' => $this->redirects()
+				'redirect' => $this->redirect
 			]);
 		}
 	}
@@ -75,10 +68,10 @@ class CommentController implements \Anax\DI\IInjectionAware
 		$this->comments->setSource($this->request->getRoute());
 		$this->comments->setRedirect($this->request->getRoute());
 
-        $this->views->add('comment/comments-list-all', [
+        $this->views->add($this->redirect["list-all"], [
             'comments'  => $this->comments->findAll(),
 			'title'     => "All Comments",
-			'redirect'	=> $this->redirects()
+			'redirect'	=> $this->redirect
         ]);
     }
 
