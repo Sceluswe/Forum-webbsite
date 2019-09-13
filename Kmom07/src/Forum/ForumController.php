@@ -492,8 +492,35 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function addQuestionAction()
 	{
+        $obj = new \Anax\Forum\CFormQuestionModel();
+
+        $callable = function ($form, $scope) {
+            $result = false;
+
+            // Check if user exists and load into model if so.
+            if(!empty($scope->users->findByAcronym($scope->users->currentUser())))
+            {
+                $form->saveInSession = true;
+
+                // Save form.
+                $result = $scope->questions->create([
+                    'user'      => $scope->users->acronym,
+                    'userid'    => $scope->users->id,
+                    'title'     => $form->Value('title'),
+                    'content'   => $form->Value('content'),
+                    'timestamp' => time(),
+                    'rating'    => 0,
+                    'answered'  => 0
+                ]);
+
+                $scope->utility->createRedirect($scope->redirect["allQuestions"]);
+            }
+
+            return $result;
+        };
+
 		// Render form.
-        $this->utility->renderDefaultPage("Create Question", $this->getQuestionForm());
+        $this->utility->renderDefaultPage("Create Question", $obj->createQuestionForm($this, $callable));
 	}
 
 
@@ -768,19 +795,19 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
     * @return boolean, true if comment was created.
     */
-    public function callbackCreateQuestion(object $form)
+    public function callbackCreateQuestion(object $form, $scope)
     {
     	$result = false;
 
         // Check if user exists and load into model if so.
-    	if(!empty($this->users->findByAcronym($this->users->currentUser())))
+    	if(!empty($scope->users->findByAcronym($scope->users->currentUser())))
     	{
     		$form->saveInSession = true;
 
             // Save form.
-    		$result = $this->questions->create([
-    			'user'      => $this->users->acronym,
-    			'userid'    => $this->users->id,
+    		$result = $scope->questions->create([
+    			'user'      => $scope->users->acronym,
+    			'userid'    => $scope->users->id,
     			'title'     => $form->Value('title'),
     			'content'   => $form->Value('content'),
     			'timestamp' => time(),
@@ -788,7 +815,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     			'answered'  => 0
     		]);
 
-            $this->utility->createRedirect($this->redirect["allQuestions"]);
+            $scope->utility->createRedirect($scope->redirect["allQuestions"]);
     	}
 
         return $result;
