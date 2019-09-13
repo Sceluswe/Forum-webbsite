@@ -6,7 +6,7 @@ namespace Anax\Forum;
  * Anax base class for wrapping sessions.
  *
  */
-class CFormQuestionModel extends \Mos\HTMLForm\CFormModel
+class CFormQuestionModel extends \Anax\HTMLForm\CFormModel
 {
     /**
     * Get a form for creating a question
