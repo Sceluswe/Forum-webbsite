@@ -15,10 +15,6 @@ class CFormQuestionModel extends \Mos\HTMLForm\CFormModel
     */
     public function createQuestionForm($scope, $callback)
     {
-        // Initiate object instance.
-        //$form = new \Mos\HTMLForm\CForm();
-        //var_dump($scope);
-
         // Create form.
         $this->create([], [
             'title' => [
