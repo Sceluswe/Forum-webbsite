@@ -16,9 +16,8 @@
             "role": "Developer"
         }
     ],
-    "require": { 
+    "require": {
         "mos/cdatabase": "dev-master",
-        "mos/cform": "v1.9.8",
         "scelusswe/escaper": "v1.0"
     }
 }
