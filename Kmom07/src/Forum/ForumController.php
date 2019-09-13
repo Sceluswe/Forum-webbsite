@@ -551,14 +551,41 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function addCommentAction($questionid, $qaid, $parent)
 	{
+        $formObj = new \Anax\Forum\CFormCommentModel();
+
 		$values = [
     		'questionid'      => $this->escaper->escapeHTMLattr($questionid),
     		'qaid'            => $this->escaper->escapeHTMLattr($qaid),
     		'commentparent'   => $this->escaper->escapeHTMLattr($parent)
 		];
 
+        $callable = function ($form, $scope) {
+            $result = false;
+
+        	// Check if user exists and load into model if so.
+        	if(!empty($scope->users->findByAcronym($scope->users->currentUser())))
+        	{
+        		$form->saveInSession = true;
+        		// Save form.
+        		$scope->comments->create([
+        			'user'          => $scope->users->acronym,
+        			'commentparent' => $form->Value('commentparent'),
+        			'qaid'          => $form->Value('qaid'),
+        			'userid'        => $scope->users->id,
+        			'content'       => $form->Value('content'),
+        			'timestamp'     => time(),
+        			'rating'        => 0
+        		]);
+
+        		$result = true;
+                $scope->utility->createRedirect($scope->redirect["question"] . $form->Value('questionid'));
+        	}
+
+            return $result;
+        };
+
         // Render form.
-        $this->utility->renderDefaultPage("Create Comment", $this->getCommentForm($values));
+        $this->utility->renderDefaultPage("Create Comment", $formObj->createCommentForm($values, $this, $callable));
 	}
 
 
@@ -620,8 +647,6 @@ class ForumController implements \Anax\DI\IInjectionAware
         // Check if user exists and load into model if so.
         if(!empty($this->users->findByAcronym($this->users->currentUser())))
         {
-            $form->saveInSession = true;
-
             // Save form.
             $createResult = $this->answers->create([
                 'questionid'    => $form->Value('questionid'),
@@ -644,7 +669,7 @@ class ForumController implements \Anax\DI\IInjectionAware
             }
             else
             {
-                die("ForumController.callbackCreateAnswer: Creation of answer or update of question failed.");
+                die("ForumController.addAnswerAction.callback: Creation of answer or update of question failed.");
             }
 
             // Use the questionid to create a redirect link back to the question.
@@ -652,202 +677,5 @@ class ForumController implements \Anax\DI\IInjectionAware
         }
 
         return $result;
-    }
-
-
-
-	/*
-	* Get a form for creating a question.
-	*
-    * @param array, containing data for the db.
-    *
-	* @return the HTML code of the form.
-	*/
-	public function getCommentForm(array $values)
-	{
-		// Initiate object instance.
-		$form = new \Mos\HTMLForm\CForm();
-
-		// Create form.
-		$form = $form->create([], [
-			'questionid' => [
-			    'type'          => 'hidden',
-				'required'      => true,
-				'validation'    => ['not_empty'],
-				'value'         => $values['questionid']
-			],
-			'qaid' => [
-				'type'          => 'hidden',
-				'required'      => true,
-				'validation'    => ['not_empty'],
-				'value'         => $values['qaid']
-			],
-			'commentparent' => [
-				'type'          => 'hidden',
-				'required'      => true,
-				'validation'    => ['not_empty'],
-				'value'         => $values['commentparent']
-			],
-			'content' => [
-				'type'          => 'textarea',
-				'required'      => true,
-				'class'         => 'cform-textarea',
-				'validation'    => ['not_empty'],
-				'value'         => ''
-			],
-			'submit' => [
-				'type'      => 'submit',
-				'class'     => 'cform-submit',
-				'callback'  => [$this, 'callbackCreateComment'],
-				'value'     => 'Post comment'
-			]
-		]);
-
-		// Check the status of the form
-		$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
-
-		return $form->getHTML();
-	}
-
-
-
-	/**
-    * Callback for createComment success.
-    *
-    * @param object, CForm containing form input from the user.
-    *
-    * @return boolean, true if comment was created.
-    */
-    public function callbackCreateComment(object $form)
-    {
-    	$result = false;
-
-    	// Check if user exists and load into model if so.
-    	if(!empty($this->users->findByAcronym($this->users->currentUser())))
-    	{
-    		$form->saveInSession = true;
-    		// Save form.
-    		$this->comments->create([
-    			'user'          => $this->users->acronym,
-    			'commentparent' => $form->Value('commentparent'),
-    			'qaid'          => $form->Value('qaid'),
-    			'userid'        => $this->users->id,
-    			'content'       => $form->Value('content'),
-    			'timestamp'     => time(),
-    			'rating'        => 0
-    		]);
-
-    		$result = true;
-            $this->utility->createRedirect($this->redirect["question"] . $form->Value('questionid'));
-    	}
-
-        return $result;
-    }
-
-
-
-	/**
-	* Get a form for creating a question
-	*
-	* @return the HTML code of the form.
-	*/
-	public function getQuestionForm()
-	{
-		// Initiate object instance.
-		$form = new \Mos\HTMLForm\CForm();
-
-		// Create form.
-		$form = $form->create([], [
-			'title' => [
-				'type'          => 'text',
-				'required'      => true,
-				'class'         => 'cform-textbox',
-				'validation'    => ['not_empty'],
-				'value'         => ''
-			],
-			'content' => [
-				'type'          => 'textarea',
-				'required'      => true,
-				'class'         => 'cform-textarea',
-				'validation'    => ['not_empty'],
-				'value'         => ''
-			],
-			'submit' => [
-    			'type'       => 'submit',
-    			'class'      => 'cform-submit',
-    			'callback'   => [$this, 'callbackCreateQuestion'],
-    			'value'      => 'Post question'
-			]
-		]);
-
-		// Check the status of the form.
-		$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
-
-		return $form->getHTML();
-	}
-
-
-
-	/**
-    * Callback for createQuestion success.
-    *
-    * @param object, CForm containing form input from the user.
-    *
-    * @return boolean, true if comment was created.
-    */
-    public function callbackCreateQuestion(object $form, $scope)
-    {
-    	$result = false;
-
-        // Check if user exists and load into model if so.
-    	if(!empty($scope->users->findByAcronym($scope->users->currentUser())))
-    	{
-    		$form->saveInSession = true;
-
-            // Save form.
-    		$result = $scope->questions->create([
-    			'user'      => $scope->users->acronym,
-    			'userid'    => $scope->users->id,
-    			'title'     => $form->Value('title'),
-    			'content'   => $form->Value('content'),
-    			'timestamp' => time(),
-    			'rating'    => 0,
-    			'answered'  => 0
-    		]);
-
-            $scope->utility->createRedirect($scope->redirect["allQuestions"]);
-    	}
-
-        return $result;
-    }
-
-
-
-	/**
-    * Callback for submit-button.
-    *
-    * @param object, CForm containing form input from the user.
-    *
-    * @return bool.
-    */
-    public function callbackSuccess(object $form)
-    {
-        $form->AddOutput("<p><i>Posted.</i></p>");
-        return false;
-    }
-
-
-
-    /**
-    * Callback for submit-button.
-    *
-    * @param object, CForm containing form input from the user.
-    *
-    * @return bool.
-    */
-    public function callbackFail(object $form)
-    {
-        $form->AddOutput("<p><i>DoSubmitFail(): Form was submitted but it failed to process/save/validate it</i></p>");
-        return false;
     }
 }
