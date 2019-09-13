@@ -534,8 +534,50 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function addAnswerAction($id)
 	{
+        $formObj = new \Anax\Forum\CFormAnswerModel();
+
+        $values = ['questionid' => $this->escaper->escapeHTMLattr($id)];
+
+        $callable = function ($form, $scope) {
+            $result = false;
+
+            // Check if user exists and load into model if so.
+            if(!empty($scope->users->findByAcronym($scope->users->currentUser())))
+            {
+                // Save form.
+                $createResult = $scope->answers->create([
+                    'questionid'    => $form->Value('questionid'),
+                    'user'          => $scope->users->acronym,
+                    'userid'        => $scope->users->id,
+                    'content'       => $form->Value('content'),
+                    'timestamp'     => time(),
+                    'rating'        => 0,
+                    'accepted'      => 0
+                ]);
+
+                // Update the question and report that it has received another answer.
+                $updateResult = $scope->questions->update([
+                    'answered'  => $scope->questions->find($form->Value('questionid'))->answered + 1
+                ]);
+
+                if($createResult && $updateResult)
+                {
+                    $result = true;
+                }
+                else
+                {
+                    die("ForumController.addAnswerAction.callback: Creation of answer or update of question failed.");
+                }
+
+                // Use the questionid to create a redirect link back to the question.
+                $this->utility->createRedirect($scope->redirect["question"] . $form->Value('questionid'));
+            }
+
+            return $result;
+        };
+
 		// Render form.
-        $this->utility->renderDefaultPage("Create Answer", $this->getAnswerForm(['questionid' => $id]));
+        $this->utility->renderDefaultPage("Create Answer", $formObj->createAnswerForm($values, $this, $callable));
 	}
 
 
@@ -587,95 +629,4 @@ class ForumController implements \Anax\DI\IInjectionAware
         // Render form.
         $this->utility->renderDefaultPage("Create Comment", $formObj->createCommentForm($values, $this, $callable));
 	}
-
-
-
-	/*
-	* Get a form for creating a answer.
-	*
-    * @param array, containing the question ID.
-    *
-	* @return the HTML code of the form.
-	*/
-	public function getAnswerForm(array $values)
-	{
-		// Initiate object instance.
-		$form = new \Mos\HTMLForm\CForm();
-
-		// Create answer form.
-		$form = $form->create([], [
-			'questionid' => [
-				'type'          => 'hidden',
-				'required'      => true,
-				'validation'    => ['not_empty'],
-				'value'         => $this->escaper->escapeHTMLattr($values['questionid'])
-			],
-			'content' => [
-				'type'          => 'textarea',
-				'required'      => true,
-				'class'         => 'cform-textarea',
-				'validation'    => ['not_empty'],
-				'value'         => ''
-			],
-			'submit' => [
-				'type'      => 'submit',
-				'class'     => 'cform-submit',
-				'callback'  => [$this, 'callbackCreateAnswer'],
-				'value'     => 'Post answer'
-			]
-		]);
-
-		// Check the status of the form
-		$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
-
-		return $form->getHTML();
-	}
-
-
-
-    /**
-    * Callback for createAnswer success.
-    *
-    * @param object, CForm object containing user input from the answer form.
-    *
-    * @return boolean, true if answer was created.
-    */
-    public function callbackCreateAnswer(object $form)
-    {
-        $result = false;
-
-        // Check if user exists and load into model if so.
-        if(!empty($this->users->findByAcronym($this->users->currentUser())))
-        {
-            // Save form.
-            $createResult = $this->answers->create([
-                'questionid'    => $form->Value('questionid'),
-                'user'          => $this->users->acronym,
-                'userid'        => $this->users->id,
-                'content'       => $form->Value('content'),
-                'timestamp'     => time(),
-                'rating'        => 0,
-                'accepted'      => 0
-            ]);
-
-            // Update the question and report that it has received another answer.
-            $updateResult = $this->questions->update([
-                'answered'  => $this->questions->find($form->Value('questionid'))->answered + 1
-            ]);
-
-            if($createResult && $updateResult)
-            {
-                $result = true;
-            }
-            else
-            {
-                die("ForumController.addAnswerAction.callback: Creation of answer or update of question failed.");
-            }
-
-            // Use the questionid to create a redirect link back to the question.
-            $this->utility->createRedirect($this->redirect["question"] . $form->Value('questionid'));
-        }
-
-        return $result;
-    }
 }
