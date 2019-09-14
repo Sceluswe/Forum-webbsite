@@ -6,7 +6,7 @@ namespace Anax\HTMLForm;
  * Anax base class for wrapping sessions.
  *
  */
-abstract class CFormModel extends \Mos\HTMLForm\CForm
+abstract class CFormModel extends \Anax\HTMLForm\CForm
 {
     /**
      * Customise the check() method to use own methods.
