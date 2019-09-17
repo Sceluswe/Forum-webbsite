@@ -3,15 +3,15 @@
 namespace Mos\HTMLForm;
 
 /**
- * Example of CFormModel implementation.
- *
- */
+* Example of CFormModel implementation.
+*
+*/
 class CFMElementsHTML401 extends \Mos\HTMLForm\CFormModel
 {
     /**
-     * Constructor
-     *
-     */
+    * Constructor
+    *
+    */
     public function __construct()
     {
         parent::__construct(
@@ -24,7 +24,7 @@ class CFMElementsHTML401 extends \Mos\HTMLForm\CFormModel
                     "description" => "Here you can place a description.",
                     "placeholder" => "Here is a placeholder",
                 ],
-                        
+
                 "password" => [
                     "type"        => "password",
                     "description" => "Here you can place a description.",
@@ -115,9 +115,9 @@ class CFMElementsHTML401 extends \Mos\HTMLForm\CFormModel
 
 
     /**
-     * Callback for submit-button.
-     *
-     */
+    * Callback for submit-button.
+    *
+    */
     public function callbackSubmit()
     {
         $this->AddOutput("<p>#callbackSubmit()</p>");

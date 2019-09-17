@@ -3,15 +3,15 @@
 namespace Mos\HTMLForm;
 
 /**
- * Example of CFormModel implementation.
- *
- */
+* Example of CFormModel implementation.
+*
+*/
 class CFMSelectOption extends \Mos\HTMLForm\CFormModel
 {
     /**
-     * Constructor
-     *
-     */
+    * Constructor
+    *
+    */
     public function __construct()
     {
         parent::__construct(
@@ -20,7 +20,7 @@ class CFMSelectOption extends \Mos\HTMLForm\CFormModel
                 "expmonth" => [
                     "type" => "select",
                     "label" => "Expiration month:",
-                    
+
                     "options" => [
                         "default" => "Select credit card expiration month...",
                         "01" => "January",
@@ -37,7 +37,7 @@ class CFMSelectOption extends \Mos\HTMLForm\CFormModel
                         "12" => "December",
                     ],
                 ],
-                
+
                 "doPay" => [
                     "type" => "submit",
                     "value" => "Perform payment",
@@ -50,9 +50,9 @@ class CFMSelectOption extends \Mos\HTMLForm\CFormModel
 
 
     /**
-     * Callback for submit-button.
-     *
-     */
+    * Callback for submit-button.
+    *
+    */
     public function callbackSubmit()
     {
         $this->AddOutput("<p>#callbackSubmit()</p>");

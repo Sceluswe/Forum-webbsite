@@ -3,27 +3,27 @@
 namespace Mos\HTMLForm;
 
 /**
- * A utility class to easy creating and handling of forms
- *
- * @package CForm
- */
+* A utility class to easy creating and handling of forms
+*
+* @package CForm
+*/
 class CFormElement implements \ArrayAccess
 {
 
     /**
-     * Properties
-     */
+    * Properties
+    */
     public $attributes;
     public $characterEncoding;
 
 
 
     /**
-     * Constructor creating a form element.
-     *
-     * @param string $name       of the element.
-     * @param array  $attributes to set to the element. Default is an empty array.
-     */
+    * Constructor creating a form element.
+    *
+    * @param string $name       of the element.
+    * @param array  $attributes to set to the element. Default is an empty array.
+    */
     public function __construct($name, $attributes = [])
     {
         $this->attributes = $attributes;
@@ -42,10 +42,10 @@ class CFormElement implements \ArrayAccess
 
 
     /**
-     * Implementing ArrayAccess for this->attributes
-     *
-     * @return void
-     */
+    * Implementing ArrayAccess for this->attributes
+    *
+    * @return void
+    */
     public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
@@ -58,8 +58,8 @@ class CFormElement implements \ArrayAccess
 
 
     /**
-     * Implementing ArrayAccess for this->attributes
-     */
+    * Implementing ArrayAccess for this->attributes
+    */
     public function offsetExists($offset)
     {
         return isset($this->attributes[$offset]);
@@ -68,8 +68,8 @@ class CFormElement implements \ArrayAccess
 
 
     /**
-     * Implementing ArrayAccess for this->attributes
-     */
+    * Implementing ArrayAccess for this->attributes
+    */
     public function offsetUnset($offset)
     {
         unset($this->attributes[$offset]);
@@ -78,8 +78,8 @@ class CFormElement implements \ArrayAccess
 
 
     /**
-     * Implementing ArrayAccess for this->attributes
-     */
+    * Implementing ArrayAccess for this->attributes
+    */
     public function offsetGet($offset)
     {
         return isset($this->attributes[$offset]) ? $this->attributes[$offset] : null;
@@ -88,14 +88,14 @@ class CFormElement implements \ArrayAccess
 
 
     /**
-     * Create a formelement from an array, factory returns the correct
-     * instance.
-     *
-     * @param string $name       name of the element.
-     * @param array  $attributes to use when creating the element.
-     *
-     * @return the instance of the form element.
-     */
+    * Create a formelement from an array, factory returns the correct
+    * instance.
+    *
+    * @param string $name       name of the element.
+    * @param array  $attributes to use when creating the element.
+    *
+    * @return the instance of the form element.
+    */
     public static function create($name, $attributes)
     {
         // Not supported is type=image, <button>, list, output, select-optgroup
@@ -150,10 +150,10 @@ class CFormElement implements \ArrayAccess
 
 
     /**
-     * Get id of an element.
-     *
-     * @return HTML code for the element.
-     */
+    * Get id of an element.
+    *
+    * @return HTML code for the element.
+    */
     public function getElementId()
     {
         return ($this['id'] = isset($this['id']) ? $this['id'] : 'form-element-' . $this['name']);
@@ -162,10 +162,10 @@ class CFormElement implements \ArrayAccess
 
 
     /**
-     * Get alll validation messages.
-     *
-     * @return HTML code for the element.
-     */
+    * Get alll validation messages.
+    *
+    * @return HTML code for the element.
+    */
     public function getValidationMessages()
     {
         $messages = null;
@@ -183,10 +183,10 @@ class CFormElement implements \ArrayAccess
 
 
     /**
-     * Get details for a HTML element, prepare for creating HTML code for it.
-     *
-     * @return HTML code for the element.
-     */
+    * Get details for a HTML element, prepare for creating HTML code for it.
+    *
+    * @return HTML code for the element.
+    */
     public function getHTMLDetails()
     {
         // Add disabled to be able to disable a form element
@@ -332,10 +332,10 @@ class CFormElement implements \ArrayAccess
 
 
     /**
-     * Get HTML code for a element.
-     *
-     * @return HTML code for the element.
-     */
+    * Get HTML code for a element.
+    *
+    * @return HTML code for the element.
+    */
     public function getHTML()
     {
         $details = $this->getHTMLDetails();
@@ -456,13 +456,13 @@ EOD;
 
 
     /**
-     * Validate the form element value according a ruleset.
-     *
-     * @param array      $rules validation rules.
-     * @param CForm|null $form  the parent form.
-     *
-     * @return boolean true if all rules pass, else false.
-     */
+    * Validate the form element value according a ruleset.
+    *
+    * @param array      $rules validation rules.
+    * @param CForm|null $form  the parent form.
+    *
+    * @return boolean true if all rules pass, else false.
+    */
     public function validate($rules, $form = null)
     {
         $regExpEmailAddress = '/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i';
@@ -550,12 +550,12 @@ EOD;
 
 
     /**
-     * Use the element name as label if label is not set.
-     *
-     * @param string $append a colon as default to the end of the label.
-     *
-     * @return void
-     */
+    * Use the element name as label if label is not set.
+    *
+    * @param string $append a colon as default to the end of the label.
+    *
+    * @return void
+    */
     public function useNameAsDefaultLabel($append = ':')
     {
         if (!isset($this['label'])) {
@@ -566,10 +566,10 @@ EOD;
 
 
     /**
-     * Use the element name as value if value is not set.
-     *
-     * @return void
-     */
+    * Use the element name as value if value is not set.
+    *
+    * @return void
+    */
     public function useNameAsDefaultValue()
     {
         if (!isset($this['value'])) {
@@ -580,10 +580,10 @@ EOD;
 
 
     /**
-     * Get the value of the form element.
-     *
-     * @return mixed the value of the form element.
-     */
+    * Get the value of the form element.
+    *
+    * @return mixed the value of the form element.
+    */
     public function getValue()
     {
         return $this['value'];
@@ -592,10 +592,10 @@ EOD;
 
 
     /**
-     * Get the value of the form element.
-     *
-     * @return mixed the value of the form element.
-     */
+    * Get the value of the form element.
+    *
+    * @return mixed the value of the form element.
+    */
     public function value()
     {
         return $this['value'];
@@ -604,10 +604,10 @@ EOD;
 
 
     /**
-     * Get the value of the form element, if value is empty return null.
-     *
-     * @return mixed the value of the form element. Null if the value is empty.
-     */
+    * Get the value of the form element, if value is empty return null.
+    *
+    * @return mixed the value of the form element. Null if the value is empty.
+    */
     public function getValueNullIfEmpty()
     {
         return empty($this['value']) ? null : $this['value'];

@@ -3,14 +3,14 @@
 namespace Mos\HTMLForm;
 
 /**
- * Example of CFormModel implementation.
- *
- */
+* Example of CFormModel implementation.
+*
+*/
 class CFMValidateVariousRules extends \Mos\HTMLForm\CFormModel
 {
     /**
-     * Rules to check.
-     */
+    * Rules to check.
+    */
     public $rules = [
         "not_empty",
         "numeric",
@@ -20,9 +20,9 @@ class CFMValidateVariousRules extends \Mos\HTMLForm\CFormModel
 
 
     /**
-     * Constructor
-     *
-     */
+    * Constructor
+    *
+    */
     public function __construct()
     {
         parent::__construct(
@@ -31,7 +31,7 @@ class CFMValidateVariousRules extends \Mos\HTMLForm\CFormModel
                 "enter-a-value" => [
                     "type" => "text",
                 ],
-                
+
                 "tests" => [
                     "type"        => "checkbox-multiple",
                     "description" => "Choose the validation rules to use.",
@@ -50,13 +50,13 @@ class CFMValidateVariousRules extends \Mos\HTMLForm\CFormModel
 
 
     /**
-     * Get active validation rules from $_POST.
-     *
-     */
+    * Get active validation rules from $_POST.
+    *
+    */
     public function getActiveRules()
     {
         $validation = [];
-        
+
         if (!empty($_POST['tests'])) {
             foreach ($_POST['tests'] as $val) {
                 if (in_array($val, $this->rules)) {
@@ -64,15 +64,15 @@ class CFMValidateVariousRules extends \Mos\HTMLForm\CFormModel
                 }
             }
         }
-        
+
         return $validation;
     }
 
 
     /**
-     * Callback for submit-button.
-     *
-     */
+    * Callback for submit-button.
+    *
+    */
     public function callbackSubmit()
     {
         $this->AddOutput("<p>#callbackSubmit()</p>");

@@ -3,15 +3,15 @@
 namespace Mos\HTMLForm;
 
 /**
- * Example of CFormModel implementation.
- *
- */
+* Example of CFormModel implementation.
+*
+*/
 class CFMSearchWidget extends \Mos\HTMLForm\CFormModel
 {
     /**
-     * Constructor
-     *
-     */
+    * Constructor
+    *
+    */
     public function __construct()
     {
         parent::__construct(
@@ -33,9 +33,9 @@ class CFMSearchWidget extends \Mos\HTMLForm\CFormModel
 
 
     /**
-     * Callback for submit-button.
-     *
-     */
+    * Callback for submit-button.
+    *
+    */
     public function callbackSubmit()
     {
         $this->AddOutput("<p>You searched for '" . $this->value("search") . "'.</p>");

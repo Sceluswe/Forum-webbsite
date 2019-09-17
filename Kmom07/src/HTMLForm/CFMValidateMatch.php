@@ -3,15 +3,15 @@
 namespace Mos\HTMLForm;
 
 /**
- * Example of CFormModel implementation.
- *
- */
+* Example of CFormModel implementation.
+*
+*/
 class CFMValidateMatch extends \Mos\HTMLForm\CFormModel
 {
     /**
-     * Constructor
-     *
-     */
+    * Constructor
+    *
+    */
     public function __construct()
     {
         parent::__construct(
@@ -42,9 +42,9 @@ class CFMValidateMatch extends \Mos\HTMLForm\CFormModel
 
 
     /**
-     * Callback for submit-button.
-     *
-     */
+    * Callback for submit-button.
+    *
+    */
     public function callbackSubmit()
     {
         $matches = $this->value("pwd") === $this->value("pwdAgain")

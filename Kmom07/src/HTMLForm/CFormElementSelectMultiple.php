@@ -3,19 +3,19 @@
 namespace Mos\HTMLForm;
 
 /**
- * Form element
- */
+* Form element
+*/
 class CFormElementSelectMultiple extends CFormElementSelect
 {
 
     /**
-     * Constructor
-     *
-     * @param string $name       of the element.
-     * @param array  $attributes to set to the element. Default is an empty array.
-     *
-     * @throws CFormException if missing <options>
-     */
+    * Constructor
+    *
+    * @param string $name       of the element.
+    * @param array  $attributes to set to the element. Default is an empty array.
+    *
+    * @throws CFormException if missing <options>
+    */
     public function __construct($name, $attributes = [])
     {
         parent::__construct($name, $attributes);
@@ -25,10 +25,10 @@ class CFormElementSelectMultiple extends CFormElementSelect
 
 
     /**
-     * Get the value of the form element.
-     *
-     * @return array the checked values of the form element.
-     */
+    * Get the value of the form element.
+    *
+    * @return array the checked values of the form element.
+    */
     public function value()
     {
         return $this['checked'];
@@ -37,19 +37,19 @@ class CFormElementSelectMultiple extends CFormElementSelect
 
 
     /**
-     * Get HTML code for a element.
-     *
-     * @return string HTML code for the element.
-     */
+    * Get HTML code for a element.
+    *
+    * @return string HTML code for the element.
+    */
     public function getHTML()
     {
         $details = $this->getHTMLDetails();
         extract($details);
-        
+
         $name = " name='{$this['name']}[]'";
         $options = null;
         $selectedValues = is_array($this['checked']) ? $this['checked'] : [];
-        
+
         foreach ($this['options'] as $optValue => $optText) {
             $selected = in_array($optValue, $selectedValues)
                 ? " selected"

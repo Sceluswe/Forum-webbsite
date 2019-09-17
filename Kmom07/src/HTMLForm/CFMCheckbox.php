@@ -3,19 +3,19 @@
 namespace Mos\HTMLForm;
 
 /**
- * Example of CFormModel implementation.
- *
- */
+* Example of CFormModel implementation.
+*
+*/
 class CFMCheckbox extends \Mos\HTMLForm\CFormModel
 {
     /**
-     * Constructor
-     *
-     */
+    * Constructor
+    *
+    */
     public function __construct()
     {
         $license = "You must accept the <a href=http://opensource.org/licenses/GPL-3.0>license agreement</a>.";
-        
+
         parent::__construct(
             [],
             [
@@ -50,9 +50,9 @@ class CFMCheckbox extends \Mos\HTMLForm\CFormModel
 
 
     /**
-     * Callback for submit-button.
-     *
-     */
+    * Callback for submit-button.
+    *
+    */
     public function callbackSubmit()
     {
         $this->AddOutput("<p>#callbackSubmit()</p>");
