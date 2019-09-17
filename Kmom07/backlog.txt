@@ -1,6 +1,3 @@
-Find out why the "Why?" question is displayed when sorting by a tag that it doesn't have. I'm guessing
-it's because the tag created contains two words "New Tag" it somehow messes with the prepared statement.
-
 Make sure users can only update the score of a question once.
     1. Create a new column in question, answer and comment tables.
     2. Make sure it contains a string where each ID is split with a comma.
@@ -18,31 +15,23 @@ Study the different view templates so you understand what each of them does. See
 removed completely with better code.
 
 
-
-
 Find a way to implement/hardcode it so that admin can never be removed, even if someone
 figures out the url links to use to remove it.
 
 
-
-
-
 project.php: look over this file, see if anything needs to be changed.
 
+ForumController.php: split the tag callback and form creation into a CFormModel.
 
-ForumController.php: place functions in proper declarative order, top to bottom.
 ForumController.php: change idAction() to questionAction() for clarity and a clean URL?
-ForumController.php: find out if you can't move the user functions into UsersController.php.
 ForumController.php: Create database link tables (questionTags) for questions answers and comments too? (Will require more research)
-ForumController.php: See if you can split it up into several controllers? one for tag one for... and so on.
-ForumController.php: Potentially reduce size by splitting up answer, question and comment management into three new objects
 ForumController.php: have tagCreateAction() include a cancel button in  case the user doesn't want to create a tag.
-ForumController.php: see if you can't use other Cform objects to reduce code and code repetition.
 
 User.php: code could possibly be reduced by abstracting a lot of the functions into the session trait.
 User.php: Allow users to delete their own questions.
 User.php: change so that User saved the ID of the user in session instead of using acronym.
 
+Find out the difference between callback and callable and make sure you're using it correctly.
 
 Consider creating a HTMLList class that creates a list or possibly HTMLlink to create links
 
@@ -65,6 +54,15 @@ Create a list of the files I've worked in for the Git README file.
 
 
 -------- Completed --------
+-------- 2019-09-17
+Find out why the "Why?" question is displayed when sorting by a tag that it doesn't have. I'm guessing
+it's because the tag created contains two words "New Tag" it somehow messes with the prepared statement.
+I prevented this by creating a link table.
+ForumController.php: place functions in proper declarative order, top to bottom.
+
+-------- 2019-09-13:
+ForumController.php: split up answer, question and comment form calls into 3 new form models.
+
 -------- 2019-09-11:
 ForumController.php: replace the redirects function with a private redirect variable instead. The function is already
 private, there's no need for it to be a function. Besides if it's a variable it can be used in more than on e place
@@ -77,6 +75,7 @@ UserController.php: replace redirects with private redirect variable.
 UsersController.php: separate templates in $redirect into private $templates.
 UsersController.php: move database interactions into functions in User.php
 UsersController.php: add a dispatch to statusAction() in loginAction()
+ForumController.php: find out if you can't move the user functions into UsersController.php.
 CommentController.php: replace redirects with private redirect variable.
 CommentController.php: separate templates in $redirect into private $templates.
 

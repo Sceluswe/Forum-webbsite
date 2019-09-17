@@ -320,91 +320,45 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function tagCreateAction($tag=null)
 	{
+        $obj = new \Anax\Forum\CFormTagModel();
 		$values = !empty($tag) ? ['name' => $this->escaper->escapeHTMLattr($tag)] : [];
 
-		// Render form.
-        $this->utility->renderDefaultPage("Create Tag", $this->getTagForm($values));
-	}
+        $callback = function ($form, $scope) {
+            $result = false;
+            $questionId = $scope->questions->getQuestionId();
+            $tagName = $form->Value('name');
 
+            // Check if question exists.
+            if($scope->questions->find($questionId))
+            {
+                // If the question exists, check or create the tag.
+                if(empty($scope->tags->findByName($tagName)))
+                    $scope->tags->create([
+                        'name' => $tagName
+                    ]);
 
+                if(!$scope->questionTags->questionHasTag($questionId, $scope->tags->id))
+                {   // If the question doesn't have tag, apply it:
+                    $form->saveInSession = true;
 
-	/**
-	* Create a form for creating a tag.
-	*
-    * @param array, contains the name of the tag to create.
-    *
-	* @return the HTML code of the form.
-	*/
-	public function getTagForm(array $values)
-	{
-		// Initiate object instance.
-		$form = new \Mos\HTMLForm\CForm();
+                    // Create a row that links the question to the tag.
+                    $scope->questionTags->create([
+                        "questionId"    => $questionId,
+                        "tagId"         => $scope->tags->id
+                    ]);
 
-		// Create tag form.
-		$form = $form->create([], [
-			'name' => [
-				'type'          => ($values) ? 'hidden' : 'text',
-				'required'      => true,
-				'validation'    => ['not_empty'],
-				'value'         => ($values) ? $values['name'] : ''
-			],
-			'submit' => [
-				'type'      => 'submit',
-				'class'     => 'cform-submit',
-				'callback'  => [$this, 'callbackCreateTag'],
-				'value'     => ($values) ? "Add tag: {$values['name']}" : "Create tag"
-			]
-		]);
+                    $result = true;
+                }
 
-		// Check the status of the form.
-		$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
-
-		return $form->getHTML();
-	}
-
-
-
-    /**
-    * Callback for createTag success.
-    *
-    * @param object, CForm object containing user inut from the create tag form.
-    *
-    * @return boolean, true if tag creation is successful.
-    */
-    public function callbackCreateTag(object $form)
-    {
-        $result = false;
-        $questionId = $this->questions->getQuestionId();
-        $tagName = $form->Value('name');
-
-        // Check if question exists.
-        if($this->questions->find($questionId))
-        {
-            // If the question exists, check or create the tag.
-            if(empty($this->tags->findByName($tagName)))
-                $this->tags->create([
-                    'name' => $tagName
-                ]);
-
-            if(!$this->questionTags->questionHasTag($questionId, $this->tags->id))
-            {   // If the question doesn't have tag, apply it:
-                $form->saveInSession = true;
-
-                // Create a row that links the question to the tag.
-                $this->questionTags->create([
-                    "questionId"    => $questionId,
-                    "tagId"         => $this->tags->id
-                ]);
-
-                $result = true;
+                // Use questionId to create a redirect link back to that question.
+                $scope->utility->createRedirect($scope->redirect["question"] . $questionId);
             }
 
-            // Use questionId to create a redirect link back to that question.
-            $this->utility->createRedirect($this->redirect["question"] . $questionId);
-        }
+            return $result;
+        };
 
-        return $result;
-    }
+        $this->utility->renderDefaultPage("Create Tag", $obj->createTagForm($values, $this, $callback));
+	}
 
 
 
