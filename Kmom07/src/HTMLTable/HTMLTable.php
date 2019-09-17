@@ -2,13 +2,13 @@
 namespace Anax\HTMLTable;
 
 /**
- * Model for creating tables.
- */
+* Model for creating tables.
+*/
 class HTMLTable
 {
 
 
-    
+
     /**
     * Creates tables and returns it in a string.
     *
