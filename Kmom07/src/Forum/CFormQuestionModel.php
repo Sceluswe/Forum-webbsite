@@ -15,7 +15,6 @@ class CFormQuestionModel extends \Anax\HTMLForm\CFormModel
     */
     public function createQuestionForm($scope, $callback)
     {
-        // Create form.
         $this->create([], [
             'title' => [
                 'type'          => 'text',

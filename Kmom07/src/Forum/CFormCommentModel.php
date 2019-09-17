@@ -15,7 +15,6 @@ class CFormCommentModel extends \Anax\HTMLForm\CFormModel
     */
     public function createCommentForm($values, $scope, $callback)
     {
-        // Create form.
         $this->create([], [
     		'questionid' => [
     		    'type'          => 'hidden',

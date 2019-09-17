@@ -15,7 +15,6 @@ class CFormAnswerModel extends \Anax\HTMLForm\CFormModel
     */
     public function createAnswerForm($values, $scope, $callback)
     {
-        // Create form.
         $this->create([], [
             'questionid' => [
 				'type'          => 'hidden',
