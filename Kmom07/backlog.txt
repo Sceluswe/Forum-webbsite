@@ -21,9 +21,6 @@ figures out the url links to use to remove it.
 
 project.php: look over this file, see if anything needs to be changed.
 
-ForumController.php: split the tag callback and form creation into a CFormModel.
-
-ForumController.php: change idAction() to questionAction() for clarity and a clean URL?
 ForumController.php: Create database link tables (questionTags) for questions answers and comments too? (Will require more research)
 ForumController.php: have tagCreateAction() include a cancel button in  case the user doesn't want to create a tag.
 
@@ -59,6 +56,8 @@ Find out why the "Why?" question is displayed when sorting by a tag that it does
 it's because the tag created contains two words "New Tag" it somehow messes with the prepared statement.
 I prevented this by creating a link table.
 ForumController.php: place functions in proper declarative order, top to bottom.
+ForumController.php: split the tag callback and form creation into a CFormModel.
+ForumController.php: change idAction() to questionAction() for clarity and a more readable URL.
 
 -------- 2019-09-13:
 ForumController.php: split up answer, question and comment form calls into 3 new form models.

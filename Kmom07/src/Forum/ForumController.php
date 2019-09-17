@@ -15,7 +15,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     // All redirect links used.
     private $redirect = [
         'menu'          => 'Forum/menu/',
-        'question'      => 'Forum/id/',
+        'question'      => 'Forum/question/',
         'addQuestion'   => 'Forum/addQuestion/',
         'addAnswer'     => 'Forum/addAnswer/',
         'addComment'    => 'Forum/addComment/',
@@ -147,7 +147,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
     * @return void.
 	*/
-	public function idAction($id, $sort=null)
+	public function questionAction($id, $sort=null)
 	{
 		// Clean the $id and get the question.
 		$question = $this->questions->find($id);
