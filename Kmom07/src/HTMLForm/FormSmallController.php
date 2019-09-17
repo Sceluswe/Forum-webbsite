@@ -3,9 +3,9 @@
 namespace Anax\HTMLForm;
 
 /**
- * Anax base class for wrapping sessions.
- *
- */
+* Anax base class for wrapping sessions.
+*
+*/
 class FormSmallController
 {
     use \Anax\DI\TInjectionaware;
@@ -13,9 +13,9 @@ class FormSmallController
 
 
     /**
-     * Index action using external form.
-     *
-     */
+    * Index action using external form.
+    *
+    */
     public function indexAction()
     {
         $this->di->session();
