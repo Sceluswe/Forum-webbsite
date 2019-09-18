@@ -8,34 +8,30 @@ Make sure users can only update the score of a question once.
     Just to elaborate: explode turns the string into an array, splitting it at each ',' in this case.
     Then, in_array checks if the string '13' is in the resulting array somewhere.
 
-Check if you can't use Comments\Comment.php as the comment model in Forum\ as well. Meaning the deletion of the
-Comment.php model in forum. Not sure about this, will have to think about it.
 
+
+-------- urgent & important
 Study the different view templates so you understand what each of them does. See if they can't be reduced or even
-removed completely with better code.
+removed completely with better code. Look over the templates and see if you can't move more of the PHP code into
+controllers. There should be as little PHP code in the templates as possible.
 
-
-Find a way to implement/hardcode it so that admin can never be removed, even if someone
-figures out the url links to use to remove it.
-
-
-project.php: look over this file, see if anything needs to be changed.
-
+ForumController.php: create a link table in the db for which questions users have voted on. Implement in ForumController.
 ForumController.php: Create database link tables (questionTags) for questions answers and comments too? (Will require more research)
-ForumController.php: have tagCreateAction() include a cancel button in  case the user doesn't want to create a tag.
 
-User.php: code could possibly be reduced by abstracting a lot of the functions into the session trait.
-User.php: Allow users to delete their own questions.
-User.php: change so that User saved the ID of the user in session instead of using acronym.
+Tag.php.tagCreateAction(): rename function to addTagAction() and rename redirect from "createTag" to "addTag".
+Make sure templates use the new redirect name.
 
-Find out the difference between callback and callable and make sure you're using it correctly.
+UsersController.php: add a CFormModel to replace the functions in UsersController.
 
+
+
+-------- important
 Consider creating a HTMLList class that creates a list or possibly HTMLlink to create links
+ForumController.php: have tagCreateAction() include a cancel button in case the user doesn't want to create a tag.
+User.php: Allow users to delete their own questions.
 
 CommentController: Check if removeAllAction() should be removed. Could be a security risk.
 CommentController: Check if setupAction() should be removed. Could be a security risk.
-
-Comment.php: make sure it uses the new traits to reduce the code.
 
 Design: Fix the design of the number in the score of the question. It looks unaligned.
 Design: Display added tags below a posted question.
@@ -44,10 +40,11 @@ Design: Make sure the size of a user box remains the same in the user menu, even
 or not.
 Design: make it so that the user that placed a comment is always displayed below the comment text, so that the
 button and time of placement never moves.
-Design: create a clearer separation between questions, perhaps using color variants.
+Design: create a clearer separation between questions, perhaps coloring the background.
 
 Fix: Remove all each() function errors. The function is deprecated.
 Create a list of the files I've worked in for the Git README file.
+
 
 
 -------- Completed --------
@@ -58,6 +55,15 @@ I prevented this by creating a link table.
 ForumController.php: place functions in proper declarative order, top to bottom.
 ForumController.php: split the tag callback and form creation into a CFormModel.
 ForumController.php: change idAction() to questionAction() for clarity and a more readable URL.
+project.php: look over this file, see if anything needs to be changed.
+-------- start of 1
+Check if you can't use Comments\Comment.php as the comment model in Forum\ as well. Meaning the deletion of the
+Comment.php model in forum. Not sure about this, will have to think about it.
+NO! They are managing different database tables, unless I want to change that functionality completely they can't.
+-------- end of 1
+Find out the difference between callback and callable and make sure you're using it correctly. ANSWER: They're used
+interchangably.
+User.php: hard code it so that the admin can never be removed.
 
 -------- 2019-09-13:
 ForumController.php: split up answer, question and comment form calls into 3 new form models.
