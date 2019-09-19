@@ -3,9 +3,9 @@
 namespace Anax\HTMLForm;
 
 /**
- * Anax base class for wrapping sessions.
- *
- */
+* Anax base class for wrapping sessions.
+*
+*/
 class CFormExample extends \Mos\HTMLForm\CForm
 {
     use \Anax\DI\TInjectionaware,
@@ -14,9 +14,9 @@ class CFormExample extends \Mos\HTMLForm\CForm
 
 
     /**
-     * Constructor
-     *
-     */
+    * Constructor
+    *
+    */
     public function __construct()
     {
         parent::__construct([], [
@@ -50,11 +50,11 @@ class CFormExample extends \Mos\HTMLForm\CForm
 
 
     /**
-     * Customise the check() method.
-     *
-     * @param callable $callIfSuccess handler to call if function returns true.
-     * @param callable $callIfFail    handler to call if function returns true.
-     */
+    * Customise the check() method.
+    *
+    * @param callable $callIfSuccess handler to call if function returns true.
+    * @param callable $callIfFail    handler to call if function returns true.
+    */
     public function check($callIfSuccess = null, $callIfFail = null)
     {
         return parent::check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
@@ -63,9 +63,9 @@ class CFormExample extends \Mos\HTMLForm\CForm
 
 
     /**
-     * Callback for submit-button.
-     *
-     */
+    * Callback for submit-button.
+    *
+    */
     public function callbackSubmit()
     {
         $this->AddOutput("<p><i>DoSubmit(): Form was submitted. Do stuff (save to database) and return true (success) or false (failed processing form)</i></p>");
@@ -79,9 +79,9 @@ class CFormExample extends \Mos\HTMLForm\CForm
 
 
     /**
-     * Callback for submit-button.
-     *
-     */
+    * Callback for submit-button.
+    *
+    */
     public function callbackSubmitFail()
     {
         $this->AddOutput("<p><i>DoSubmitFail(): Form was submitted but I failed to process/save/validate it</i></p>");
@@ -91,9 +91,9 @@ class CFormExample extends \Mos\HTMLForm\CForm
 
 
     /**
-     * Callback What to do if the form was submitted?
-     *
-     */
+    * Callback What to do if the form was submitted?
+    *
+    */
     public function callbackSuccess()
     {
         $this->AddOUtput("<p><i>Form was submitted and the callback method returned true.</i></p>");
@@ -103,9 +103,9 @@ class CFormExample extends \Mos\HTMLForm\CForm
 
 
     /**
-     * Callback What to do when form could not be processed?
-     *
-     */
+    * Callback What to do when form could not be processed?
+    *
+    */
     public function callbackFail()
     {
         $this->AddOutput("<p><i>Form was submitted and the Check() method returned false.</i></p>");

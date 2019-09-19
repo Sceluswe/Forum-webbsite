@@ -3,9 +3,9 @@
 namespace Anax\HTMLForm;
 
 /**
- * Anax base class for wrapping sessions.
- *
- */
+* Anax base class for wrapping sessions.
+*
+*/
 class FormController
 {
     use \Anax\DI\TInjectionaware,
@@ -14,9 +14,9 @@ class FormController
 
 
     /**
-     * Index action.
-     *
-     */
+    * Index action.
+    *
+    */
     public function indexAction()
     {
         $this->di->session(); // Will load the session service which also starts the session
@@ -61,9 +61,9 @@ class FormController
 
 
     /**
-     * Callback for submit-button.
-     *
-     */
+    * Callback for submit-button.
+    *
+    */
     public function callbackSubmit($form)
     {
         $form->AddOutput("<p><i>DoSubmit(): Form was submitted. Do stuff (save to database) and return true (success) or false (failed processing form)</i></p>");
@@ -77,9 +77,9 @@ class FormController
 
 
     /**
-     * Callback for submit-button.
-     *
-     */
+    * Callback for submit-button.
+    *
+    */
     public function callbackSubmitFail($form)
     {
         $form->AddOutput("<p><i>DoSubmitFail(): Form was submitted but I failed to process/save/validate it</i></p>");
@@ -89,9 +89,9 @@ class FormController
 
 
     /**
-     * Callback What to do if the form was submitted?
-     *
-     */
+    * Callback What to do if the form was submitted?
+    *
+    */
     public function callbackSuccess($form)
     {
         $form->AddOUtput("<p><i>Form was submitted and the callback method returned true.</i></p>");
@@ -101,9 +101,9 @@ class FormController
 
 
     /**
-     * Callback What to do when form could not be processed?
-     *
-     */
+    * Callback What to do when form could not be processed?
+    *
+    */
     public function callbackFail($form)
     {
         $form->AddOutput("<p><i>Form was submitted and the Check() method returned false.</i></p>");

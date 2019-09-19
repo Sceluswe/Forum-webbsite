@@ -1,6 +1,6 @@
 <?php
 
-namespace Anax\HTMLForm;
+namespace Mos\HTMLForm;
 
 /**
 * A utility class to easy creating and handling of forms

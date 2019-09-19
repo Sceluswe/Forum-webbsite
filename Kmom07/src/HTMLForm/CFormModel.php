@@ -3,17 +3,17 @@
 namespace Anax\HTMLForm;
 
 /**
- * Anax base class for wrapping sessions.
- *
- */
+* Anax base class for wrapping sessions.
+*
+*/
 abstract class CFormModel extends \Anax\HTMLForm\CForm
 {
     /**
-     * Customise the check() method to use own methods.
-     *
-     * @param callable $callIfSuccess handler to call if function returns true.
-     * @param callable $callIfFail    handler to call if function returns true.
-     */
+    * Customise the check() method to use own methods.
+    *
+    * @param callable $callIfSuccess handler to call if function returns true.
+    * @param callable $callIfFail    handler to call if function returns true.
+    */
     public function check($callIfSuccess = null, $callIfFail = null)
     {
         return parent::check([$this, "callbackSuccess"], [$this, "callbackFail"]);
@@ -22,17 +22,17 @@ abstract class CFormModel extends \Anax\HTMLForm\CForm
 
 
     /**
-     * Callback for submitting the form.
-     *
-     */
+    * Callback for submitting the form.
+    *
+    */
     abstract public function callbackSubmit();
 
 
 
     /**
-     * Callback What to do if the form was submitted successfully?
-     *
-     */
+    * Callback What to do if the form was submitted successfully?
+    *
+    */
     public function callbackSuccess()
     {
         $this->AddOUtput("<p>#callbackSuccess()</p>");
@@ -43,9 +43,9 @@ abstract class CFormModel extends \Anax\HTMLForm\CForm
 
 
     /**
-     * Callback What to do when submitted form could not be processed?
-     *
-     */
+    * Callback What to do when submitted form could not be processed?
+    *
+    */
     public function callbackFail()
     {
         $this->AddOutput("<p>#callbackFailed()</p>");

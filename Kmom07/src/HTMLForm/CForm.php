@@ -3,16 +3,16 @@
 namespace Anax\HTMLForm;
 
 /**
- * A utility class to easy creating and handling of forms
- *
- * @package CForm
- */
+* A utility class to easy creating and handling of forms
+*
+* @package CForm
+*/
 class CForm implements \ArrayAccess
 {
 
     /**
-     * Properties
-     */
+    * Properties
+    */
     public $form;     // array with settings for the form
     public $elements; // array with all form elements
     public $output;   // array with messages to display together with the form
@@ -21,11 +21,11 @@ class CForm implements \ArrayAccess
 
 
     /**
-     * Constructor
-     *
-     * @param array $form     details for the form
-     * @param array $elements all the elements
-     */
+    * Constructor
+    *
+    * @param array $form     details for the form
+    * @param array $elements all the elements
+    */
     public function __construct($form = [], $elements = [])
     {
         $this->create($form, $elements);
@@ -34,8 +34,8 @@ class CForm implements \ArrayAccess
 
 
     /**
-     * Implementing ArrayAccess for this->elements
-     */
+    * Implementing ArrayAccess for this->elements
+    */
     public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
@@ -65,13 +65,13 @@ class CForm implements \ArrayAccess
 
 
     /**
-     * Add a form element
-     *
-     * @param array $form     details for the form
-     * @param array $elements all the elements
-     *
-     * @return $this CForm
-     */
+    * Add a form element
+    *
+    * @param array $form     details for the form
+    * @param array $elements all the elements
+    *
+    * @return $this CForm
+    */
     public function create($form = [], $elements = [])
     {
         $defaults = [
@@ -104,12 +104,12 @@ class CForm implements \ArrayAccess
 
 
     /**
-     * Add a form element
-     *
-     * @param CFormElement $element the formelement to add.
-     *
-     * @return $this CForm
-     */
+    * Add a form element
+    *
+    * @param CFormElement $element the formelement to add.
+    *
+    * @return $this CForm
+    */
     public function addElement($element)
     {
         $this[$element['name']] = $element;
@@ -119,12 +119,12 @@ class CForm implements \ArrayAccess
 
 
     /**
-     * Remove an form element
-     *
-     * @param string $name the name of the element to remove from the form.
-     *
-     * @return $this CForm
-     */
+    * Remove an form element
+    *
+    * @param string $name the name of the element to remove from the form.
+    *
+    * @return $this CForm
+    */
     public function removeElement($name)
     {
         unset($this->elements[$name]);
@@ -134,13 +134,13 @@ class CForm implements \ArrayAccess
 
 
     /**
-     * Set validation to a form element
-     *
-     * @param string $element the name of the formelement to add validation rules to.
-     * @param array  $rules   array of validation rules.
-     *
-     * @return $this CForm
-     */
+    * Set validation to a form element
+    *
+    * @param string $element the name of the formelement to add validation rules to.
+    * @param array  $rules   array of validation rules.
+    *
+    * @return $this CForm
+    */
     public function setValidation($element, $rules)
     {
         $this[$element]['validation'] = $rules;
@@ -150,12 +150,12 @@ class CForm implements \ArrayAccess
 
 
     /**
-     * Add output to display to the user what happened whith the form.
-     *
-     * @param string $str the string to add as output.
-     *
-     * @return $this CForm.
-     */
+    * Add output to display to the user what happened whith the form.
+    *
+    * @param string $str the string to add as output.
+    *
+    * @return $this CForm.
+    */
     public function addOutput($str)
     {
         $key = $this->session["output"];
@@ -170,12 +170,12 @@ class CForm implements \ArrayAccess
 
 
     /**
-     * Get value of a form element
-     *
-     * @param string $element the name of the formelement.
-     *
-     * @return mixed the value of the element.
-     */
+    * Get value of a form element
+    *
+    * @param string $element the name of the formelement.
+    *
+    * @return mixed the value of the element.
+    */
     public function value($element)
     {
         return $this[$element]->value();
@@ -184,12 +184,12 @@ class CForm implements \ArrayAccess
 
 
     /**
-     * Return HTML for the form or the formdefinition.
-     *
-     * @param array $options with options affecting the form output.
-     *
-     * @return string with HTML for the form.
-     */
+    * Return HTML for the form or the formdefinition.
+    *
+    * @param array $options with options affecting the form output.
+    *
+    * @return string with HTML for the form.
+    */
     public function getHTML($options = [])
     {
         $defaults = [
@@ -257,12 +257,12 @@ EOD;
 
 
     /**
-     * Return HTML for the elements
-     *
-     * @param array $options with options affecting the form output.
-     *
-     * @return array with HTML for the formelements.
-     */
+    * Return HTML for the elements
+    *
+    * @param array $options with options affecting the form output.
+    *
+    * @return array with HTML for the formelements.
+    */
     public function getHTMLForElements($options = [])
     {
         $defaults = [
@@ -310,13 +310,13 @@ EOD;
 
 
     /**
-     * Place the elements according to a layout and return the HTML
-     *
-     * @param array $elements as returned from GetHTMLForElements().
-     * @param array $options  with options affecting the layout.
-     *
-     * @return array with HTML for the formelements.
-     */
+    * Place the elements according to a layout and return the HTML
+    *
+    * @param array $elements as returned from GetHTMLForElements().
+    * @param array $options  with options affecting the layout.
+    *
+    * @return array with HTML for the formelements.
+    */
     public function getHTMLLayoutForElements($elements, $options = [])
     {
         $defaults = [
@@ -372,10 +372,10 @@ EOD;
 
 
     /**
-     * Get an array with all elements that failed validation together with their id and validation message.
-     *
-     * @return array with elements that failed validation.
-     */
+    * Get an array with all elements that failed validation together with their id and validation message.
+    *
+    * @return array with elements that failed validation.
+    */
     public function getValidationErrors()
     {
         $errors = [];
@@ -394,10 +394,10 @@ EOD;
 
 
     /**
-     * Get output messages as <output>.
-     *
-     * @return string|null with the complete <output> element or null if no output.
-     */
+    * Get output messages as <output>.
+    *
+    * @return string|null with the complete <output> element or null if no output.
+    */
     public function getOutput()
     {
         return !empty($this->output)
@@ -408,12 +408,12 @@ EOD;
 
 
     /**
-     * Init all element with values from session, clear all and fill in with values from the session.
-     *
-     * @param array $values retrieved from session
-     *
-     * @return void
-     */
+    * Init all element with values from session, clear all and fill in with values from the session.
+    *
+    * @param array $values retrieved from session
+    *
+    * @return void
+    */
     protected function initElements($values)
     {
         // First clear all
@@ -460,17 +460,17 @@ EOD;
 
 
     /**
-     * Check if a form was submitted and perform validation and call callbacks.
-     * The form is stored in the session if validation or callback fails. The page should then be redirected
-     * to the original form page, the form will populate from the session and should be rendered again.
-     * Form elements may remember their value if 'remember' is set and true.
-     *
-     * @param callable $callIfSuccess handler to call if function returns true.
-     * @param callable $callIfFail    handler to call if function returns true.
-     *
-     * @return boolean|null $callbackStatus if submitted&validates, false if not validate, null if not submitted.
-     *         If submitted the callback function will return the actual value which should be true or false.
-     */
+    * Check if a form was submitted and perform validation and call callbacks.
+    * The form is stored in the session if validation or callback fails. The page should then be redirected
+    * to the original form page, the form will populate from the session and should be rendered again.
+    * Form elements may remember their value if 'remember' is set and true.
+    *
+    * @param callable $callIfSuccess handler to call if function returns true.
+    * @param callable $callIfFail    handler to call if function returns true.
+    *
+    * @return boolean|null $callbackStatus if submitted&validates, false if not validate, null if not submitted.
+    *         If submitted the callback function will return the actual value which should be true or false.
+    */
     public function check($callIfSuccess = null, $callIfFail = null)
     {
         $remember = null;

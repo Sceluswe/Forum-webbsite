@@ -156,12 +156,26 @@ class User extends \Anax\MVC\CDatabaseModel
 	*
 	* @return resultset, returns the top 6 rated users.
 	*/
+    public function delete($id=null)
+    {
+        if(!isset($id))
+			$id = $this->id;
+
+        return ($id != "1") ? parent::delete($id) : array();
+    }
+
+
+
+    /**
+	* Returns the top 6 users with the highest score.
+	*
+	* @return resultset, returns the top 6 rated users.
+	*/
     public function getTopRatedUsers()
     {
         // Get the highest rated users.
         return $this->query()->orderBy('score DESC LIMIT 6')->execute();
     }
-
 
 
 	/**
