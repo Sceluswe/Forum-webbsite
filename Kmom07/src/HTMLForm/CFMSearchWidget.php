@@ -1,12 +1,12 @@
 <?php
 
-namespace Mos\HTMLForm;
+namespace Anax\HTMLForm;
 
 /**
 * Example of CFormModel implementation.
 *
 */
-class CFMSearchWidget extends \Mos\HTMLForm\CFormModel
+class CFMSearchWidget extends \Anax\HTMLForm\CFormModel
 {
     /**
     * Constructor
