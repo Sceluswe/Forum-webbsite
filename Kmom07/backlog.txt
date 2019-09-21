@@ -21,6 +21,11 @@ ForumController.php: Create database link tables (questionTags) for questions an
 Tag.php.tagCreateAction(): rename function to addTagAction() and rename redirect from "createTag" to "addTag".
 Make sure templates use the new redirect name.
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 33ba98b38fdb38eb3b8f83536b2fe0fae63f3466
 
 
 -------- important
