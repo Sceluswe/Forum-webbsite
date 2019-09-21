@@ -27,7 +27,7 @@ class ForumController implements \Anax\DI\IInjectionAware
         "allQuestions"  => "Questions",
         'accepted'      => 'Forum/accepted/',
         'tagButton'     => 'Forum/tag/',
-        'tagCreate'     => 'Forum/tagCreate/'
+        'addTag'        => 'Forum/addTag/'
     ];
 
     // All template links used.
@@ -311,57 +311,6 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 
 
-	/**
-	* Render a create tag form and add the input to a question.
-    *
-    * @param string, name of the tag to add.
-    *
-    * @return void.
-	*/
-	public function tagCreateAction($tag=null)
-	{
-        $obj = new \Anax\Forum\CFormTagModel();
-		$values = !empty($tag) ? ['name' => $this->escaper->escapeHTMLattr($tag)] : [];
-
-        $callback = function ($form, $scope) {
-            $result = false;
-            $questionId = $scope->questions->getQuestionId();
-            $tagName = $form->Value('name');
-
-            // Check if question exists.
-            if($scope->questions->find($questionId))
-            {
-                // If the question exists, check or create the tag.
-                if(empty($scope->tags->findByName($tagName)))
-                    $scope->tags->create([
-                        'name' => $tagName
-                    ]);
-
-                if(!$scope->questionTags->questionHasTag($questionId, $scope->tags->id))
-                {   // If the question doesn't have tag, apply it:
-                    $form->saveInSession = true;
-
-                    // Create a row that links the question to the tag.
-                    $scope->questionTags->create([
-                        "questionId"    => $questionId,
-                        "tagId"         => $scope->tags->id
-                    ]);
-
-                    $result = true;
-                }
-
-                // Use questionId to create a redirect link back to that question.
-                $scope->utility->createRedirect($scope->redirect["question"] . $questionId);
-            }
-
-            return $result;
-        };
-
-        $this->utility->renderDefaultPage("Create Tag", $obj->createTagForm($values, $this, $callback));
-	}
-
-
-
 //---------------- Ratings ----------------
 	/**
 	* Function to edit the rating of a question, answer or comment.
@@ -438,7 +387,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 
 
-//---------------- Questions, answers and comments actions ----------------
+//---------------- Questions, answers, comments and tags actions ----------------
 	/**
 	* Function that adds a new question to the database.
     *
@@ -583,4 +532,55 @@ class ForumController implements \Anax\DI\IInjectionAware
         // Render form.
         $this->utility->renderDefaultPage("Create Comment", $formObj->createCommentForm($values, $this, $callable));
 	}
+
+
+
+    /**
+    * Render a create tag form and add the input to a question.
+    *
+    * @param string, name of the tag to add.
+    *
+    * @return void.
+    */
+    public function addTagAction($tag=null)
+    {
+        $obj = new \Anax\Forum\CFormTagModel();
+        $values = !empty($tag) ? ['name' => $this->escaper->escapeHTMLattr($tag)] : [];
+
+        $callback = function ($form, $scope) {
+            $result = false;
+            $questionId = $scope->questions->getQuestionId();
+            $tagName = $form->Value('name');
+
+            // Check if question exists.
+            if($scope->questions->find($questionId))
+            {
+                // If the question exists, check or create the tag.
+                if(empty($scope->tags->findByName($tagName)))
+                    $scope->tags->create([
+                        'name' => $tagName
+                    ]);
+
+                if(!$scope->questionTags->questionHasTag($questionId, $scope->tags->id))
+                {   // If the question doesn't have tag, apply it:
+                    $form->saveInSession = true;
+
+                    // Create a row that links the question to the tag.
+                    $scope->questionTags->create([
+                        "questionId"    => $questionId,
+                        "tagId"         => $scope->tags->id
+                    ]);
+
+                    $result = true;
+                }
+
+                // Use questionId to create a redirect link back to that question.
+                $scope->utility->createRedirect($scope->redirect["question"] . $questionId);
+            }
+
+            return $result;
+        };
+
+        $this->utility->renderDefaultPage("Create Tag", $obj->createTagForm($values, $this, $callback));
+    }
 }
