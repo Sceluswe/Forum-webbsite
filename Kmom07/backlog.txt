@@ -21,7 +21,7 @@ ForumController.php: Create database link tables (questionTags) for questions an
 Tag.php.tagCreateAction(): rename function to addTagAction() and rename redirect from "createTag" to "addTag".
 Make sure templates use the new redirect name.
 
-UsersController.php: add a CFormModel to replace the functions in UsersController.
+
 
 
 
@@ -48,6 +48,9 @@ Create a list of the files I've worked in for the Git README file.
 
 
 -------- Completed --------
+-------- 2019-09-21
+UsersController.php: add a CFormModel to replace the functions in UsersController.
+
 -------- 2019-09-17
 Find out why the "Why?" question is displayed when sorting by a tag that it doesn't have. I'm guessing
 it's because the tag created contains two words "New Tag" it somehow messes with the prepared statement.
