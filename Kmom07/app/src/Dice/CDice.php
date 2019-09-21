@@ -3,11 +3,12 @@
 namespace Mos\Dice;
 
 /**
- * A CDice class to play around with a dice.
- *
- */
+* A CDice class to play around with a dice.
+*/
 class CDice
 {
+
+
 
     /**
     * Properties
@@ -18,13 +19,13 @@ class CDice
 
 
     /**
-     * Roll the dice
-     *
-     * @param int $times the number of times to roll.
-     * 
-     * @return void
-     */
-    public function roll($times) 
+    * Roll the dice
+    *
+    * @param int $times the number of times to roll.
+    *
+    * @return void
+    */
+    public function roll($times)
     {
         $this->lastRoll = array();
         for ($i = 0; $i < $times; $i++) {
@@ -35,11 +36,11 @@ class CDice
 
 
     /**
-     * Get number of rolls in last roll
-     *
-     * @return int
-     */
-    public function getNumOfRolls() 
+    * Get number of rolls in last roll
+    *
+    * @return int
+    */
+    public function getNumOfRolls()
     {
         return count($this->lastRoll);
     }
@@ -47,11 +48,11 @@ class CDice
 
 
     /**
-     * Get the array that contains the last roll(s).
-     *
-     * @return void
-     */
-    public function getResults() 
+    * Get the array that contains the last roll(s).
+    *
+    * @return void
+    */
+    public function getResults()
     {
         return $this->lastRoll;
     }
@@ -59,11 +60,11 @@ class CDice
 
 
     /**
-     * Get the total from the last roll(s).
-     *
-     * @return void
-     */
-    public function getTotal() 
+    * Get the total from the last roll(s).
+    *
+    * @return void
+    */
+    public function getTotal()
     {
         return array_sum($this->lastRoll);
     }
