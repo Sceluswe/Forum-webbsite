@@ -153,7 +153,22 @@ class UsersController implements \Anax\DI\IInjectionAware
 
         $this->users->created = gmdate('Y-m-d H:i:s');
 
-        $this->utility->renderDefaultPage("Create User", $this->getUserForm());
+        $obj = new \Anax\Users\CFormUserModel();
+        $this->utility->renderDefaultPage("Create User", $obj->createUserForm($this, function ($form, $scope) {
+            $scope->users->save([
+                'acronym' 	=> strtolower($form->Value('acronym')),
+                'email' 	=> $form->Value('email'),
+                'name' 		=> $form->Value('name'),
+                'password' 	=> md5($form->Value('password')),
+                'created' 	=> $scope->users->created,
+                'updated'	=> isset($scope->users->updated) ? $scope->users->updated : null,
+                'active' 	=> gmdate('Y-m-d H:i:s')
+            ]);
+
+            $scope->utility->createRedirect($scope->redirect["profile"] . $scope->users->id);
+
+            return true;
+        }));
     }
 
 
@@ -269,7 +284,25 @@ class UsersController implements \Anax\DI\IInjectionAware
 		$user = $this->users->find($id);
 		$this->users->updated = gmdate('Y-m-d H:i:s');
 
-        $this->utility->renderDefaultPage("Update User", $this->getUserForm([
+        $obj = new \Anax\Users\CFormUserModel();
+
+        $callback = function ($form, $scope) {
+            $scope->users->save([
+                'acronym' 	=> strtolower($form->Value('acronym')),
+                'email' 	=> $form->Value('email'),
+                'name' 		=> $form->Value('name'),
+                'password' 	=> md5($form->Value('password')),
+                'created' 	=> $scope->users->created,
+                'updated'	=> isset($scope->users->updated) ? $scope->users->updated : null,
+                'active' 	=> gmdate('Y-m-d H:i:s')
+            ]);
+
+            $scope->utility->createRedirect($scope->redirect["profile"] . $scope->users->id);
+
+            return true;
+        };
+
+        $this->utility->renderDefaultPage("Update User", $obj->createUserForm($this, $callback, [
 			'acronym' 	=> $user->acronym,
 			'email'		=> $user->email,
 			'name' 		=> $user->name,
@@ -343,107 +376,6 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 
 
-    /**
-    * Callback for login-button success.
-    *
-    * @return boolean.
-    */
-	public function loginSubmit($form)
-    {
-		$success = false;
-
-        // Get acronym from form and escape it and hash the password.
-		$acronym = strtolower($this->escaper->escapeHTML($form->Value('acronym')));
-		$password = md5($form->Value('password'));
-
-		// Ask the module if user is valid.
-		if($this->users->validateUser($acronym, $password))
-		{
-            // Fetch the user into model and update active time.
-            $this->users->findByAcronym($form->Value('acronym'));
-
-			if($this->users->update(['active' => gmdate('Y-m-d H:i:s')]))
-			{	// Save user in session.
-				$this->users->loginUser($acronym);
-				$success = true;
-			}
-
-            $this->utility->createRedirect($this->redirect["profile"] . $this->users->id);
-		}
-
-        return $success;
-    }
-
-
-
-	/**
-    * Callback for submit-button.
-    *
-    * @param CForm object, the form used.
-    *
-    * @return boolean.
-    */
-    public function loginSuccess($form)
-    {
-        $form->AddOutput("<p><i>You've been logged in.</i></p>");
-        return false;
-    }
-
-
-
-    /**
-    * Callback for submit-button.
-    *
-    * @param CForm object, the form used.
-    *
-    * @return boolean.
-    */
-    public function loginFail($form)
-    {
-        $form->AddOutput("<p><i>Invalid login information.</i></p>");
-        return false;
-    }
-
-
-
-    /**
-    * Get a form for logging in a user.
-    *
-    * @return the HTML code of the form.
-    */
-    private function getLoginForm()
-    {
-        $form = new \Mos\HTMLForm\CForm();
-
-        $form = $form->create([], [
-            'acronym' => [
-                'type' 		 => 'text',
-                'required' 	 => true,
-                'class' 	 => 'cform-textbox',
-                'validation' => ['not_empty']
-            ],
-            'password' => [
-                'type' 		 => 'password',
-                'required' 	 => true,
-                'class' 	 => 'cform-textbox',
-                'validation' => ['not_empty']
-            ],
-            'submit' => [
-                'type' 		=> 'submit',
-                'class' 	=> 'cform-submit',
-                'callback'  => [$this, 'loginSubmit'],
-                'value'		=> 'Login'
-            ],
-        ]);
-
-        // Check the status of the form
-        $form->check([$this, 'loginSuccess'], [$this, 'loginFail']);
-
-        return $form->getHTML();
-    }
-
-
-
 	/**
 	* Function that logs in a user and stores the currently logged in user in session.
     *
@@ -453,91 +385,33 @@ class UsersController implements \Anax\DI\IInjectionAware
 	{
         $this->dispatcher->forwardTo("Users", "status");
 
+        $obj = new \Anax\Users\CFormUserModel();
+        $callback = function ($form, $scope) {
+            $success = false;
+
+            // Get acronym from form and escape it and hash the password.
+            $acronym = strtolower($scope->escaper->escapeHTML($form->Value('acronym')));
+            $password = md5($form->Value('password'));
+
+            if($scope->users->validateUser($acronym, $password))
+            {
+                $scope->users->findByAcronym($form->Value('acronym'));
+
+                if($scope->users->update(['active' => gmdate('Y-m-d H:i:s')]))
+                {
+                    $scope->users->loginUser($acronym);
+                    $success = true;
+                }
+
+                $scope->utility->createRedirect($scope->redirect["profile"] . $scope->users->id);
+            }
+
+            return $success;
+        };
+
         (!$this->users->isUserLoggedIn())
-            ? $this->utility->renderDefaultPage($this->redirect["login"], $this->getLoginForm())
+            ? $this->utility->renderDefaultPage($this->redirect["login"], $obj->createUserLoginForm($this, $callback))
             : $this->utility->createRedirect($this->redirect["logout"]);
-	}
-
-
-
-    /**
-    * Callback for login-button success.
-    *
-    * @param CForm object, the form used.
-    *
-    * @return boolean.
-    */
-	public function logoutSubmit($form)
-    {
-		$success = false;
-
-		// Check if user is logged in.
-		if($this->users->isUserLoggedIn())
-		{
-			// Log the user out.
-			$this->users->logoutUser();
-			$success = true;
-
-            $this->utility->createRedirect($this->redirect["login"]);
-		}
-
-        return $success;
-    }
-
-
-
-    /**
-    * Callback for submit-button.
-    *
-    * @param CForm object, the form used.
-    *
-    * @return boolean.
-    */
-    public function logoutSuccess($form)
-    {
-        $form->AddOutput("<p><i>You've been logged out.</i></p>");
-        return false;
-    }
-
-
-
-    /**
-    * Callback for submit-button.
-    *
-    * @param CForm object, the form used.
-    *
-    * @return boolean.
-    */
-    public function logoutFail($form)
-    {
-        $form->AddOutput("<p><i>You're not logged in.</i></p>");
-        return false;
-    }
-
-
-
-	/**
-	* Get a form for logging out a user.
-	*
-	* @return the HTML code of the form.
-	*/
-	private function getLogoutForm()
-	{
-		$form = new \Mos\HTMLForm\CForm();
-
-		$form = $form->create([], [
-			'logout' => [
-				'type' 		 => 'submit',
-				'class' 	 => 'cform-submit',
-				'callback'  => [$this, 'logoutSubmit'],
-				'value'		=> 'Logout'
-			]
-		]);
-
-		// Check the status of the form.
-		$form->check([$this, 'logoutSuccess'], [$this, 'logoutFail']);
-
-		return $form->getHTML();
 	}
 
 
@@ -551,123 +425,19 @@ class UsersController implements \Anax\DI\IInjectionAware
 	{
         $this->dispatcher->forwardTo("Users", "status");
 
-        $this->utility->renderDefaultPage("Logout", $this->getLogoutForm());
-	}
+        $obj = new \Anax\Users\CFormUserModel();
+        $this->utility->renderDefaultPage("Logout", $obj->createUserLogoutForm($this, function ($form, $scope) {
+            $success = false;
 
+            if($this->users->isUserLoggedIn())
+            {
+                $this->users->logoutUser();
+                $success = true;
 
+                $this->utility->createRedirect($this->redirect["login"]);
+            }
 
-    /**
-    * Callback for submit-button success.
-    *
-    * @param CForm object, the form used.
-    *
-    * @return boolean.
-    */
-	public function callbackSubmit($form)
-    {
-		// Save form.
-		$form->saveInSession = true;
-
-		$this->users->save([
-			'acronym' 	=> strtolower($form->Value('acronym')),
-			'email' 	=> $form->Value('email'),
-			'name' 		=> $form->Value('name'),
-			'password' 	=> md5($form->Value('password')),
-			'created' 	=> $this->users->created,
-			'updated'	=> isset($this->users->updated) ? $this->users->updated : null,
-			'active' 	=> gmdate('Y-m-d H:i:s')
-		]);
-
-        $this->utility->createRedirect($this->redirect["profile"] . $this->users->id);
-
-        return true;
-    }
-
-
-
-    /**
-    * Callback for submit-button.
-    *
-    * @param CForm object, the form used.
-    *
-    * @return boolean.
-    */
-    public function callbackSuccess($form)
-    {
-        $form->AddOutput("<p><i>User Created.</i></p>");
-        return false;
-    }
-
-
-
-    /**
-    * Callback for submit-button.
-    *
-    * @param CForm object, the form used.
-    *
-    * @return boolean.
-    */
-    public function callbackFail($form)
-    {
-        $form->AddOutput("<p><i>DoSubmitFail(): Form was submitted but I failed to process/save/validate it</i></p>");
-        return false;
-    }
-
-
-
-	/**
-	* Get a form for creating and updating a user.
-	*
-	* @param optional, values to be put into the textfields.
-	*
-	* @return the HTML code of the form.
-	*/
-	private function getUserForm($values = null)
-	{
-		// Initiate object instance.
-		$form = new \Mos\HTMLForm\CForm();
-
-		// Create form.
-		$form = $form->create([], [
-			'acronym' => [
-				'type' 		=> 'text',
-				'required' 	=> true,
-				'class' 	=> 'cform-textbox',
-				'validation'=> ['not_empty'],
-				'value' 	=> !empty($values['acronym']) ? $values['acronym'] : ''
-			],
-			'email' => [
-				'type'       => 'text',
-				'required'   => true,
-				'class' 	 => 'cform-textbox',
-				'validation' => ['not_empty', 'email_adress'],
-				'value' 	 => !empty($values['email']) ? $values['email'] : ''
-			],
-			'name' => [
-				'type' 		 => 'text',
-				'label' 	 => 'Your name:',
-				'required' 	 => true,
-				'class' 	 => 'cform-textbox',
-				'validation' => ['not_empty'],
-				'value' 	 => !empty($values['name']) ? $values['name'] : ''
-			],
-			'password' => [
-				'type' 		 => !empty($values['password']) ? 'hidden' : 'password',
-				'required' 	 => true,
-				'class' 	 => 'cform-textbox',
-				'value' 	 => !empty($values['password']) ? $values['password'] : ''
-			],
-			'submit' => [
-    			'type' 		=> 'submit',
-    			'class' 	=> 'cform-submit',
-    			'callback'  => [$this, 'callbackSubmit'],
-    			'value'		=> 'Submit user'
-			]
-		]);
-
-		// Check the status of the form
-		$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
-
-		return $form->getHTML();
+            return $success;
+        }));
 	}
 }
