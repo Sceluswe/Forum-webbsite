@@ -16,9 +16,9 @@ removed completely with better code. Look over the templates and see if you can'
 controllers. There should be as little PHP code in the templates as possible.
 
 ForumController.php: create a link table in the db for which questions users have voted on. Implement in ForumController.
-ForumController.php: Create database link tables (questionTags) for questions answers and comments too? (Will require more research)
+ForumController.php: Create database link tables (like questionTags) for questions answers and comments too? (Will require more research)
 
-
+Look over all the files in app/src/ and format them. Code looked terrible.
 
 -------- important
 Consider creating a HTMLList class that creates a list or possibly HTMLlink to create links
@@ -47,6 +47,7 @@ Create a list of the files I've worked in for the Git README file.
 UsersController.php: add a CFormModel to replace the functions in UsersController.
 Tag.php.tagCreateAction(): rename function to addTagAction() and rename redirect from "createTag" to "addTag".
 Make sure templates use the new redirect name.
+make sure all files are in the LF format
 
 
 -------- 2019-09-17
