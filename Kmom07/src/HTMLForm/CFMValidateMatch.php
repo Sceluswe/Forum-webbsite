@@ -1,12 +1,12 @@
 <?php
 
-namespace Mos\HTMLForm;
+namespace Anax\HTMLForm;
 
 /**
 * Example of CFormModel implementation.
 *
 */
-class CFMValidateMatch extends \Mos\HTMLForm\CFormModel
+class CFMValidateMatch extends \Anax\HTMLForm\CFormModel
 {
     /**
     * Constructor
