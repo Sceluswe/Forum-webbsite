@@ -15,10 +15,10 @@ Study the different view templates so you understand what each of them does. See
 removed completely with better code. Look over the templates and see if you can't move more of the PHP code into
 controllers. There should be as little PHP code in the templates as possible.
 
-ForumController.php: create a link table in the db for which questions users have voted on. Implement in ForumController.
-ForumController.php: Create database link tables (like questionTags) for questions answers and comments too? (Will require more research)
+ForumController.php: Create a link table in the db for which questions users have voted on. Implement in ForumController.
+ForumController.php: Create database link tables (like questionTags) for questions answers and comments too? (Will require more research).
 
-Look over all the files in app/src/ and format them. Code looked terrible.
+
 
 -------- important
 Consider creating a HTMLList class that creates a list or possibly HTMLlink to create links
@@ -31,8 +31,7 @@ CommentController: Check if setupAction() should be removed. Could be a security
 Design: Fix the design of the number in the score of the question. It looks unaligned.
 Design: Display added tags below a posted question.
 Design: Fix the design when displaying a user profile. The lightblue box should be aligned to the left.
-Design: Make sure the size of a user box remains the same in the user menu, even if buttons are displayed
-or not.
+Design: Make sure the size of a user box remains the same in the user menu, even if buttons are displayed or not.
 Design: make it so that the user that placed a comment is always displayed below the comment text, so that the
 button and time of placement never moves.
 Design: create a clearer separation between questions, perhaps coloring the background.
@@ -44,10 +43,11 @@ Create a list of the files I've worked in for the Git README file.
 
 -------- Completed --------
 -------- 2019-09-21
-UsersController.php: add a CFormModel to replace the functions in UsersController.
-Tag.php.tagCreateAction(): rename function to addTagAction() and rename redirect from "createTag" to "addTag".
+1. UsersController.php: add a CFormModel to replace the functions in UsersController.
+2. Tag.php.tagCreateAction(): rename function to addTagAction() and rename redirect from "createTag" to "addTag".
 Make sure templates use the new redirect name.
-make sure all files are in the LF format
+3. Make sure all files are in the LF format.
+4. Look over all the files in app/src/ and format them. Code looked terrible.
 
 
 -------- 2019-09-17
