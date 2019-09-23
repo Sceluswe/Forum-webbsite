@@ -96,7 +96,7 @@ class UsersController implements \Anax\DI\IInjectionAware
     *
     * @return void
     */
-    public function profileAction($id = null)
+    public function profileAction($id)
     {
         $this->initialize();
 
