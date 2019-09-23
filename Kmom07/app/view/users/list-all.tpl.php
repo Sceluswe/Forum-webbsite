@@ -6,12 +6,14 @@
 	<p><h5 style="display: inline;">Name:</h5> <?=$user->name?></p>
 	<p><h5 style="display: inline;">E-Mail:</h5> <?=$user->email?></p>
 
-	<p><h5 style="display: inline;">Currently active:</h5>
-	<?php if(!empty($user->active) && (empty($user->deleted))) : ?>
-		<i class='fa fa-check-circle-o'></i></p>
-	<?php else : ?>
-		<i class='fa fa-times-circle'></i></p>
-	<?php endif; ?>
+	<p>
+        <h5 style="display: inline;">Currently active:</h5>
+    	<?php if(!empty($user->active) && (empty($user->deleted))) : ?>
+    		<i class='fa fa-check-circle-o'></i></p>
+    	<?php else : ?>
+    		<i class='fa fa-times-circle'></i>
+    	<?php endif; ?>
+    </p>
 
 		<ul class="userlist">
 			<li><a class="userbutton" href="<?=$this->url->create($redirect["profile"] . $user->id)?>"><i class="fa fa-user"></i> Profile</a></li>
@@ -22,5 +24,4 @@
 			<?php endif;?>
 		</ul>
 </div>
-
 <?php endforeach; ?>
