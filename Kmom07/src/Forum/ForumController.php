@@ -22,12 +22,11 @@ class ForumController implements \Anax\DI\IInjectionAware
         'rateQuestion'  => 'Forum/vote/Q/',
         'rateAnswer'    => 'Forum/vote/A/',
         'rateComment'   => 'Forum/vote/C/',
-        'profile'       => 'Users/profile/',
-        "login"         => "Users/login",
-        "allQuestions"  => "Questions",
         'accepted'      => 'Forum/accepted/',
         'tagButton'     => 'Forum/tag/',
-        'addTag'        => 'Forum/addTag/'
+        'addTag'        => 'Forum/addTag/',
+        'profile'       => 'Users/profile/',
+        "login"         => "Users/login"
     ];
 
     // All template links used.
@@ -416,7 +415,7 @@ class ForumController implements \Anax\DI\IInjectionAware
                     'answered'  => 0
                 ]);
 
-                $scope->utility->createRedirect($scope->redirect["allQuestions"]);
+                $scope->utility->createRedirect($scope->redirect["menu"]);
             }
 
             return $result;
