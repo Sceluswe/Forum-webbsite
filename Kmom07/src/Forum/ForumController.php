@@ -31,11 +31,11 @@ class ForumController implements \Anax\DI\IInjectionAware
 
     // All template links used.
     private $template = [
-        "home"          => "forum/forum-home",
         "menu"          => "forum/forum-menu",
         "question"      => "forum/forum-question",
         "tagMenu"       => "forum/forum-tagMenu",
-        "tagQuestion"   => "forum/forum-tagQuestion"
+        "tagQuestion"   => "forum/forum-tagQuestion",
+        "userSketch"    => "forum/forum-userSketch"
     ];
 
 
@@ -209,27 +209,35 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 
 
-	/**
-	* Display the homepage.
+    /**
+    * Display the homepage.
     *
     * @return void.
-	*/
-	public function homeAction()
-	{
-		// Get the recently posted questions.
+    */
+    public function homeAction()
+    {
+        // Get the recently posted questions.
         $questions = $this->questions->getRecentQuestions();
         $questions = (!empty($questions)) ? $this->time->formatUnixProperties($questions) : [];
 
-		$this->views->add($this->template["home"], [
-			'questions'=> $questions,
-			'title1'     => "Recent Questions",
-			'redirect'   => $this->redirect,
-			'title2'     => "Most active users",
-			'users'      => $this->users->getTopRatedUsers(),
-			'title3'     => "Popular tags",
-			'tags'       => $this->tags->getPopularTags()
-		]);
-	}
+        $this->views->add($this->template["menu"], [
+            'title'      => "Recent Questions",
+            'redirect'   => $this->redirect,
+            "class"      => "width60",
+            "questions"  => $questions
+        ]);
+
+        $this->views->add($this->template["userSketch"], [
+            "title" => "Most active users",
+            'users' => $this->users->getTopRatedUsers()
+        ]);
+
+        $this->views->add($this->template["tagMenu"], [
+            'title' => "Popular tags",
+            "class" => "clear",
+            'tags'  => $this->tags->getPopularTags()
+        ]);
+    }
 
 
 

@@ -35,6 +35,8 @@ Design: Make sure the size of a user box remains the same in the user menu, even
 Design: make it so that the user that placed a comment is always displayed below the comment text, so that the
 button and time of placement never moves.
 Design: create a clearer separation between questions, perhaps coloring the background.
+Design/views: move inline CSS code out of the templates into CSS classes.
+Design: fix the design of the home page so that things have proper margin/padding.
 
 Fix: Remove all each() function errors. The function is deprecated.
 Create a list of the files I've worked in for the Git README file.
