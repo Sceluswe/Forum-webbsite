@@ -46,10 +46,6 @@ class UsersController implements \Anax\DI\IInjectionAware
 		$this->users = new \Anax\Users\User();
 		$this->users->setDI($this->di);
 		$this->di->session();
-
-		$this->questions = new \Anax\Forum\Question();
-		$this->questions->setDI($this->di);
-		//$this->questions->setSource('question');
 	}
 
 
@@ -100,7 +96,7 @@ class UsersController implements \Anax\DI\IInjectionAware
     *
     * @return void
     */
-    public function profileAction($id = null)
+    public function profileAction($id)
     {
         $this->initialize();
 
