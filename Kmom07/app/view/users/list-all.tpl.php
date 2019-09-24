@@ -16,11 +16,27 @@
     </p>
 
 		<ul class="userlist">
-			<li><a class="userbutton" href="<?=$this->url->create($redirect["profile"] . $user->id)?>"><i class="fa fa-user"></i> Profile</a></li>
+			<li>
+                <a class="userbutton" href="<?=$this->url->create($redirect["profile"] . $user->id)?>">
+                    <i class="fa fa-user"></i> Profile
+                </a>
+            </li>
 			<?php if($admin && $user->acronym != "admin"):?>
-			<li><a class="userbutton" href="<?=$this->url->create($redirect["update"] . $user->id)?>"><i class="fa fa-pencil"></i> Update</a></li>
-			<li><a class="userbutton" href="<?=$this->url->create($redirect["softDelete"] . $user->id)?>"><i class="fa fa-trash"></i> Trashbin</a></li>
-			<li><a class="userbutton" href="<?=$this->url->create($redirect["restore"] . $user->id)?>"><i class="fa fa-wrench"></i> Restore</a></li>
+			<li>
+                <a class="userbutton" href="<?=$this->url->create($redirect["update"] . $user->id)?>">
+                    <i class="fa fa-pencil"></i> Update
+                </a>
+            </li>
+			<li>
+                <a class="userbutton" href="<?=$this->url->create($redirect["softDelete"] . $user->id)?>">
+                    <i class="fa fa-trash"></i> Trashbin
+                </a>
+            </li>
+			<li>
+                <a class="userbutton" href="<?=$this->url->create($redirect["restore"] . $user->id)?>">
+                    <i class="fa fa-wrench"></i> Restore
+                </a>
+            </li>
 			<?php endif;?>
 		</ul>
 </div>
