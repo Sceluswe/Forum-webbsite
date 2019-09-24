@@ -1,4 +1,5 @@
 <h1><?=$title?></h1>
+
 <p>The entire package has been created based on the recommendations found here:
 <a href="https://wiki.php.net/rfc/escaper">php.net</a></p>
 <p>The entire package on GitHub: <a href="https://github.com/Sceluswe/XSS-Escaper">Escaper on GitHub</a></p>

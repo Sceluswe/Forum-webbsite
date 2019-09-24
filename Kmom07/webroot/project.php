@@ -20,6 +20,12 @@ $di->set('UsersController', function() use ($di) {
 	return $controller;
 });
 
+$di->set('EscaperController', function() use ($di) {
+	$controller = new Anax\Escaper\EscaperController();
+	$controller->setDi($di);
+	return $controller;
+});
+
 $app = new \Anax\MVC\CApplicationBasic($di);
 
 
