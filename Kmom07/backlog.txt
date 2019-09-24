@@ -23,7 +23,7 @@ ForumController.php: Create database link tables (like questionTags) for questio
 -------- important
 Consider creating a HTMLList class that creates a list or possibly HTMLlink to create links
 ForumController.php: have tagCreateAction() include a cancel button in case the user doesn't want to create a tag.
-User.php: Allow users to delete their own questions.
+User.php: Allow users to delete their own questions. Or just the admin?
 
 CommentController: Check if removeAllAction() should be removed. Could be a security risk.
 CommentController: Check if setupAction() should be removed. Could be a security risk.
