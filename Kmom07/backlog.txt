@@ -11,10 +11,6 @@ Make sure users can only update the score of a question once.
 
 
 -------- urgent & important
-Study the different view templates so you understand what each of them does. See if they can't be reduced or even
-removed completely with better code. Look over the templates and see if you can't move more of the PHP code into
-controllers. There should be as little PHP code in the templates as possible.
-
 ForumController.php: Create a link table in the db for which questions users have voted on. Implement in ForumController.
 ForumController.php: Create database link tables (like questionTags) for questions answers and comments too? (Will require more research).
 
@@ -44,6 +40,11 @@ Create a list of the files I've worked in for the Git README file.
 
 
 -------- Completed --------
+-------- 2019-09-24
+Study the different view templates so you understand what each of them does. See if they can't be reduced or even
+removed completely with better code. Look over the templates and see if you can't move more of the PHP code into
+controllers. There should be as little PHP code in the templates as possible.
+
 -------- 2019-09-21
 1. UsersController.php: add a CFormModel to replace the functions in UsersController.
 2. Tag.php.tagCreateAction(): rename function to addTagAction() and rename redirect from "createTag" to "addTag".
