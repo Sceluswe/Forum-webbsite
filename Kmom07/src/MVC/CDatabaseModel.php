@@ -93,9 +93,9 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 
 
     /**
-	* Create User.
+	* Create row.
 	*
-	* @param array values with which to initiate User.
+	* @param array values with which to initiate row.
 	*
 	* @return boolean true or false.
 	*/

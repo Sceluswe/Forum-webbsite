@@ -66,6 +66,9 @@ class ForumController implements \Anax\DI\IInjectionAware
         $this->users->setDI($this->di);
         $this->di->session();
 
+        $this->linkQuestionToUserVotes = new \Anax\Forum\linkQuestionToUserVotes();
+        $this->linkQuestionToUserVotes->setDI($this->di);
+
         $this->time = new \Anax\Forum\CFormatUnixTime();
 
         $this->table = new \Anax\HTMLTable\HTMLTable();
@@ -319,7 +322,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 
 //---------------- Ratings ----------------
-	/**
+    /**
 	* Function to edit the rating of a question, answer or comment.
 	*
 	* @param string, a 1 letter value to determine which table to use.
@@ -328,24 +331,53 @@ class ForumController implements \Anax\DI\IInjectionAware
     *
     * @return void.
 	*/
-	public function voteAction($table, $rowid, $number)
+	public function voteAction($table, $rowId, $number)
 	{
 		if($this->users->isUserLoggedIn())
 		{
             // Find database table and change the rating of the row in that table.
-            if(is_numeric($rowid) && ($number == 1 || $number == -1))
+            if(is_numeric($rowId))
             {
-                switch($table)
+                switch($number)
                 {
-                    case 'Q':
-                        $this->questions->editVote($rowid, $number);
-                        break;
-                    case 'A':
-                        $this->answers->editVote($rowid, $number);
-                        break;
-                    case 'C':
-                        $this->comments->editVote($rowid, $number);
-                        break;
+                    case 1:
+                        switch($table)
+                        {
+                            case 'Q':
+                                $userId = $this->users->findByAcronym($this->users->currentUser())->id;
+                                if($this->linkQuestionToUserVotes->userHasNotVoted($rowId, $userId))
+                                {
+                                    $this->questions->editVote($rowId, $number);
+                                    $this->linkQuestionToUserVotes->addUserVote($rowId, $userId);
+                                }
+                                break;
+                            case 'A':
+                                $this->answers->editVote($rowId, $number);
+                                break;
+                            case 'C':
+                                $this->comments->editVote($rowId, $number);
+                                break;
+                        }
+                    break;
+                    case -1:
+                        switch($table)
+                        {
+                            case 'Q':
+                                $userId = $this->users->findByAcronym($this->users->currentUser())->id;
+                                if($this->linkQuestionToUserVotes->userHasVoted($rowId, $userId))
+                                {
+                                    $this->questions->editVote($rowId, $number);
+                                    $this->linkQuestionToUserVotes->removeUserVote($rowId, $userId);
+                                }
+                                break;
+                            case 'A':
+                                $this->answers->editVote($rowId, $number);
+                                break;
+                            case 'C':
+                                $this->comments->editVote($rowId, $number);
+                                break;
+                        }
+                    break;
                     default:
                         die("Error: invalid parameters in ForumController.voteAction().");
                 }
@@ -362,7 +394,6 @@ class ForumController implements \Anax\DI\IInjectionAware
             $this->utility->createRedirect($this->redirect["login"]);
 		}
 	}
-
 
 
 // ---------------- Accept answer ---------------

@@ -17,7 +17,7 @@ class QuestionTags extends \Anax\MVC\CDatabaseModel
     * @param string, the id of the question.
     * @param string, the id of the tag to look for.
     *
-    * @return boolean, true of false.
+    * @return boolean, true or false.
     */
     public function questionHasTag($questionId, $tagId)
     {
