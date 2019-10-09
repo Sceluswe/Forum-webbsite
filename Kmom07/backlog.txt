@@ -11,16 +11,15 @@ Make sure users can only update the score of a question once.
 
 
 -------- urgent & important
-ForumController.php: Create a link table in the db for which questions users have voted on. Implement in ForumController.
-    1. Create DB table, assign appropriate name. linkQuestionToUserVotes questionId UserId
-    2. Create a model.
-    3. Implement the model in ForumController.
-
 ForumController.php: Create database link tables (like questionTags) for questions answers and comments too? (Will require more research).
 
-
+ForumController & QuestionTags: move call to create in ForumController into a wrapper function in QuestionTags.
+ForumController & QuestionTags: rename QuestionTags to linkQuestionTags (or linkQuestionToTags).
 
 -------- important
+UserController & ForumController & user: use ID as user identifier and save the id in the session instead of the acronym?
+    Perhaps even save the user object in session?
+User.phg: correct delete() comments.
 Consider creating a HTMLList class that creates a list or possibly HTMLlink to create links
 ForumController.php: have tagCreateAction() include a cancel button in case the user doesn't want to create a tag.
 User.php: Allow users to delete their own questions. Or just the admin?
@@ -44,6 +43,12 @@ Create a list of the files I've worked in for the Git README file.
 
 
 -------- Completed --------
+-------- 2019-10-07
+ForumController.php: Create a link table in the db for which questions users have voted on. Implement in ForumController.
+    1. Create DB table, assign appropriate name. linkQuestionToUserVotes questionId UserId
+    2. Create a model.
+    3. Implement the model in ForumController.
+
 -------- 2019-09-24
 Study the different view templates so you understand what each of them does. See if they can't be reduced or even
 removed completely with better code. Look over the templates and see if you can't move more of the PHP code into
@@ -55,7 +60,6 @@ controllers. There should be as little PHP code in the templates as possible.
 Make sure templates use the new redirect name.
 3. Make sure all files are in the LF format.
 4. Look over all the files in app/src/ and format them. Code looked terrible.
-
 
 -------- 2019-09-17
 Find out why the "Why?" question is displayed when sorting by a tag that it doesn't have. I'm guessing
