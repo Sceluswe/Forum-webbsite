@@ -6,7 +6,8 @@ namespace Anax\Forum;
 *
 * Contains interactions with the database.
 */
-trait TQACModel {
+trait TQACModel
+{
 
 
 
