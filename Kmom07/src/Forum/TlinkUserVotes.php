@@ -21,7 +21,7 @@ trait TlinkUserVotes
     */
     public function userHasNotVoted($questionId, $userId)
     {
-        return empty($this->query()->where('questionId = ?')
+        return empty(parent::query()->where('questionId = ?')
             ->andWhere('userId = ?')
             ->execute([$questionId, $userId]));
     }
@@ -38,7 +38,7 @@ trait TlinkUserVotes
     */
     public function userHasVoted($questionId, $userId)
     {
-        return !empty($this->query()->where('questionId = ?')
+        return !empty(parent::query()->where('questionId = ?')
             ->andWhere('userId = ?')
             ->execute([$questionId, $userId]));
     }
@@ -55,7 +55,7 @@ trait TlinkUserVotes
     */
     public function addUserVote($questionId, $userId)
     {
-        return $this->create([
+        return parent::create([
             "questionId"    => $questionId,
             "userId"        => $userId
         ]);
@@ -73,10 +73,10 @@ trait TlinkUserVotes
     */
     public function removeUserVote($questionId, $userId)
     {
-        $row = $this->query()->where('questionId = ?')
+        $row = parent::query()->where('questionId = ?')
             ->andWhere('userId = ?')
             ->execute([$questionId, $userId])[0];
 
-        return $this->delete($row->id);
+        return parent::delete($row->id);
     }
 }
