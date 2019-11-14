@@ -69,6 +69,12 @@ class ForumController implements \Anax\DI\IInjectionAware
         $this->linkQuestionToUserVotes = new \Anax\Forum\linkQuestionToUserVotes();
         $this->linkQuestionToUserVotes->setDI($this->di);
 
+        $this->linkAnswerToUserVotes = new \Anax\Forum\linkAnswerToUserVotes();
+        $this->linkAnswerToUserVotes->setDI($this->di);
+
+        $this->linkCommentToUserVotes = new \Anax\Forum\linkCommentToUserVotes();
+        $this->linkCommentToUserVotes->setDI($this->di);
+
         $this->time = new \Anax\Forum\CFormatUnixTime();
 
         $this->table = new \Anax\HTMLTable\HTMLTable();
@@ -322,6 +328,20 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 
 //---------------- Ratings ----------------
+    private function vote($model)
+    {
+        if($this->linkQuestionToUserVotes->userHasNotVoted($rowId, $userId))
+        {
+            $this->questions->editVote($rowId, (1 * $number));
+            $model->addUserVote($rowId, $userId);
+        }
+        elseif($this->linkQuestionToUserVotes->userHasVoted($rowId, $userId))
+        {
+            $this->questions->editVote($rowId, (-1 * $number));
+            $model->removeUserVote($rowId, $userId);
+        }
+    }
+
     /**
 	* Function to edit the rating of a question, answer or comment.
 	*
@@ -336,50 +356,22 @@ class ForumController implements \Anax\DI\IInjectionAware
 		if($this->users->isUserLoggedIn())
 		{
             // Find database table and change the rating of the row in that table.
-            if(is_numeric($rowId))
+            if(is_numeric($rowId) && ($number == 1 || $number == -1))
             {
-                switch($number)
+                switch($table)
                 {
-                    case 1:
-                        switch($table)
-                        {
-                            case 'Q':
-                                $userId = $this->users->findByAcronym($this->users->currentUser())->id;
-                                if($this->linkQuestionToUserVotes->userHasNotVoted($rowId, $userId))
-                                {
-                                    $this->questions->editVote($rowId, $number);
-                                    $this->linkQuestionToUserVotes->addUserVote($rowId, $userId);
-                                }
-                                break;
-                            case 'A':
-                                $this->answers->editVote($rowId, $number);
-                                break;
-                            case 'C':
-                                $this->comments->editVote($rowId, $number);
-                                break;
-                        }
-                    break;
-                    case -1:
-                        switch($table)
-                        {
-                            case 'Q':
-                                $userId = $this->users->findByAcronym($this->users->currentUser())->id;
-                                if($this->linkQuestionToUserVotes->userHasVoted($rowId, $userId))
-                                {
-                                    $this->questions->editVote($rowId, $number);
-                                    $this->linkQuestionToUserVotes->removeUserVote($rowId, $userId);
-                                }
-                                break;
-                            case 'A':
-                                $this->answers->editVote($rowId, $number);
-                                break;
-                            case 'C':
-                                $this->comments->editVote($rowId, $number);
-                                break;
-                        }
-                    break;
-                    default:
-                        die("Error: invalid parameters in ForumController.voteAction().");
+                    case 'Q':
+                        $userId = $this->users->findByAcronym($this->users->currentUser())->id;
+                        $this->vote($this->linkQuestionToUserVotes);
+                        break;
+                    case 'A':
+                        $userId = $this->users->findByAcronym($this->users->currentUser())->id;
+                        $this->vote($this->linkAnswerToUserVotes);
+                        break;
+                    case 'C':
+                        $userId = $this->users->findByAcronym($this->users->currentUser())->id;
+                        $this->vote($this->linkCommentToUserVotes);
+                        break;
                 }
 
                 $this->utility->createRedirect($this->redirect["question"] . $this->questions->getQuestionId());
