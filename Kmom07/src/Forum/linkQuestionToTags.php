@@ -6,7 +6,7 @@ namespace Anax\Forum;
 *
 * Contains interactions with the database.
 */
-class QuestionTags extends \Anax\MVC\CDatabaseModel
+class linkQuestionToTags extends \Anax\MVC\CDatabaseModel
 {
 
 

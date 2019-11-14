@@ -12,7 +12,6 @@ Make sure users can only update the score of a question once.
 
 -------- urgent & important
 ForumController & QuestionTags: move call to create in ForumController into a wrapper function in QuestionTags.
-ForumController & QuestionTags: rename QuestionTags to linkQuestionTags (or linkQuestionToTags).
 
 ForumController: implement so that questions can receive negatives votes. Big question to fix this is if I need an
 interface or an abstract class.
@@ -47,6 +46,7 @@ Create a list of the files I've worked in for the Git README file.
 
 -------- Completed --------
 -------- 2019-11-14
+ForumController & QuestionTags: rename QuestionTags to linkQuestionTags (or linkQuestionToTags).
 db: add a column to the linktables that lets you determine if  it was a negative or positive vote.
 
 ForumController.php: Create database link tables (like questionTags) for questions answers and comments.
