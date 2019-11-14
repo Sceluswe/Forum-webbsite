@@ -6,8 +6,26 @@ namespace Anax\Forum;
 *
 * Contains interactions with the database.
 */
-class QuestionTags extends \Anax\MVC\CDatabaseModel
+class linkQuestionToTags extends \Anax\MVC\CDatabaseModel
 {
+
+
+
+    /**
+    * Wrapper function around parent create functionality.
+    *
+    * @param string, the id of the question.
+    * @param string, the id of the tag to link to.
+    *
+    * @return boolean, true or false.
+    */
+    public function createLink($questionId, $tagId)
+    {
+        return parent::create([
+            "questionId"    => $questionId,
+            "tagId"         => $tagId
+        ]);
+    }
 
 
 

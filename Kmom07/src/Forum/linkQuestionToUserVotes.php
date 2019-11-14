@@ -84,7 +84,7 @@ class linkQuestionToUserVotes extends \Anax\Forum\ACUserVotes
 
 
     /**
-    * Checks if a user has voted on a question.
+    * Get the voteType of a placed vote.
     *
     * @param string, the id of the question.
     * @param string, the id of the user to look for.

@@ -84,7 +84,7 @@ class linkCommentToUserVotes extends \Anax\Forum\ACUserVotes
 
 
     /**
-    * Checks if a user has voted on a comment.
+    * Get the voteType of a placed vote.
     *
     * @param string, the id of the comment.
     * @param string, the id of the user to look for.

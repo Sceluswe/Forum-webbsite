@@ -47,6 +47,10 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function initialize()
 	{
+        $this->users = new \Anax\Users\User();
+        $this->users->setDI($this->di);
+        $this->di->session();
+
 		$this->questions = new \Anax\Forum\Question();
 		$this->questions->setDI($this->di);
 
@@ -59,12 +63,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 		$this->tags = new \Anax\Forum\Tag();
 		$this->tags->setDI($this->di);
 
-        $this->questionTags = new \Anax\Forum\QuestionTags();
-        $this->questionTags->setDI($this->di);
-
-        $this->users = new \Anax\Users\User();
-        $this->users->setDI($this->di);
-        $this->di->session();
+        $this->linkQuestionToTags = new \Anax\Forum\linkQuestionToTags();
+        $this->linkQuestionToTags->setDI($this->di);
 
         $this->linkQuestionToUserVotes = new \Anax\Forum\linkQuestionToUserVotes();
         $this->linkQuestionToUserVotes->setDI($this->di);
@@ -104,7 +104,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 		{   // Check if the tag exists.
             if(!empty($this->tags->findByName($tagName)))
             {
-                $result = $this->time->formatUnixProperties($this->questionTags->selectByTag($this->tags->id));
+                $result = $this->time->formatUnixProperties($this->linkQuestionToTags->selectByTag($this->tags->id));
             }
 		}
 
@@ -592,17 +592,14 @@ class ForumController implements \Anax\DI\IInjectionAware
                         'name' => $tagName
                     ]);
 
-                if(!$scope->questionTags->questionHasTag($questionId, $scope->tags->id))
+                if(!$scope->linkQuestionToTags->questionHasTag($questionId, $scope->tags->id))
                 {   // If the question doesn't have tag, apply it:
                     $form->saveInSession = true;
 
                     // Create a row that links the question to the tag.
-                    $scope->questionTags->create([
-                        "questionId"    => $questionId,
-                        "tagId"         => $scope->tags->id
-                    ]);
-
-                    $result = true;
+                    ($scope->linkQuestionToTags->createLink($questionId, $scope->tags->id))
+                        ? $result = true
+                        : die("ForumController.addCommentAction.callback: Comment creation failed.");
                 }
 
                 // Use questionId to create a redirect link back to that question.
