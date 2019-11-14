@@ -346,7 +346,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	* Function to edit the rating of a question, answer or comment.
 	*
 	* @param string, a 1 letter value to determine which table to use.
-	* @param string, the unique id of the row to use in the table.
+	* @param string, the unique id of the row to use in the QAC table.
     * @param string, a positive or negative number to add to the rating score.
     *
     * @return void.
