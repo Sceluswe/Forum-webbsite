@@ -5,8 +5,9 @@ abstract class ACUserVotes extends \Anax\MVC\CDatabaseModel
 {
     abstract public function userHasNotVoted($qacId, $userId);
     abstract public function userHasVoted($qacId, $userId);
-    abstract public function addUserVote($qacId, $userId);
+    abstract public function addUserVote($qacId, $userId, $voteType);
     abstract public function removeUserVote($qacId, $userId);
+    abstract public function getVoteType($qacId, $userId);
 
 
 

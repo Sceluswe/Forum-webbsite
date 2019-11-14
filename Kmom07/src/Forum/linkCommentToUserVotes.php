@@ -49,14 +49,16 @@ class linkCommentToUserVotes extends \Anax\Forum\ACUserVotes
     *
     * @param string, the id of the comment.
     * @param string, the id of the user to look for.
+    * @param integer, the type of vote placed (1 or -1).
     *
     * @return boolean, true or false.
     */
-    public function addUserVote($qacId, $userId)
+    public function addUserVote($qacId, $userId, $voteType)
     {
         return $this->create([
             "commentId"    => $qacId,
-            "userId"        => $userId
+            "userId"       => $userId,
+            "voteType"     => $voteType
         ]);
     }
 
@@ -77,5 +79,24 @@ class linkCommentToUserVotes extends \Anax\Forum\ACUserVotes
             ->execute([$qacId, $userId])[0];
 
         return $this->delete($row->id);
+    }
+
+
+
+    /**
+    * Checks if a user has voted on a comment.
+    *
+    * @param string, the id of the comment.
+    * @param string, the id of the user to look for.
+    *
+    * @return integer, the number indicating the type of vote placed.
+    */
+    public function getVoteType($qacId, $userId)
+    {
+        $row = $this->query()->where('commentId = ?')
+            ->andWhere('userId = ?')
+            ->execute([$qacId, $userId])[0];
+
+        return $row->voteType;
     }
 }

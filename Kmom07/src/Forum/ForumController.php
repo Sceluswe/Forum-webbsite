@@ -328,17 +328,19 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 
 //---------------- Ratings ----------------
-    private function vote($model)
+    private function vote($model, $linktable, $rowId, $number)
     {
-        if($this->linkQuestionToUserVotes->userHasNotVoted($rowId, $userId))
+        $userId = $this->users->findByAcronym($this->users->currentUser())->id;
+
+        if($linktable->userHasNotVoted($rowId, $userId))
         {
-            $this->questions->editVote($rowId, (1 * $number));
-            $model->addUserVote($rowId, $userId);
+            $model->editVote($rowId, (1 * $number));
+            $linktable->addUserVote($rowId, $userId, $number);
         }
-        elseif($this->linkQuestionToUserVotes->userHasVoted($rowId, $userId))
+        elseif($linktable->userHasVoted($rowId, $userId))
         {
-            $this->questions->editVote($rowId, (-1 * $number));
-            $model->removeUserVote($rowId, $userId);
+            $model->editVote($rowId, (-1 * $linktable->getVoteType($rowId, $userId)));
+            $linktable->removeUserVote($rowId, $userId);
         }
     }
 
@@ -361,16 +363,13 @@ class ForumController implements \Anax\DI\IInjectionAware
                 switch($table)
                 {
                     case 'Q':
-                        $userId = $this->users->findByAcronym($this->users->currentUser())->id;
-                        $this->vote($this->linkQuestionToUserVotes);
+                        $this->vote($this->questions, $this->linkQuestionToUserVotes, $rowId, $number);
                         break;
                     case 'A':
-                        $userId = $this->users->findByAcronym($this->users->currentUser())->id;
-                        $this->vote($this->linkAnswerToUserVotes);
+                        $this->vote($this->answers, $this->linkAnswerToUserVotes, $rowId, $number);
                         break;
                     case 'C':
-                        $userId = $this->users->findByAcronym($this->users->currentUser())->id;
-                        $this->vote($this->linkCommentToUserVotes);
+                        $this->vote($this->comments, $this->linkCommentToUserVotes, $rowId, $number);
                         break;
                 }
 
