@@ -69,6 +69,12 @@ class ForumController implements \Anax\DI\IInjectionAware
         $this->linkQuestionToUserVotes = new \Anax\Forum\linkQuestionToUserVotes();
         $this->linkQuestionToUserVotes->setDI($this->di);
 
+        $this->linkAnswerToUserVotes = new \Anax\Forum\linkAnswerToUserVotes();
+        $this->linkAnswerToUserVotes->setDI($this->di);
+
+        $this->linkCommentToUserVotes = new \Anax\Forum\linkCommentToUserVotes();
+        $this->linkCommentToUserVotes->setDI($this->di);
+
         $this->time = new \Anax\Forum\CFormatUnixTime();
 
         $this->table = new \Anax\HTMLTable\HTMLTable();
@@ -322,11 +328,27 @@ class ForumController implements \Anax\DI\IInjectionAware
 
 
 //---------------- Ratings ----------------
+    private function vote($model, $linktable, $rowId, $number)
+    {
+        $userId = $this->users->findByAcronym($this->users->currentUser())->id;
+
+        if($linktable->userHasNotVoted($rowId, $userId))
+        {
+            $model->editVote($rowId, (1 * $number));
+            $linktable->addUserVote($rowId, $userId, $number);
+        }
+        elseif($linktable->userHasVoted($rowId, $userId))
+        {
+            $model->editVote($rowId, (-1 * $linktable->getVoteType($rowId, $userId)));
+            $linktable->removeUserVote($rowId, $userId);
+        }
+    }
+
     /**
 	* Function to edit the rating of a question, answer or comment.
 	*
 	* @param string, a 1 letter value to determine which table to use.
-	* @param string, the unique id of the row to use in the table.
+	* @param string, the unique id of the row to use in the QAC table.
     * @param string, a positive or negative number to add to the rating score.
     *
     * @return void.
@@ -336,50 +358,19 @@ class ForumController implements \Anax\DI\IInjectionAware
 		if($this->users->isUserLoggedIn())
 		{
             // Find database table and change the rating of the row in that table.
-            if(is_numeric($rowId))
+            if(is_numeric($rowId) && ($number == 1 || $number == -1))
             {
-                switch($number)
+                switch($table)
                 {
-                    case 1:
-                        switch($table)
-                        {
-                            case 'Q':
-                                $userId = $this->users->findByAcronym($this->users->currentUser())->id;
-                                if($this->linkQuestionToUserVotes->userHasNotVoted($rowId, $userId))
-                                {
-                                    $this->questions->editVote($rowId, $number);
-                                    $this->linkQuestionToUserVotes->addUserVote($rowId, $userId);
-                                }
-                                break;
-                            case 'A':
-                                $this->answers->editVote($rowId, $number);
-                                break;
-                            case 'C':
-                                $this->comments->editVote($rowId, $number);
-                                break;
-                        }
-                    break;
-                    case -1:
-                        switch($table)
-                        {
-                            case 'Q':
-                                $userId = $this->users->findByAcronym($this->users->currentUser())->id;
-                                if($this->linkQuestionToUserVotes->userHasVoted($rowId, $userId))
-                                {
-                                    $this->questions->editVote($rowId, $number);
-                                    $this->linkQuestionToUserVotes->removeUserVote($rowId, $userId);
-                                }
-                                break;
-                            case 'A':
-                                $this->answers->editVote($rowId, $number);
-                                break;
-                            case 'C':
-                                $this->comments->editVote($rowId, $number);
-                                break;
-                        }
-                    break;
-                    default:
-                        die("Error: invalid parameters in ForumController.voteAction().");
+                    case 'Q':
+                        $this->vote($this->questions, $this->linkQuestionToUserVotes, $rowId, $number);
+                        break;
+                    case 'A':
+                        $this->vote($this->answers, $this->linkAnswerToUserVotes, $rowId, $number);
+                        break;
+                    case 'C':
+                        $this->vote($this->comments, $this->linkCommentToUserVotes, $rowId, $number);
+                        break;
                 }
 
                 $this->utility->createRedirect($this->redirect["question"] . $this->questions->getQuestionId());
@@ -444,7 +435,7 @@ class ForumController implements \Anax\DI\IInjectionAware
                 $form->saveInSession = true;
 
                 // Save form.
-                $result = $scope->questions->create([
+                $createResult = $scope->questions->create([
                     'user'      => $scope->users->acronym,
                     'userid'    => $scope->users->id,
                     'title'     => $form->Value('title'),
@@ -453,6 +444,10 @@ class ForumController implements \Anax\DI\IInjectionAware
                     'rating'    => 0,
                     'answered'  => 0
                 ]);
+
+                ($createResult)
+                    ? $result = true
+                    : die("ForumController.addQuestionAction.callback: Question creation failed.");
 
                 $scope->utility->createRedirect($scope->redirect["menu"]);
             }
@@ -501,14 +496,9 @@ class ForumController implements \Anax\DI\IInjectionAware
                     'answered'  => $scope->questions->find($form->Value('questionid'))->answered + 1
                 ]);
 
-                if($createResult && $updateResult)
-                {
-                    $result = true;
-                }
-                else
-                {
-                    die("ForumController.addAnswerAction.callback: Creation of answer or update of question failed.");
-                }
+                ($createResult && $updateResult)
+                    ? $result = true
+                    : die("ForumController.addAnswerAction.callback: Creation or update of answer to question failed.");
 
                 // Use the questionid to create a redirect link back to the question.
                 $this->utility->createRedirect($scope->redirect["question"] . $form->Value('questionid'));
@@ -550,7 +540,7 @@ class ForumController implements \Anax\DI\IInjectionAware
         	{
         		$form->saveInSession = true;
         		// Save form.
-        		$scope->comments->create([
+        		$createResult = $scope->comments->create([
         			'user'          => $scope->users->acronym,
         			'commentparent' => $form->Value('commentparent'),
         			'qaid'          => $form->Value('qaid'),
@@ -560,7 +550,10 @@ class ForumController implements \Anax\DI\IInjectionAware
         			'rating'        => 0
         		]);
 
-        		$result = true;
+                ($createResult)
+                    ? $result = true
+                    : die("ForumController.addCommentAction.callback: Comment creation failed.");
+
                 $scope->utility->createRedirect($scope->redirect["question"] . $form->Value('questionid'));
         	}
 

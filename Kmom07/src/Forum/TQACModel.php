@@ -2,16 +2,17 @@
 namespace Anax\Forum;
 
 /**
-* Trait for shared questions(q), answers(a) and comments(c) functionality.
+* Trait for shared questions(Q), answers(A) and comments(C) functionality.
 *
 * Contains interactions with the database.
 */
-trait TQACModel {
+trait TQACModel
+{
 
 
 
     /**
-    * Find correct q, a or c row and update its rating with input number.
+    * Find correct Q, A or C row and update its rating with input number.
     *
     * @param object, the data in which the targeted dataobject exists.
     * @param string, the unique id of the row to use in the table/data.
@@ -29,9 +30,9 @@ trait TQACModel {
 
 
     /**
-    * Find q, a or c by column userId.
+    * Find Q, A or C by column userId.
     *
-    * @param string, the id number of the q a or c rows to find.
+    * @param string, the id number of the Q, A or C rows to find.
     *
     * @return array with resultset.
     */
@@ -43,7 +44,7 @@ trait TQACModel {
 
 
     /**
-    * Calculate: total nr of q/a/c, respective rating and total score.
+    * Calculate: total nr of Q/A/C, respective rating and total score.
     *
     * @param string, the user id to find by.
     *
