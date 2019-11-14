@@ -12,6 +12,24 @@ class linkQuestionToTags extends \Anax\MVC\CDatabaseModel
 
 
     /**
+    * Wrapper function around parent create functionality.
+    *
+    * @param string, the id of the question.
+    * @param string, the id of the tag to link to.
+    *
+    * @return boolean, true or false.
+    */
+    public function createLink($questionId, $tagId)
+    {
+        return parent::create([
+            "questionId"    => $questionId,
+            "tagId"         => $tagId
+        ]);
+    }
+
+
+
+    /**
     * Checks if a question has a tag.
     *
     * @param string, the id of the question.

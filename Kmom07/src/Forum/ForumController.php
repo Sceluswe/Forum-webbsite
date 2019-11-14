@@ -597,12 +597,9 @@ class ForumController implements \Anax\DI\IInjectionAware
                     $form->saveInSession = true;
 
                     // Create a row that links the question to the tag.
-                    $scope->linkQuestionToTags->create([
-                        "questionId"    => $questionId,
-                        "tagId"         => $scope->tags->id
-                    ]);
-
-                    $result = true;
+                    ($scope->linkQuestionToTags->createLink($questionId, $scope->tags->id))
+                        ? $result = true
+                        : die("ForumController.addCommentAction.callback: Comment creation failed.");
                 }
 
                 // Use questionId to create a redirect link back to that question.
