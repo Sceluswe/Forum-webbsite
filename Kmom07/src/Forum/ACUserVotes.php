@@ -24,11 +24,11 @@ abstract class ACUserVotes extends \Anax\MVC\CDatabaseModel
         $bool = false;
         if($this->userHasNotVoted($qacId, $userId))
         {
-            $this->addUserVote($qacId, $userId);
+            $bool = $this->addUserVote($qacId, $userId);
         }
         elseif($this->userHasVoted($qacId, $userId))
         {
-            $this->removeUserVote($qacId, $userId);
+            $bool = $this->removeUserVote($qacId, $userId);
         }
 
         return $bool;
