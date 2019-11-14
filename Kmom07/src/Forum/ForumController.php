@@ -436,7 +436,7 @@ class ForumController implements \Anax\DI\IInjectionAware
                 $form->saveInSession = true;
 
                 // Save form.
-                $result = $scope->questions->create([
+                $createResult = $scope->questions->create([
                     'user'      => $scope->users->acronym,
                     'userid'    => $scope->users->id,
                     'title'     => $form->Value('title'),
@@ -445,6 +445,10 @@ class ForumController implements \Anax\DI\IInjectionAware
                     'rating'    => 0,
                     'answered'  => 0
                 ]);
+
+                ($createResult)
+                    ? $result = true
+                    : die("ForumController.addQuestionAction.callback: Question creation failed.");
 
                 $scope->utility->createRedirect($scope->redirect["menu"]);
             }
@@ -493,14 +497,9 @@ class ForumController implements \Anax\DI\IInjectionAware
                     'answered'  => $scope->questions->find($form->Value('questionid'))->answered + 1
                 ]);
 
-                if($createResult && $updateResult)
-                {
-                    $result = true;
-                }
-                else
-                {
-                    die("ForumController.addAnswerAction.callback: Creation of answer or update of question failed.");
-                }
+                ($createResult && $updateResult)
+                    ? $result = true
+                    : die("ForumController.addAnswerAction.callback: Creation or update of answer to question failed.");
 
                 // Use the questionid to create a redirect link back to the question.
                 $this->utility->createRedirect($scope->redirect["question"] . $form->Value('questionid'));
@@ -542,7 +541,7 @@ class ForumController implements \Anax\DI\IInjectionAware
         	{
         		$form->saveInSession = true;
         		// Save form.
-        		$scope->comments->create([
+        		$createResult = $scope->comments->create([
         			'user'          => $scope->users->acronym,
         			'commentparent' => $form->Value('commentparent'),
         			'qaid'          => $form->Value('qaid'),
@@ -552,7 +551,10 @@ class ForumController implements \Anax\DI\IInjectionAware
         			'rating'        => 0
         		]);
 
-        		$result = true;
+                ($createResult)
+                    ? $result = true
+                    : die("ForumController.addCommentAction.callback: Comment creation failed.");
+
                 $scope->utility->createRedirect($scope->redirect["question"] . $form->Value('questionid'));
         	}
 
