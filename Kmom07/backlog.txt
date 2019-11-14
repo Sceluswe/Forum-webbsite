@@ -38,10 +38,7 @@ Design: create a clearer separation between questions, perhaps coloring the back
 Design/views: move inline CSS code out of the templates into CSS classes.
 Design: fix the design of the home page so that things have proper margin/padding.
 Design: remove the "Smiteology" title and replace it with "Smite"
-<<<<<<< HEAD
 Design: add green and red vote buttons, implement so that the buttons change color if a vote has been placed.
-=======
->>>>>>> d93963176cc7d8863418612060d90846e1773795
 
 Fix: Remove all each() function errors. The function is deprecated.
 Create a list of the files I've worked in for the Git README file.
