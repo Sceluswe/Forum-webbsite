@@ -35,7 +35,7 @@ class CommentController implements \Anax\DI\IInjectionAware
 	*
 	* @return void.
 	*/
-	public function initialize($table = null)
+	public function initialize()
 	{
 		$this->comments = new \Anax\Comments\Comment();
 		$this->comments->setDI($this->di);

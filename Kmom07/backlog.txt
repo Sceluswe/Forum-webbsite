@@ -1,27 +1,9 @@
-Make sure users can only update the score of a question once.
-    1. Create a new column in question, answer and comment tables.
-    2. Make sure it contains a string where each ID is split with a comma.
-    3. When upvoting or downvoting, take the string from the database, check if the ID is there before
-    making any changes. If it is, nothing happens, if it isn't a vote is placed.
-
-    in_array('13', explode(',', '8,7,13,14,16'));
-    Just to elaborate: explode turns the string into an array, splitting it at each ',' in this case.
-    Then, in_array checks if the string '13' is in the resulting array somewhere.
-
-
-
 -------- urgent & important
 
 -------- important
 UserController & ForumController & user: use ID as user identifier and save the id in the session instead of the acronym?
     Perhaps even save the user object in session?
-User.phg: correct delete() comments.
-Consider creating a HTMLList class that creates a list or possibly HTMLlink to create links
-ForumController.php: have tagCreateAction() include a cancel button in case the user doesn't want to create a tag.
 User.php: Allow users to delete their own questions. Or just the admin?
-
-CommentController: Check if removeAllAction() should be removed. Could be a security risk.
-CommentController: Check if setupAction() should be removed. Could be a security risk.
 
 Design: Fix the design of the number in the score of the question. It looks unaligned.
 Design: Display added tags below a posted question.
@@ -41,6 +23,18 @@ Create a list of the files I've worked in for the Git README file.
 
 
 -------- Completed --------
+-------- 2019-11-15
+User.php: correct delete() comments.
+CommentController: Check if removeAllAction() should be removed. Could be a security risk.
+CommentController: Check if setupAction() should be removed. Could be a security risk.
+Decided not to do anything about commentcontroller functions.
+ForumController.php: have tagCreateAction() include a cancel button in case the user doesn't want to create a tag. It's
+not possible with the current package extension.
+
+User.php: see if you can't move the hashing of the password into the database model. I'd have to make wrappers around
+everything, and even then basic functionality would be able to bypass it, that's a problem with not having overloading
+in a language.
+
 -------- 2019-11-14
 ForumController & QuestionTags: move call to create in ForumController into a wrapper function in QuestionTags.
 
