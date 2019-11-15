@@ -56,8 +56,8 @@ class User extends \Anax\MVC\CDatabaseModel
 	/**
 	* Function that checks if a user is an admin based on the provided $condition.
 	*
-	* @param $user, string, A string with the current users name.
-	* @param $condition, array, an array of strings containing the allowed users.
+	* @param $user string, A string with the current users name.
+	* @param $condition array, an array of strings containing the allowed users.
 	*
 	* @return boolean, depending on result.
 	*/
@@ -70,8 +70,11 @@ class User extends \Anax\MVC\CDatabaseModel
 
 	/**
 	* Function that validates a user based on acronym and password.
+    *
+    * @param string, name of the user.
+    * @param string, the hashed password of the user.
 	*
-	* $return boolean, false or true depending on result.
+	* @return boolean, false or true depending on result.
 	*/
 	public function validateUser($acronym, $password)
 	{
@@ -101,6 +104,8 @@ class User extends \Anax\MVC\CDatabaseModel
 	* Function that saves the logged in user in session.
 	*
 	* @param $user, acronym of the user to be logged in.
+    *
+    * @return void.
 	*/
 	public function loginUser($user)
 	{
@@ -119,6 +124,7 @@ class User extends \Anax\MVC\CDatabaseModel
 	/**
 	* Function that unsets the logged in user in session.
 	*
+    * @return void.
 	*/
 	public function logoutUser()
 	{
@@ -153,6 +159,8 @@ class User extends \Anax\MVC\CDatabaseModel
 
     /**
 	* Returns the top 6 users with the highest score.
+    *
+    * @param int, id of the row/user to be deleted.
 	*
 	* @return resultset, returns the top 6 rated users.
 	*/
@@ -180,6 +188,8 @@ class User extends \Anax\MVC\CDatabaseModel
 
 	/**
 	* Test function to initialize a database table.
+    *
+    * @param string, name of the table to create.
 	*
 	* @return boolean.
 	*/

@@ -15,7 +15,7 @@ Make sure users can only update the score of a question once.
 -------- important
 UserController & ForumController & user: use ID as user identifier and save the id in the session instead of the acronym?
     Perhaps even save the user object in session?
-User.phg: correct delete() comments.
+User.php: see if you can't move the hasing of the password into the database model.
 Consider creating a HTMLList class that creates a list or possibly HTMLlink to create links
 ForumController.php: have tagCreateAction() include a cancel button in case the user doesn't want to create a tag.
 User.php: Allow users to delete their own questions. Or just the admin?
@@ -41,6 +41,9 @@ Create a list of the files I've worked in for the Git README file.
 
 
 -------- Completed --------
+-------- 2019-11-15
+User.php: correct delete() comments.
+
 -------- 2019-11-14
 ForumController & QuestionTags: move call to create in ForumController into a wrapper function in QuestionTags.
 
