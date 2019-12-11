@@ -1,9 +1,16 @@
 -------- urgent & important
 
 -------- important
-UserController & ForumController & user: use ID as user identifier and save the id in the session instead of the acronym?
-    Perhaps even save the user object in session?
+
 User.php: Allow users to delete their own questions. Or just the admin?
+
+
+Find a way to save the state of the webpage or similiar in order to maintain the users position in the browser when the
+user votes on a Q A or C.
+1. Figure out a way to load a javascript on certain pages, don't want to run the code where it isn't needed.
+
+ForumController.php: On the homepage, when clicking the name of a top rated user it doesn't take you to the users profile
+as it should.
 
 Design: Fix the design of the number in the score of the question. It looks unaligned.
 Design: Display added tags below a posted question.
@@ -23,6 +30,11 @@ Create a list of the files I've worked in for the Git README file.
 
 
 -------- Completed --------
+-------- 2019-12-10
+UserController & ForumController & user: use ID as user identifier and save the id in the session instead of the acronym?
+Bad idea. I'd rather not give anyone the id of a row in the database. Email maybe but that's confidential information.
+
+
 -------- 2019-11-15
 User.php: correct delete() comments.
 CommentController: Check if removeAllAction() should be removed. Could be a security risk.
