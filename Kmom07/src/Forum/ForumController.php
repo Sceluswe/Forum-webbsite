@@ -357,6 +357,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 	{
 		if($this->users->isUserLoggedIn())
 		{
+            $this->theme->addJavascript("js/saveScrollState.js");
+
             // Find database table and change the rating of the row in that table.
             if(is_numeric($rowId) && ($number == 1 || $number == -1))
             {

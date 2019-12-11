@@ -6,7 +6,8 @@ User.php: Allow users to delete their own questions. Or just the admin?
 
 
 Find a way to save the state of the webpage or similiar in order to maintain the users position in the browser when the
-user votes on a Q A or C.
+user votes on a Q A or C. Looks like it'll be done with JS.
+Anax takes javascript through a config file. Need to know if this can be edited by individual controllers.
 1. Figure out a way to load a javascript on certain pages, don't want to run the code where it isn't needed.
 
 ForumController.php: On the homepage, when clicking the name of a top rated user it doesn't take you to the users profile
