@@ -1,9 +1,4 @@
 -------- urgent & important
-
--------- important
-
-User.php: Allow users to delete their own questions. Or just the admin?
-
 Design: Fix the design of the number in the score of the question. It looks unaligned.
 Design: Display added tags below a posted question.
 Design: Fix the design when displaying a user profile. The lightblue box should be aligned to the left.
@@ -13,8 +8,18 @@ button and time of placement never moves.
 Design: create a clearer separation between questions, perhaps coloring the background.
 Design/views: move inline CSS code out of the templates into CSS classes.
 Design: fix the design of the home page so that things have proper margin/padding.
+Design: move content a few pixels up to remove ugly background line formed at the top of the page.
+Design: move main body content a few pixels up to remove ugly background line between the header and the content.
+Right underneath the navigation buttons.
 Design: remove the "Smiteology" title and replace it with "Smite"
 Design: add green and red vote buttons, implement so that the buttons change color if a vote has been placed.
+
+-------- important
+double check if you need the 1* and -1* in ForomController.vote();
+
+User.php: Allow users to delete their own questions. Or just the admin?
+
+
 
 Fix: Remove all each() function errors. The function is deprecated.
 Create a list of the files I've worked in for the Git README file.

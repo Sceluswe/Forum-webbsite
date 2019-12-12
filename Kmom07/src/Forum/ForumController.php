@@ -35,8 +35,7 @@ class ForumController implements \Anax\DI\IInjectionAware
         "question"      => "forum/forum-question",
         "tagMenu"       => "forum/forum-tagMenu",
         "tagQuestion"   => "forum/forum-tagQuestion",
-        "userSketch"    => "forum/forum-userSketch",
-        "javascript"    => "javascript/hidden"
+        "userSketch"    => "forum/forum-userSketch"
     ];
 
 
@@ -158,7 +157,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function questionAction($id, $sort=null)
 	{
-        $this->theme->addJavascript("js/saveScrollState.js");
+        $this->theme->addJavascript("js/saveVoteScrollState.js");
 
 		// Clean the $id and get the question.
 		$question = $this->questions->find($id);
