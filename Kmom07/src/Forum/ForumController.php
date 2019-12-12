@@ -334,17 +334,23 @@ class ForumController implements \Anax\DI\IInjectionAware
 //---------------- Ratings ----------------
     private function vote($model, $linktable, $rowId, $number)
     {
-        $userId = $this->users->findByAcronym($this->users->currentUser())->id;
-
-        if($linktable->userHasNotVoted($rowId, $userId))
+        if($this->users->currentUser() == "admin")
         {
-            $model->editVote($rowId, (1 * $number));
-            $linktable->addUserVote($rowId, $userId, $number);
+            $model->editVote($rowId, $number);
         }
-        elseif($linktable->userHasVoted($rowId, $userId))
+        else
         {
-            $model->editVote($rowId, (-1 * $linktable->getVoteType($rowId, $userId)));
-            $linktable->removeUserVote($rowId, $userId);
+            $userId = $this->users->findByAcronym($this->users->currentUser())->id;
+            if($linktable->userHasNotVoted($rowId, $userId))
+            {
+                $model->editVote($rowId, (1 * $number));
+                $linktable->addUserVote($rowId, $userId, $number);
+            }
+            elseif($linktable->userHasVoted($rowId, $userId))
+            {
+                $model->editVote($rowId, (-1 * $linktable->getVoteType($rowId, $userId)));
+                $linktable->removeUserVote($rowId, $userId);
+            }
         }
     }
 
