@@ -4,9 +4,6 @@
 
 User.php: Allow users to delete their own questions. Or just the admin?
 
-ForumController.php: On the homepage, when clicking the name of a top rated user it doesn't take you to the users profile
-as it should.
-
 Design: Fix the design of the number in the score of the question. It looks unaligned.
 Design: Display added tags below a posted question.
 Design: Fix the design when displaying a user profile. The lightblue box should be aligned to the left.
@@ -26,6 +23,8 @@ Create a list of the files I've worked in for the Git README file.
 
 -------- Completed --------
 -------- 2019-12-12
+ForumController.php: On the homepage, when clicking the name of a top rated user it doesn't take you to the users profile
+as it should. FIX: template was missing the redirect variables.
 Find a way to save the state of the webpage or similiar in order to maintain the users position in the browser when the
 user votes on a Q A or C. Looks like it'll be done with JS.
 Anax takes javascript through a config file. Need to know if this can be edited by individual controllers.

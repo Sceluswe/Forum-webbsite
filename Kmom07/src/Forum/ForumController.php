@@ -241,6 +241,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 
         $this->views->add($this->template["userSketch"], [
             "title" => "Most active users",
+            "redirect"   => $this->redirect,
             'users' => $this->users->getTopRatedUsers()
         ]);
 
