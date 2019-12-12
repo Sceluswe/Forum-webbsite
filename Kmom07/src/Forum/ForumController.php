@@ -158,7 +158,7 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function questionAction($id, $sort=null)
 	{
-        $this->theme->addJavascript("js/saveScrollState.js");
+        $this->theme->addJavascript("js/saveVoteScrollState.js");
 
 		// Clean the $id and get the question.
 		$question = $this->questions->find($id);
