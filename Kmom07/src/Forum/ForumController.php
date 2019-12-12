@@ -35,7 +35,8 @@ class ForumController implements \Anax\DI\IInjectionAware
         "question"      => "forum/forum-question",
         "tagMenu"       => "forum/forum-tagMenu",
         "tagQuestion"   => "forum/forum-tagQuestion",
-        "userSketch"    => "forum/forum-userSketch"
+        "userSketch"    => "forum/forum-userSketch",
+        "javascript"    => "javascript/hidden"
     ];
 
 
@@ -157,6 +158,8 @@ class ForumController implements \Anax\DI\IInjectionAware
 	*/
 	public function questionAction($id, $sort=null)
 	{
+        $this->theme->addJavascript("js/saveScrollState.js");
+
 		// Clean the $id and get the question.
 		$question = $this->questions->find($id);
 
@@ -230,8 +233,8 @@ class ForumController implements \Anax\DI\IInjectionAware
         $questions = (!empty($questions)) ? $this->time->formatUnixProperties($questions) : [];
 
         $this->views->add($this->template["menu"], [
-            'title'      => "Recent Questions",
-            'redirect'   => $this->redirect,
+            "title"      => "Recent Questions",
+            "redirect"   => $this->redirect,
             "class"      => "width60",
             "questions"  => $questions
         ]);
@@ -242,9 +245,9 @@ class ForumController implements \Anax\DI\IInjectionAware
         ]);
 
         $this->views->add($this->template["tagMenu"], [
-            'title' => "Popular tags",
+            "title" => "Popular tags",
             "class" => "clear",
-            'tags'  => $this->tags->getPopularTags()
+            "tags"  => $this->tags->getPopularTags()
         ]);
     }
 
@@ -357,8 +360,6 @@ class ForumController implements \Anax\DI\IInjectionAware
 	{
 		if($this->users->isUserLoggedIn())
 		{
-            $this->theme->addJavascript("js/saveScrollState.js");
-
             // Find database table and change the rating of the row in that table.
             if(is_numeric($rowId) && ($number == 1 || $number == -1))
             {
