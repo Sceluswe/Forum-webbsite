@@ -116,7 +116,6 @@ class CRouterBasic implements \Anax\DI\IInjectionAware
     public function handle()
     {
         try {
-
             $query = $this->di->request->getRoute();
             $parts = $this->di->request->getRouteParts();
 
@@ -132,7 +131,6 @@ class CRouterBasic implements \Anax\DI\IInjectionAware
             $dispatcher->setControllerName(isset($parts[0]) ? $parts[0] : 'index');
 
             if ($dispatcher->isValidController()) {
-
                 $dispatcher->setActionName(isset($parts[1]) ? $parts[1] : 'index');
 
                 $params = [];
@@ -155,17 +153,14 @@ class CRouterBasic implements \Anax\DI\IInjectionAware
 
             // No route was matched
             $this->handleInternal('404');
-
         } catch (\Exception $e) {
 
             // Exception codes can match a route for a http status code
             $code = $e->getCode();
             $statusCodes = [403, 404, 500];
             if (in_array($code, $statusCodes)) {
-
                 $this->di->flash->setMessage($e->getMessage());
                 $this->handleInternal($code);
-
             } else {
                 throw $e;
             }
