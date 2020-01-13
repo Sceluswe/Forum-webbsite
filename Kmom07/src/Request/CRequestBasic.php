@@ -313,12 +313,9 @@ class CRequestBasic
     */
     public function getPost($key = null, $default = null)
     {
-        if ($key)
-		{
+        if ($key) {
             return isset($this->post[$key]) ? $this->post[$key] : $default;
-        }
-		else
-		{
+        } else {
             return $this->post;
         }
     }
@@ -332,8 +329,8 @@ class CRequestBasic
     *
     * @return boolean.
     */
-	public function hasPost($key)
-	{
-		return isset($this->post[$key]);
-	}
+    public function hasPost($key)
+    {
+        return isset($this->post[$key]);
+    }
 }
