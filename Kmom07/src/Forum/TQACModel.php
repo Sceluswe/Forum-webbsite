@@ -56,8 +56,7 @@ trait TQACModel
         $count = count($arrObj);
         $ratingSum = 0;
 
-        foreach($arrObj as $item)
-        {
+        foreach ($arrObj as $item) {
             $ratingSum += $item->rating;
         }
 

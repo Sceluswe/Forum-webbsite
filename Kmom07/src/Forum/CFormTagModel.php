@@ -15,21 +15,21 @@ class CFormTagModel extends \Anax\HTMLForm\CFormModel
     */
     public function createTagForm($values, $scope, $callback)
     {
-		$this->create([], [
-			'name' => [
-				'type'          => ($values) ? 'hidden' : 'text',
-				'required'      => true,
-				'validation'    => ['not_empty'],
-				'value'         => ($values) ? $values['name'] : ''
-			],
-			'submit' => [
-				'type'      => 'submit',
-				'class'     => 'cform-submit',
-				'callback'  => $callback,
+        $this->create([], [
+            'name' => [
+                'type'          => ($values) ? 'hidden' : 'text',
+                'required'      => true,
+                'validation'    => ['not_empty'],
+                'value'         => ($values) ? $values['name'] : ''
+            ],
+            'submit' => [
+                'type'      => 'submit',
+                'class'     => 'cform-submit',
+                'callback'  => $callback,
                 "callback-args" => [$scope],
-				'value'     => ($values) ? "Add tag: {$values['name']}" : "Create tag"
-			]
-		]);
+                'value'     => ($values) ? "Add tag: {$values['name']}" : "Create tag"
+            ]
+        ]);
 
         // Check the status of the form.
         $this->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
