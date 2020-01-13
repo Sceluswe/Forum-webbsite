@@ -50,19 +50,20 @@ class CViewBasic implements \Anax\DI\IInjectionAware
     */
     public function render()
     {
-        switch ($this->type)
-        {
+        switch ($this->type) {
             case 'file':
-                if (!is_readable($this->template))
+                if (!is_readable($this->template)) {
                     throw new \Exception("Could not find template file: " . $this->template);
+                }
 
                 extract($this->templateData);
                 include $this->template;
                 break;
 
             case 'callback':
-                if (!isset($this->template['callback']) || !is_callable($this->template['callback']))
+                if (!isset($this->template['callback']) || !is_callable($this->template['callback'])) {
                     throw new \Exception("View missing callback.");
+                }
 
                 echo call_user_func($this->template['callback']);
                 break;

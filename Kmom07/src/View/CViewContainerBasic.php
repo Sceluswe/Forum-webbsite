@@ -36,31 +36,28 @@ class CViewContainerBasic implements \Anax\DI\IInjectionAware
     {
         $view = $this->di->get('view'); // Get the view resource.
 
-		// Check if @template is a string or an array.
-        if (is_string($template))
-		{
+        // Check if @template is a string or an array.
+        if (is_string($template)) {
             $tpl = $this->path . $template . $this->suffix;
             $type = 'file';
-        }
-		elseif (is_array($template))
-		{
+        } elseif (is_array($template)) {
             $tpl = $template;
             $type = 'callback';
         }
 
-		/* Set the:
-		** @tpl to the path where the template can be found.
-		** @data to whatever variables should be used in the template.
-		** @sort which order the views should be displayed. IF IT IS AN ARRAY.
-		** @type what kind of file it is.
-		** for example: a regular 'file' if we want to load one file.
-		** A 'callback' if we want to load more than one.
-		*/
+        /* Set the:
+        ** @tpl to the path where the template can be found.
+        ** @data to whatever variables should be used in the template.
+        ** @sort which order the views should be displayed. IF IT IS AN ARRAY.
+        ** @type what kind of file it is.
+        ** for example: a regular 'file' if we want to load one file.
+        ** A 'callback' if we want to load more than one.
+        */
         $view->set($tpl, $data, $sort, $type);
         // Sets itself?
-		$view->setDI($this->di);
+        $view->setDI($this->di);
 
-		// Store the view in the region. Default is 'main'.
+        // Store the view in the region. Default is 'main'.
         $this->views[$region][] = $view;
 
         return $this;
@@ -135,8 +132,9 @@ class CViewContainerBasic implements \Anax\DI\IInjectionAware
     */
     public function setBasePath($path)
     {
-        if (!is_dir($path))
+        if (!is_dir($path)) {
             throw new \Exception("Base path for views is not a directory: " . $path);
+        }
 
         $this->path = rtrim($path, '/') . '/';
     }
@@ -166,15 +164,17 @@ class CViewContainerBasic implements \Anax\DI\IInjectionAware
     */
     public function render($region = 'main')
     {
-        if (!isset($this->views[$region]))
+        if (!isset($this->views[$region])) {
             return $this;
+        }
 
         mergesort($this->views[$region], function ($a, $b) {
             $sa = $a->sortOrder();
             $sb = $b->sortOrder();
 
-            if ($sa == $sb)
+            if ($sa == $sb) {
                 return 0;
+            }
 
             return $sa < $sb ? -1 : 1;
         });
