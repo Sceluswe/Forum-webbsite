@@ -170,7 +170,6 @@ class CFormElement implements \ArrayAccess
     {
         $messages = null;
         if (isset($this['validation-messages'])) {
-
             $message = null;
             foreach ($this['validation-messages'] as $val) {
                 $message .= "<li>{$val}</li>\n";
@@ -350,7 +349,6 @@ class CFormElement implements \ArrayAccess
 <input id='$id'{$type}{$class}{$name}{$value}{$autofocus}{$readonly}{$novalidate}{$title} />
 </span>
 EOD;
-
         } elseif ($this['type'] == 'search-widget') {
 
             // custom search-widget with type=search and type=submit
@@ -364,7 +362,6 @@ EOD;
 </p>
 <p class='cf-desc'>{$description}</p>
 EOD;
-
         } elseif ($this['type'] == 'textarea') {
 
             // textarea
@@ -375,12 +372,10 @@ EOD;
 </p>
 <p class='cf-desc'>{$description}</p>
 EOD;
-
         } elseif ($this['type'] == 'hidden') {
 
             // type=hidden
             return "<input id='$id'{$type}{$class}{$name}{$value} />\n";
-
         } elseif ($this['type'] == 'checkbox') {
 
             // checkbox
@@ -392,7 +387,6 @@ EOD;
 </p>
 <p class='cf-desc'>{$description}</p>
 EOD;
-
         } elseif ($this['type'] == 'radio') {
 
             // radio
@@ -419,7 +413,6 @@ EOD;
 <p class='cf-desc'>{$description}</p>
 </div>
 EOD;
-
         } elseif ($this['type'] == 'file-multiple') {
 
             // file-multiple
@@ -433,8 +426,7 @@ EOD;
 </p>
 <p class='cf-desc'>{$description}</p>
 EOD;
-            // @codingStandardsIgnoreEnd
-
+        // @codingStandardsIgnoreEnd
         } else {
 
             // Everything else
@@ -449,7 +441,6 @@ EOD;
 <p class='cf-desc'>{$description}</p>
 EOD;
             // @codingStandardsIgnoreEnd
-
         }
     }
 
@@ -520,7 +511,6 @@ EOD;
         $checked = $this['checked'];
 
         foreach ($rules as $key => $val) {
-
             $rule = is_numeric($key) ? $val : $key;
             if (!isset($tests[$rule])) {
                 throw new \Exception("Validation of form element failed, no such validation rule exists: $rule");
