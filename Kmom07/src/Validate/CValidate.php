@@ -34,50 +34,50 @@ class CValidate
         $tests = [
             'fail' => [
                 'message' => 'Will always fail.',
-                'test' => function() {
+                'test' => function () {
                     return false;
                 },
             ],
             'pass' => [
                 'message' => 'Will always pass.',
-                'test' => function() {
+                'test' => function () {
                     return true;
                 },
             ],
             'not_empty' => [
                 'message' => 'Can not be empty.',
-                'test' => function($value) {
+                'test' => function ($value) {
                     return !empty($value);
                 },
             ],
             'not_equal' => [
                 'message' => 'Not equal.',
-                'test' => function($value, $arg) {
+                'test' => function ($value, $arg) {
                     return $value != $arg;
                 },
             ],
             'numeric' => [
                 'message' => 'Must be numeric.',
-                'test' => function($value) {
+                'test' => function ($value) {
                     return is_numeric($value);
                 }
             ],
             'int' => [
                 'message' => 'Must be an integer.',
-                'test' => function($value) {
+                'test' => function ($value) {
                     $int = (int) $value;
                     return "$int" == "$value";
                 }
             ],
             'range' => [
                 'message' => 'Out of range.',
-                'test' => function($value, $min, $max) {
+                'test' => function ($value, $min, $max) {
                     return $value >= $min && $value <= $max;
                 }
             ],
             'email_adress' => [
                 'message' => 'Must be an email adress.',
-                'test' => function($value) {
+                'test' => function ($value) {
                     return preg_match(self::REGEXP_EMAIL, $value) === 1;
                 }
             ],
@@ -94,10 +94,9 @@ class CValidate
             $test  =  $tests[$rule];
 
             if (is_callable($test['test'])) {
-
                 if (isset($param) && is_array($param)) {
                     $param = array_merge([$value], $param);
-                } else if (isset($param)) {
+                } elseif (isset($param)) {
                     $param = [$value, $param];
                 } else {
                     $param = [$value];
