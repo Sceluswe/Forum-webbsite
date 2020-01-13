@@ -3,7 +3,7 @@
 namespace Anax\DI;
 
 /**
- * Anax base class implementing Dependency Injection / Service Locator of the services used by the 
+ * Anax base class implementing Dependency Injection / Service Locator of the services used by the
  * framework, using lazy loading.
  *
  */
@@ -76,7 +76,7 @@ class CDI implements IDI
      *
      * @param string  $service   as a service label, naming this service.
      * @param mixed   $loader    contains a pre-defined object, a string with classname or an
-     *      callable which returns an instance of the service object. Its the way to 
+     *      callable which returns an instance of the service object. Its the way to
      *      actually load, insantiate, the serviceobject.
      * @param boolean $singleton set if service is to act as singleton or not, default is false.
      *
@@ -119,21 +119,16 @@ class CDI implements IDI
     public function get($service)
     {
         // Is the service active?
-        if (isset($this->active[$service])) 
-		{
-			// Is the service loaded?
-            if ($this->loaded[$service]['singleton'])
-			{
+        if (isset($this->active[$service])) {
+            // Is the service loaded?
+            if ($this->loaded[$service]['singleton']) {
                 return $this->active[$service];
-            } 
-			else // No? Then load it and return.
-			{
+            } else { // No? Then load it and return.
                 return $this->load($service);
             }
-        } 
-		// If it's not active then check if it's loaded. 
-		elseif (isset($this->loaded[$service])) 
-		{
+        }
+        // If it's not active then check if it's loaded.
+        elseif (isset($this->loaded[$service])) {
             // Is the service loaded? Then return:
             return $this->load($service);
         }
@@ -143,7 +138,7 @@ class CDI implements IDI
         natcasesort($services);
         $services = implode("\n", $services);
         $message .= " Loaded services are: <pre>$services</pre>";
-        
+
         throw new \Exception($message);
     }
 
@@ -181,7 +176,7 @@ class CDI implements IDI
 
 
     /**
-     * Magic method to get and create services. 
+     * Magic method to get and create services.
      * When created it is also stored as a parameter of this object.
      *
      * @param string $service   name of class property not existing.
@@ -202,7 +197,7 @@ class CDI implements IDI
      * @param string $service as a service label, naming this service.
      *
      * @return object as instance of the service object.
-     * @throws Exception when service could not be loaded. 
+     * @throws Exception when service could not be loaded.
      */
     protected function load($service)
     {
@@ -211,29 +206,19 @@ class CDI implements IDI
              : null;
 
         // Load by calling a function
-        if (is_callable($sol)) 
-		{
-            try 
-			{
+        if (is_callable($sol)) {
+            try {
                 $this->active[$service] = $sol();
-            } 
-			catch (\Exception $e) 
-			{
+            } catch (\Exception $e) {
                 throw new \Exception("CDI could not load service '$service'. Failed in the callback that instantiates the service. " . $e->getMessage());
             }
-        } 
-		elseif (is_object($sol)) 
-		{
+        } elseif (is_object($sol)) {
             // Load by pre-instantiated object
             $this->active[$service] = $sol;
-        } 
-		elseif (is_string($sol)) 
-		{
+        } elseif (is_string($sol)) {
             // Load by creating a new object from class-string
             $this->active[$service] = new $sol();
-        } 
-		else 
-		{
+        } else {
             throw new Exception("CDI could not load service '$service'. It is unknown how to load it.");
         }
 

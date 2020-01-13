@@ -7,7 +7,7 @@ namespace Anax\DI;
 
 class CDIArray extends CDI implements \ArrayAccess
 {
-    
+
     /**
      * Properties
      *
