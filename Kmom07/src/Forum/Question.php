@@ -13,26 +13,26 @@ class Question extends \Anax\MVC\CDatabaseModel
 
 
     /**
-	* Save the previous object in session.
+    * Save the previous object in session.
     *
     * @return void.
-	*/
-	public function setQuestionId($question)
-	{
-		$this->session->set('savedQuestion', htmlentities($question));
-	}
+    */
+    public function setQuestionId($question)
+    {
+        $this->session->set('savedQuestion', htmlentities($question));
+    }
 
 
 
     /**
-	* Get the previous object from session.
+    * Get the previous object from session.
     *
     * @return object, the object stored in session.
-	*/
-	public function getQuestionId()
-	{
-		return $this->session->get('savedQuestion');
-	}
+    */
+    public function getQuestionId()
+    {
+        return $this->session->get('savedQuestion');
+    }
 
 
 
@@ -51,10 +51,10 @@ class Question extends \Anax\MVC\CDatabaseModel
 
 
     /**
-	* Get the 6 most recent questions.
+    * Get the 6 most recent questions.
     *
     * @return array with resultset.
-	*/
+    */
     public function getRecentQuestions()
     {
         return $this->query()->orderBy('timestamp DESC LIMIT 6')->execute();

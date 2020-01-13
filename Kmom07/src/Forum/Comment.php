@@ -19,12 +19,12 @@ class Comment extends \Anax\MVC\CDatabaseModel
     *
     * @return array, the resultset containing the questions comments.
     */
-	public function findQuestionComments($id)
-	{
-		return $this->query()->where("commentparent='Q'")
+    public function findQuestionComments($id)
+    {
+        return $this->query()->where("commentparent='Q'")
             ->andWhere("qaid = ?")
             ->execute([$id]);
-	}
+    }
 
 
 
@@ -35,10 +35,10 @@ class Comment extends \Anax\MVC\CDatabaseModel
     *
     * @return array, the resultset containing the answers comments.
     */
-	public function findAnswerComments($id)
-	{
-		return $this->query()->where("commentparent='A'")
+    public function findAnswerComments($id)
+    {
+        return $this->query()->where("commentparent='A'")
             ->andWhere("qaid = ?")
             ->execute([$id]);
-	}
+    }
 }
