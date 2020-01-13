@@ -16,7 +16,7 @@ class CNavbar
 
     /**
      * Create a navigation bar / menu, with submenu.
-     * 
+     *
      * @return string with html for the menu.
      *
      * @link http://dbwebb.se/coachen/skapa-en-dynamisk-navbar-meny-med-undermeny-via-php
@@ -37,7 +37,6 @@ class CNavbar
         // Create the ul li menu from the array, use an anonomous recursive function that returns an
         // array of values.
         $createMenu = function ($items, $callback) use (&$createMenu, $menu) {
-            
             $html = null;
             $hasItemIsSelected = false;
 
@@ -71,10 +70,10 @@ class CNavbar
                 $class = isset($item['class']) && ! is_null($item['class'])
                     ? $item['class']
                     : null;
-				// Allow for a font awesome class to be added
-				$FAclass = isset($item['FA']) && !is_null($item['FA'])
-					? "class='{$item['FA']}'"
-					: null;
+                // Allow for a font awesome class to be added
+                $FAclass = isset($item['FA']) && !is_null($item['FA'])
+                    ? "class='{$item['FA']}'"
+                    : null;
 
                 // Prepare the class-attribute, if used
                 $class = ($selected || $selectedParent || $isParent || $class)
