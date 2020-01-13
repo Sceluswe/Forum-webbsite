@@ -22,12 +22,9 @@ abstract class ACUserVotes extends \Anax\MVC\CDatabaseModel
     public function updateUserVote($qacId, $userId)
     {
         $bool = false;
-        if($this->userHasNotVoted($qacId, $userId))
-        {
+        if ($this->userHasNotVoted($qacId, $userId)) {
             $bool = $this->addUserVote($qacId, $userId);
-        }
-        elseif($this->userHasVoted($qacId, $userId))
-        {
+        } elseif ($this->userHasVoted($qacId, $userId)) {
             $bool = $this->removeUserVote($qacId, $userId);
         }
 

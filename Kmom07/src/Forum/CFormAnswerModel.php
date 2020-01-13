@@ -17,26 +17,26 @@ class CFormAnswerModel extends \Anax\HTMLForm\CFormModel
     {
         $this->create([], [
             'questionid' => [
-				'type'          => 'hidden',
-				'required'      => true,
-				'validation'    => ['not_empty'],
-				'value'         => $values['questionid']
-			],
-			'content' => [
-				'type'          => 'textarea',
-				'required'      => true,
-				'class'         => 'cform-textarea',
-				'validation'    => ['not_empty'],
-				'value'         => ''
-			],
-			'submit' => [
-				'type'          => 'submit',
-				'class'         => 'cform-submit',
+                'type'          => 'hidden',
+                'required'      => true,
+                'validation'    => ['not_empty'],
+                'value'         => $values['questionid']
+            ],
+            'content' => [
+                'type'          => 'textarea',
+                'required'      => true,
+                'class'         => 'cform-textarea',
+                'validation'    => ['not_empty'],
+                'value'         => ''
+            ],
+            'submit' => [
+                'type'          => 'submit',
+                'class'         => 'cform-submit',
                 'callback'      => $callback,
                 "callback-args" => [$scope],
-				'value'         => 'Post answer'
-			]
-		]);
+                'value'         => 'Post answer'
+            ]
+        ]);
 
         // Check the status of the form.
         $this->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);

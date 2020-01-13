@@ -9,7 +9,7 @@ class CFormatUnixTime
 {
 
 
-    
+
     /**
     * Function to format the unix timestamp property of one object.
     *
@@ -17,7 +17,7 @@ class CFormatUnixTime
     *
     * @return array, array of human readable timestamps.
     */
-    function formatUnixProperty(object $obj)
+    public function formatUnixProperty(object $obj)
     {
         $obj->timestamp = $this->humanUnixTime($obj->timestamp);
         return $obj;
@@ -32,10 +32,9 @@ class CFormatUnixTime
     *
     * @return array, array of human readable timestamps.
     */
-    function formatUnixProperties(array $arrOfObj)
+    public function formatUnixProperties(array $arrOfObj)
     {
-        foreach($arrOfObj as $item)
-        {
+        foreach ($arrOfObj as $item) {
             $item->timestamp = $this->humanUnixTime($item->timestamp);
         }
 
@@ -56,8 +55,7 @@ class CFormatUnixTime
         $elapsedtime = "Just now.";
         $secs = time() - $timestamp;
 
-        if($secs > 0)
-        {
+        if ($secs > 0) {
             $ret = array();
             $bit = array(
                 'y' => $secs / 31556926 % 12,
@@ -67,10 +65,8 @@ class CFormatUnixTime
                 's' => $secs % 60
             );
 
-            foreach($bit as $k => $v)
-            {
-                if($v > 0)
-                {
+            foreach ($bit as $k => $v) {
+                if ($v > 0) {
                     $ret[] = $v . $k;
                 }
             }
