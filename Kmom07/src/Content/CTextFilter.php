@@ -37,7 +37,6 @@ class CTextFilter
 
         // For each filter, call its function with the $text as parameter.
         foreach ($filter as $key) {
-
             if (isset($callbacks[$key])) {
                 $text = call_user_func_array([$this, $callbacks[$key]], [$text]);
             } else {
