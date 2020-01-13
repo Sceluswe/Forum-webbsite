@@ -7,35 +7,35 @@ namespace Anax\MVC;
 */
 class CDatabaseModel implements \Anax\DI\IInjectionAware
 {
-	use \Anax\DI\TInjectable;
+    use \Anax\DI\TInjectable;
 
 
 
     /**
-	* Returns the name of the Class which is also the name of the database table.
+    * Returns the name of the Class which is also the name of the database table.
     *
     * @return string
-	*/
-	public function getSource()
-	{
-		return strtolower(implode('', array_slice(explode('\\', get_class($this)), -1)));
-	}
+    */
+    public function getSource()
+    {
+        return strtolower(implode('', array_slice(explode('\\', get_class($this)), -1)));
+    }
 
 
 
-	/**
-	* Get object properties.
+    /**
+    * Get object properties.
     *
-	* @return array with object properties.
-	*/
-	public function getProperties()
-	{
-		$properties = get_object_vars($this);
-		unset($properties['di']);
-		unset($properties['db']);
+    * @return array with object properties.
+    */
+    public function getProperties()
+    {
+        $properties = get_object_vars($this);
+        unset($properties['di']);
+        unset($properties['db']);
 
-		return $properties;
-	}
+        return $properties;
+    }
 
 
 
@@ -49,10 +49,8 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
     public function setProperties($properties)
     {
         // Update object with incoming values, if any.
-        if(!empty($properties))
-        {
-            foreach($properties as $key => $val)
-            {
+        if (!empty($properties)) {
+            foreach ($properties as $key => $val) {
                 $this->$key = $val;
             }
         }
@@ -85,78 +83,80 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
     *
     * @return array with resultset.
     */
-	public function executeFetchAll($query, $params)
-	{
-        return $this->db->executeFetchAll($query, $params);;
+    public function executeFetchAll($query, $params)
+    {
+        return $this->db->executeFetchAll($query, $params);
+        ;
     }
 
 
 
     /**
-	* Create row.
-	*
-	* @param array values with which to initiate row.
-	*
-	* @return boolean true or false.
-	*/
-	public function create($values)
-	{
-		// Turn incoming values into arrays.
-		$keys = array_keys($values);
-		$values = array_values($values);
+    * Create row.
+    *
+    * @param array values with which to initiate row.
+    *
+    * @return boolean true or false.
+    */
+    public function create($values)
+    {
+        // Turn incoming values into arrays.
+        $keys = array_keys($values);
+        $values = array_values($values);
 
-		$this->db->insert($this->getSource(), $keys);
+        $this->db->insert($this->getSource(), $keys);
 
-		$res = $this->db->execute($values);
+        $res = $this->db->execute($values);
 
-		$this->id = $this->db->lastInsertId();
+        $this->id = $this->db->lastInsertId();
 
-		return $res;
-	}
+        return $res;
+    }
 
 
 
-	/**
-	* Update.
-	*
-	* @param array $values to update.
-	*
-	* @return boolean true or false.
-	*/
-	public function update($values)
-	{
-		$keys = array_keys($values);
-		$values = array_values($values);
+    /**
+    * Update.
+    *
+    * @param array $values to update.
+    *
+    * @return boolean true or false.
+    */
+    public function update($values)
+    {
+        $keys = array_keys($values);
+        $values = array_values($values);
 
         // Id should never be changeable. Therefore unset it (if it exists).
         unset($keys["id"]);
         // add the id of the row to be updated.
         $values[] = $this->id;
 
-		$this->db->update($this->getSource(), $keys, "id = ?");
+        $this->db->update($this->getSource(), $keys, "id = ?");
 
-		return $this->db->execute($values);
-	}
+        return $this->db->execute($values);
+    }
 
 
 
     /**
-	* Delete User.
-	*
-	* @param integer, id of the User to delete.
-	*
-	* @return void.
-	*/
-	public function delete($id = null)
-	{
-		if(!isset($id))
-			$id = $this->id;
+    * Delete User.
+    *
+    * @param integer, id of the User to delete.
+    *
+    * @return void.
+    */
+    public function delete($id = null)
+    {
+        if (!isset($id)) {
+            $id = $this->id;
+        }
 
         // Delete in $this->getSource (table) where id = ?
-		$this->db->delete($this->getSource(), 'id = ?');
+        $this->db->delete($this->getSource(), 'id = ?');
 
-		return $this->db->execute([$id]);
-	}
+        return $this->db->execute([$id]);
+    }
 
 
 
@@ -182,81 +182,81 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
 
 
     /**
-	* Read. Build a select-query.
-	*
-	* @param string $columns which columns to select.
-	*
-	* @return $this
-	*/
-	public function query($columns = '*')
-	{
-		$this->db->select($columns)->from($this->getSource());
+    * Read. Build a select-query.
+    *
+    * @param string $columns which columns to select.
+    *
+    * @return $this
+    */
+    public function query($columns = '*')
+    {
+        $this->db->select($columns)->from($this->getSource());
 
-		return $this;
-	}
+        return $this;
+    }
 
 
 
     /**
-	* Find and return all.
+    * Find and return all.
     *
-	* @return array.
-	*/
-	public function findAll()
-	{
+    * @return array.
+    */
+    public function findAll()
+    {
         $this->db->select()->from($this->getSource());
         $this->db->execute();
-		$this->db->setFetchModeClass(__CLASS__);
-		return $this->db->fetchAll();
-	}
+        $this->db->setFetchModeClass(__CLASS__);
+        return $this->db->fetchAll();
+    }
 
 
 
     /**
-	* Find single row by id-column and return.
+    * Find single row by id-column and return.
     *
     * @param string $id identifier in the column.
     *
-	* @return array.
-	*/
-	public function find($id)
-	{
+    * @return array.
+    */
+    public function find($id)
+    {
         $this->query()->where("id = ?");
         $this->db->execute([$id]);
         return $this->db->fetchInto($this);
-	}
+    }
 
 
 
-	/**
-	* Build the where part.
-	*
-	* @param string $condition for building the where part of the query.
-	*
-	* @return $this
-	*/
-	public function where($condition)
-	{
-		$this->db->where($condition);
+    /**
+    * Build the where part.
+    *
+    * @param string $condition for building the where part of the query.
+    *
+    * @return $this
+    */
+    public function where($condition)
+    {
+        $this->db->where($condition);
 
-		return $this;
-	}
+        return $this;
+    }
 
 
 
-	/**
-	* Build the where part.
-	*
-	* @param string $condition for building the where part of the query.
-	*
-	* @return $this
-	*/
-	public function andWhere($condition)
-	{
-		$this->db->andWhere($condition);
+    /**
+    * Build the where part.
+    *
+    * @param string $condition for building the where part of the query.
+    *
+    * @return $this
+    */
+    public function andWhere($condition)
+    {
+        $this->db->andWhere($condition);
 
-		return $this;
-	}
+        return $this;
+    }
 
 
 
@@ -267,12 +267,12 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
     *
     * @return $this
     */
-	public function orderBy($order)
-	{
-		$this->db->orderBy($order);
+    public function orderBy($order)
+    {
+        $this->db->orderBy($order);
 
-		return $this;
-	}
+        return $this;
+    }
 
 
 
@@ -283,7 +283,7 @@ class CDatabaseModel implements \Anax\DI\IInjectionAware
     *
     * @return $this
     */
-	public function groupBy($condition)
+    public function groupBy($condition)
     {
         $this->db->groupBy($condition);
 
