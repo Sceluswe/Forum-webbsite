@@ -7,5 +7,4 @@ namespace Anax\ThemeEngine;
 
 interface IThemeEngine
 {
-
 }
