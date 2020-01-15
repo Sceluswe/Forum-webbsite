@@ -11,7 +11,7 @@ A Forum website created using Anax a HMVC framework. It's a framework developed 
 You can login with the username 'admin' and the password 'admin'.
 
 ## Requirements
-1. A local environment that supports PHP (at least version 5.6.0).
+1. A local environment that supports PHP 7.2.0.
 2. A environment capable of hosting a local server (like xampp): https://www.apachefriends.org/index.html.
 3. A command line with Composer installed: https://getcomposer.org/
 
