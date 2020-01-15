@@ -145,12 +145,32 @@ class CommentController implements \Anax\DI\IInjectionAware
     *
     * @return void.
     */
-    public function deleteAllAction()
+    /*public function deleteAllAction()
     {
         $this->comments->createCommentTable();
 
         $this->utility->createRedirect($this->comments->getRedirect());
-    }
+    }*/
+
+
+
+    /**
+    * Reset a comment section.
+    *
+    * @return void.
+    */
+    /*public function setupAction()
+    {
+        if($this->comments->initializeTable())
+        {
+            $this->theme->setTitle("All comments");
+            $this->views->add($this->template["list-all"], [
+                'comments' => $this->comments->findAll(),
+                'title' => "Comment section reset!",
+                'redirect' => $this->redirect
+            ]);
+        }
+    }*/
 
 
 
