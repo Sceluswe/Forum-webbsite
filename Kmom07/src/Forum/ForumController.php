@@ -149,6 +149,7 @@ class ForumController implements \Anax\DI\IInjectionAware
     * @param string, the column to sort after.
     *
     * @return void.
+    */
     public function questionAction($id, $sort=null)
     {
         $this->theme->addJavascript("js/saveVoteScrollState.js");
