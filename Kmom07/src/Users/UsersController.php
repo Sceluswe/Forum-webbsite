@@ -9,7 +9,7 @@ namespace Anax\Users;
 class UsersController implements \Anax\DI\IInjectionAware
 {
     use \Anax\DI\TInjectable,
-		\Anax\MVC\TRedirectHelpers;
+        \Anax\MVC\TRedirectHelpers;
 
 
 
@@ -36,17 +36,17 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 
 
-	/**
-	* Initialize the controller.
-	*
-	* @return void
-	*/
-	public function initialize()
-	{
-		$this->users = new \Anax\Users\User();
-		$this->users->setDI($this->di);
-		$this->di->session();
-	}
+    /**
+    * Initialize the controller.
+    *
+    * @return void
+    */
+    public function initialize()
+    {
+        $this->users = new \Anax\Users\User();
+        $this->users->setDI($this->di);
+        $this->di->session();
+    }
 
 
 
@@ -59,8 +59,7 @@ class UsersController implements \Anax\DI\IInjectionAware
     {
         $userlink = "<p>You are currently not logged in: <a href=\"" . $this->url->create($this->redirect["login"]) . "\">Login</a></p>";
 
-        if($this->users->isUserLoggedIn())
-        {
+        if ($this->users->isUserLoggedIn()) {
             $user = $this->users->findByAcronym($this->users->currentUser());
 
             // Create a link to the currently logged in user.
@@ -104,8 +103,7 @@ class UsersController implements \Anax\DI\IInjectionAware
 
         $user = $this->users->find($id);
 
-        if(!empty($user))
-        {
+        if (!empty($user)) {
             $this->theme->setTitle("View user with id");
 
             $this->views->add($this->template["view"], [
@@ -127,9 +125,7 @@ class UsersController implements \Anax\DI\IInjectionAware
                 'action'	 => 'userQuestions',
                 'params' 	 => ['id' => $id]
             ]);
-        }
-        else
-        {
+        } else {
             $this->views->add($this->template["none"], []);
         }
     }
@@ -192,44 +188,44 @@ class UsersController implements \Anax\DI\IInjectionAware
 
 
     /**
-	* List all soft deleted users.
-	*
-	* @return void
-	*/
-	public function deletedAction()
-	{
-		$this->initialize();
+    * List all soft deleted users.
+    *
+    * @return void
+    */
+    public function deletedAction()
+    {
+        $this->initialize();
 
-		$this->menuAction();
+        $this->menuAction();
 
-		$this->theme->setTitle("Users that are deleted");
-		$this->views->add($this->redirect["list-all"], [
-			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
-			'users' => $this->users->findSoftDeleted(),
-			'title' => "View all users",
-			'redirect' => $this->redirect
-		]);
-	}
+        $this->theme->setTitle("Users that are deleted");
+        $this->views->add($this->redirect["list-all"], [
+            'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
+            'users' => $this->users->findSoftDeleted(),
+            'title' => "View all users",
+            'redirect' => $this->redirect
+        ]);
+    }
 
 
 
-	/**
-	* List all active users (not soft deleted).
-	*
-	* $return void
-	*/
-	public function activeAction()
-	{
-		$this->menuAction();
+    /**
+    * List all active users (not soft deleted).
+    *
+    * $return void
+    */
+    public function activeAction()
+    {
+        $this->menuAction();
 
-		$this->theme->setTitle("Users that are active");
-		$this->views->add($this->redirect["list-all"], [
-			'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
-			'users' => $this->users->findActive(),
-			'title' => "View all users",
-			'redirect' => $this->redirect
-		]);
-	}
+        $this->theme->setTitle("Users that are active");
+        $this->views->add($this->redirect["list-all"], [
+            'admin'	=> $this->users->isUserAdmin($this->users->currentUser(), ['admin']),
+            'users' => $this->users->findActive(),
+            'title' => "View all users",
+            'redirect' => $this->redirect
+        ]);
+    }
 
 
 
@@ -240,10 +236,8 @@ class UsersController implements \Anax\DI\IInjectionAware
     */
     public function setupAction()
     {
-        if($this->users->isUserAdmin($this->users->currentUser(), ['admin']))
-        {
-            if($this->users->initializeTable('user'))
-            {
+        if ($this->users->isUserAdmin($this->users->currentUser(), ['admin'])) {
+            if ($this->users->initializeTable('user')) {
                 $this->menuAction();
 
                 $this->theme->setTitle("Create Table");
@@ -254,9 +248,7 @@ class UsersController implements \Anax\DI\IInjectionAware
                     'redirect' => $this->redirect
                 ]);
             }
-        }
-        else
-        {
+        } else {
             $this->listAction();
         }
     }
@@ -270,15 +262,16 @@ class UsersController implements \Anax\DI\IInjectionAware
     *
     * @return void
     */
-	public function updateAction($id = null)
-	{
-		if(!isset($id))
-			die("Missing id.");
+    public function updateAction($id = null)
+    {
+        if (!isset($id)) {
+            die("Missing id.");
+        }
 
-		$this->menuAction();
+        $this->menuAction();
 
-		$user = $this->users->find($id);
-		$this->users->updated = gmdate('Y-m-d H:i:s');
+        $user = $this->users->find($id);
+        $this->users->updated = gmdate('Y-m-d H:i:s');
 
         $obj = new \Anax\Users\CFormUserModel();
 
@@ -299,12 +292,12 @@ class UsersController implements \Anax\DI\IInjectionAware
         };
 
         $this->utility->renderDefaultPage("Update User", $obj->createUserForm($this, $callback, [
-			'acronym' 	=> $user->acronym,
-			'email'		=> $user->email,
-			'name' 		=> $user->name,
-			'password'	=> $user->password
-		]));
-	}
+            'acronym' 	=> $user->acronym,
+            'email'		=> $user->email,
+            'name' 		=> $user->name,
+            'password'	=> $user->password
+        ]));
+    }
 
 
 
@@ -315,70 +308,73 @@ class UsersController implements \Anax\DI\IInjectionAware
     *
     * @return void
     */
-	public function restoreAction($id = null)
-	{
-		if(!isset($id))
-			die("Missing id.");
+    public function restoreAction($id = null)
+    {
+        if (!isset($id)) {
+            die("Missing id.");
+        }
 
-		$user = $this->users->find($id);
-		$user->deleted = null;
-		$user->active = gmdate("Y-m-d H:i:s");
-		$user->save();
+        $user = $this->users->find($id);
+        $user->deleted = null;
+        $user->active = gmdate("Y-m-d H:i:s");
+        $user->save();
 
-		//Create a url and redirect to the updated object.
+        //Create a url and redirect to the updated object.
         $this->utility->createRedirect($this->redirect["profile"] . $id);
-	}
+    }
 
 
 
-	/**
-	* Delete user.
-	*
-	* $param int $id of the user to delete.
-	*
-	* @return void.
-	*/
-	public function deleteAction($id = null)
-	{
-		if(!isset($id))
-			die("Missing id.");
+    /**
+    * Delete user.
+    *
+    * $param int $id of the user to delete.
+    *
+    * @return void.
+    */
+    public function deleteAction($id = null)
+    {
+        if (!isset($id)) {
+            die("Missing id.");
+        }
 
-		$this->users->delete($id);
+        $this->users->delete($id);
 
         $this->utility->createRedirect($this->redirect["list-all"]);
-	}
+    }
 
 
 
-	/**
-	* Soft delete User.
-	*
-	* @param integer, id of the user to soft-delete.
-	*
-	* @return void.
-	*/
-	public function softDeleteAction($id = null)
-	{
-		if(!isset($id))
-			die("Missing id.");
-
-		$user = $this->users->find($id);
-		$user->deleted = gmdate("Y-m-d H:i:s");
-		$user->save();
-
-		//Create a url and redirect to the updated object.
-        $this->utility->createRedirect($this->redirect["profile"] . $id);
-	}
-
-
-
-	/**
-	* Function that logs in a user and stores the currently logged in user in session.
+    /**
+    * Soft delete User.
     *
-	* @return void
-	*/
-	public function loginAction()
-	{
+    * @param integer, id of the user to soft-delete.
+    *
+    * @return void.
+    */
+    public function softDeleteAction($id = null)
+    {
+        if (!isset($id)) {
+            die("Missing id.");
+        }
+
+        $user = $this->users->find($id);
+        $user->deleted = gmdate("Y-m-d H:i:s");
+        $user->save();
+
+        //Create a url and redirect to the updated object.
+        $this->utility->createRedirect($this->redirect["profile"] . $id);
+    }
+
+
+
+    /**
+    * Function that logs in a user and stores the currently logged in user in session.
+    *
+    * @return void
+    */
+    public function loginAction()
+    {
         $this->dispatcher->forwardTo("Users", "status");
 
         $obj = new \Anax\Users\CFormUserModel();
@@ -389,12 +385,10 @@ class UsersController implements \Anax\DI\IInjectionAware
             $acronym = strtolower($scope->escaper->escapeHTML($form->Value('acronym')));
             $password = md5($form->Value('password'));
 
-            if($scope->users->validateUser($acronym, $password))
-            {
+            if ($scope->users->validateUser($acronym, $password)) {
                 $scope->users->findByAcronym($form->Value('acronym'));
 
-                if($scope->users->update(['active' => gmdate('Y-m-d H:i:s')]))
-                {
+                if ($scope->users->update(['active' => gmdate('Y-m-d H:i:s')])) {
                     $scope->users->loginUser($acronym);
                     $success = true;
                 }
@@ -408,25 +402,24 @@ class UsersController implements \Anax\DI\IInjectionAware
         (!$this->users->isUserLoggedIn())
             ? $this->utility->renderDefaultPage($this->redirect["login"], $obj->createUserLoginForm($this, $callback))
             : $this->utility->createRedirect($this->redirect["logout"]);
-	}
+    }
 
 
 
-	/**
-	* Function presents a logout form to the user.
+    /**
+    * Function presents a logout form to the user.
     *
-	* @return void
-	*/
-	public function logoutAction()
-	{
+    * @return void
+    */
+    public function logoutAction()
+    {
         $this->dispatcher->forwardTo("Users", "status");
 
         $obj = new \Anax\Users\CFormUserModel();
         $this->utility->renderDefaultPage("Logout", $obj->createUserLogoutForm($this, function ($form, $scope) {
             $success = false;
 
-            if($this->users->isUserLoggedIn())
-            {
+            if ($this->users->isUserLoggedIn()) {
                 $this->users->logoutUser();
                 $success = true;
 
@@ -435,5 +428,5 @@ class UsersController implements \Anax\DI\IInjectionAware
 
             return $success;
         }));
-	}
+    }
 }

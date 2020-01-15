@@ -8,7 +8,7 @@ namespace Anax\Utility;
 */
 class CUtility implements \Anax\DI\IInjectionAware
 {
-	use \Anax\DI\TInjectable;
+    use \Anax\DI\TInjectable;
 
 
 

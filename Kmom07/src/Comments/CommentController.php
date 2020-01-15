@@ -9,7 +9,7 @@ namespace Anax\Comments;
 class CommentController implements \Anax\DI\IInjectionAware
 {
     use \Anax\DI\TInjectable,
-		\Anax\MVC\TRedirectHelpers;
+        \Anax\MVC\TRedirectHelpers;
 
 
 
@@ -30,40 +30,59 @@ class CommentController implements \Anax\DI\IInjectionAware
 
 
 
-	/**
-	* Initialize the controller.
-	*
-	* @return void.
-	*/
-	public function initialize()
-	{
-		$this->comments = new \Anax\Comments\Comment();
-		$this->comments->setDI($this->di);
-	}
+    /**
+    * Initialize the controller.
+    *
+    * @return void.
+    */
+    public function initialize()
+    {
+        $this->comments = new \Anax\Comments\Comment();
+        $this->comments->setDI($this->di);
+    }
 
 
 
     /**
-	* View all comments.
-	*
-	* @return void.
-	*/
+    * Reset a comment section.
+    *
+    * @return void.
+    */
+    public function setupAction()
+    {
+        if ($this->comments->initializeTable()) {
+            $this->theme->setTitle("All comments");
+            $this->views->add($this->template["list-all"], [
+                'comments' => $this->comments->findAll(),
+                'title' => "Comment section reset!",
+                'redirect' => $this->redirect
+            ]);
+        }
+    }
+
+
+
+    /**
+    * View all comments.
+    *
+    * @return void.
+    */
     public function viewAction()
     {
-		$this->initialize();
-		$this->comments->setSource($this->request->getRoute());
-		$this->comments->setRedirect($this->request->getRoute());
+        $this->initialize();
+        $this->comments->setSource($this->request->getRoute());
+        $this->comments->setRedirect($this->request->getRoute());
 
         $this->views->add($this->template["list-all"], [
             'comments'  => $this->comments->findAll(),
-			'title'     => "All Comments",
-			'redirect'	=> $this->redirect
+            'title'     => "All Comments",
+            'redirect'	=> $this->redirect
         ]);
     }
 
 
 
-	/**
+    /**
     * Add a comment.
     *
     * @return void.
@@ -75,32 +94,33 @@ class CommentController implements \Anax\DI\IInjectionAware
 
 
 
-	/**
-	* Update a comment.
-	*
+    /**
+    * Update a comment.
+    *
     * @param int, the database id of the comment to update.
     *
-	* @return void.
-	*/
-	public function updateAction($id = null)
-	{
-		if(!isset($id))
-			die("Missing id.");
+    * @return void.
+    */
+    public function updateAction($id = null)
+    {
+        if (!isset($id)) {
+            die("Missing id.");
+        }
 
         $comment = $this->comments->find($id);
 
         $this->utility->renderDefaultPage("Edit Comment", $this->getCommentForm([
-			'name' 		=> $comment->name,
-			'email'		=> $comment->email,
-			'web' 		=> $comment->web,
-			'content' 	=> $comment->content,
-			'timestamp' => $comment->timestamp
-		]));
-	}
+            'name' 		=> $comment->name,
+            'email'		=> $comment->email,
+            'web' 		=> $comment->web,
+            'content' 	=> $comment->content,
+            'timestamp' => $comment->timestamp
+        ]));
+    }
 
 
 
-	/**
+    /**
     * Remove a comment.
     *
     * @param int, id of the comment to remove.
@@ -109,17 +129,18 @@ class CommentController implements \Anax\DI\IInjectionAware
     */
     public function deleteAction($id = null)
     {
-		if(!isset($id))
-			die("Missing id.");
+        if (!isset($id)) {
+            die("Missing id.");
+        }
 
-		$this->comments->delete($id);
+        $this->comments->delete($id);
 
         $this->utility->createRedirect($this->comments->getRedirect());
     }
 
 
 
-	/**
+    /**
     * Remove all comments.
     *
     * @return void.
@@ -153,80 +174,80 @@ class CommentController implements \Anax\DI\IInjectionAware
 
 
 
-	/**
-	* Get a form for creating and updating a comment.
-	*
-	* @param optional, values to be put into the textfields.
-	*
-	* @return the HTML code of the form.
-	*/
-	private function getCommentForm($values = null)
-	{
-		$form = new \Mos\HTMLForm\CForm();
+    /**
+    * Get a form for creating and updating a comment.
+    *
+    * @param optional, values to be put into the textfields.
+    *
+    * @return the HTML code of the form.
+    */
+    private function getCommentForm($values = null)
+    {
+        $form = new \Mos\HTMLForm\CForm();
 
-		$form = $form->create([], [
-			'name' => [
-				'type' 		 => 'text',
-				'label' 	 => 'Your name:',
-				'required' 	 => true,
-				'class' 	 => 'cform-textbox',
-				'validation' => ['not_empty'],
-				'value' 	 => !empty($values['name']) ? $values['name'] : ''
-			],
-			'email' => [
-				'type'       => 'text',
-				'required'   => true,
-				'class' 	 => 'cform-textbox',
-				'validation' => ['not_empty', 'email_adress'],
-				'value' 	 => !empty($values['email']) ? $values['email'] : ''
-			],
-			'web' => [
-				'type'       => 'text',
-				'required'   => true,
-				'class' 	 => 'cform-textbox',
-				'value' 	 => !empty($values['web']) ? $values['web'] : ''
-			],
-			'content' => [
-				'type'       => 'textarea',
-				'required'   => true,
-				'class' 	 => 'cform-textbox cform-textarea',
-				'value' 	 => !empty($values['content']) ? $values['content'] : ''
-			],
-			'submit' => [
-    			'type' 		=> 'submit',
-    			'class' 	=> 'cform-submit',
-    			'callback'  => [$this, 'callbackSubmit'],
-    			'value'		=> 'Submit user'
-			]
-		]);
+        $form = $form->create([], [
+            'name' => [
+                'type' 		 => 'text',
+                'label' 	 => 'Your name:',
+                'required' 	 => true,
+                'class' 	 => 'cform-textbox',
+                'validation' => ['not_empty'],
+                'value' 	 => !empty($values['name']) ? $values['name'] : ''
+            ],
+            'email' => [
+                'type'       => 'text',
+                'required'   => true,
+                'class' 	 => 'cform-textbox',
+                'validation' => ['not_empty', 'email_adress'],
+                'value' 	 => !empty($values['email']) ? $values['email'] : ''
+            ],
+            'web' => [
+                'type'       => 'text',
+                'required'   => true,
+                'class' 	 => 'cform-textbox',
+                'value' 	 => !empty($values['web']) ? $values['web'] : ''
+            ],
+            'content' => [
+                'type'       => 'textarea',
+                'required'   => true,
+                'class' 	 => 'cform-textbox cform-textarea',
+                'value' 	 => !empty($values['content']) ? $values['content'] : ''
+            ],
+            'submit' => [
+                'type' 		=> 'submit',
+                'class' 	=> 'cform-submit',
+                'callback'  => [$this, 'callbackSubmit'],
+                'value'		=> 'Submit user'
+            ]
+        ]);
 
-		// Check the status of the form.
-		$form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
+        // Check the status of the form.
+        $form->check([$this, 'callbackSuccess'], [$this, 'callbackFail']);
 
-		return $form->getHTML();
-	}
+        return $form->getHTML();
+    }
 
 
 
-	/**
+    /**
     * Callback for submit-button success.
     *
     * @param CForm object, the form to be submitted.
     *
     * @return boolean true.
     */
-	public function callbackSubmit($form)
+    public function callbackSubmit($form)
     {
-		$form->saveInSession = true;
+        $form->saveInSession = true;
 
-		$this->comments->save([
-			'name' 		=> $form->Value('name'),
-			'email' 	=> $form->Value('email'),
-			'web' 		=> $form->Value('web'),
-			'content'	=> $form->Value('content'),
-			'timestamp' => gmdate('Y-m-d H:i:s'),
-			'ip'		=> $this->request->getServer('REMOTE_ADDR')
-		]);
+        $this->comments->save([
+            'name' 		=> $form->Value('name'),
+            'email' 	=> $form->Value('email'),
+            'web' 		=> $form->Value('web'),
+            'content'	=> $form->Value('content'),
+            'timestamp' => gmdate('Y-m-d H:i:s'),
+            'ip'		=> $this->request->getServer('REMOTE_ADDR')
+        ]);
 
         $this->utility->createRedirect($this->comments->getRedirect());
 

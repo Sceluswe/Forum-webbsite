@@ -3,16 +3,16 @@
 namespace Anax\DI;
 
 /**
- * Anax base class implementing Dependency Injection / Service Locator 
+ * Anax base class implementing Dependency Injection / Service Locator
  * of the services used by the framework, using lazy loading.
  *
  */
 class CDIFactoryDefault extends CDI
 {
-   /**
-     * Construct.
-     *
-     */
+    /**
+      * Construct.
+      *
+      */
     public function __construct()
     {
         parent::__construct();
@@ -22,7 +22,7 @@ class CDIFactoryDefault extends CDI
         $this->setShared('response', '\Anax\Response\CResponseBasic');
         $this->setShared('validate', '\Anax\Validate\CValidate');
         $this->setShared('flash', '\Anax\Flash\CFlashBasic');
-        
+
         $this->set('route', '\Anax\Route\CRouteBasic');
         $this->set('view', '\Anax\View\CViewBasic');
 
@@ -64,7 +64,6 @@ class CDIFactoryDefault extends CDI
         });
 
         $this->setShared('router', function () {
-            
             $router = new \Anax\Route\CRouterBasic();
             $router->setDI($this);
 
@@ -78,7 +77,7 @@ class CDIFactoryDefault extends CDI
                     ],
                 ]);
             })->setName('403');
-            
+
             $router->addInternal('404', function () {
                 $this->dispatcher->forward([
                     'controller' => 'error',
@@ -93,7 +92,7 @@ class CDIFactoryDefault extends CDI
                     'action' => 'displayValidRoutes',
                 ]);
             })->setName('404');
-            
+
             $router->addInternal('500', function () {
                 $this->dispatcher->forward([
                     'controller' => 'error',
@@ -104,7 +103,7 @@ class CDIFactoryDefault extends CDI
                     ],
                 ]);
             })->setName('500');
-            
+
             return $router;
         });
 
@@ -114,8 +113,7 @@ class CDIFactoryDefault extends CDI
             return $dispatcher;
         });
 
-        $this->setShared('session', function () 
-		{
+        $this->setShared('session', function () {
             $session = new \Anax\Session\CSession();
             $session->configure(ANAX_APP_PATH . 'config/session.php');
             $session->name();
@@ -149,29 +147,29 @@ class CDIFactoryDefault extends CDI
             $filter->configure(ANAX_APP_PATH . 'config/text_filter.php');
             return $filter;
         });
-		
-		$this->setShared('CForm', function() {
-			$escaper = new \Mos\HTMLForm\CForm();
-			return $escaper;
-		});
-        
+
+        $this->setShared('CForm', function () {
+            $escaper = new \Mos\HTMLForm\CForm();
+            return $escaper;
+        });
+
         $this->setShared('utility', function () {
             $utility = new \Anax\Utility\CUtility();
             $utility->setDI($this);
             return $utility;
         });
-		
-		$this->setShared('db', function() {
-			$db = new \Mos\Database\CDatabaseBasic();
-			//$db->setOptions(require ANAX_APP_PATH . 'config/config_mysql.php');
+
+        $this->setShared('db', function () {
+            $db = new \Mos\Database\CDatabaseBasic();
+            //$db->setOptions(require ANAX_APP_PATH . 'config/config_mysql.php');
             $db->setOptions(require ANAX_APP_PATH . 'config/config_sqlite.php');
-			$db->connect();
-			return $db;
-		});
-		
-		$this->setShared('escaper', function() {
-			$escaper = new \Scelus\Escaper\CEscaper();
-			return $escaper;
-		});
+            $db->connect();
+            return $db;
+        });
+
+        $this->setShared('escaper', function () {
+            $escaper = new \Scelus\Escaper\CEscaper();
+            return $escaper;
+        });
     }
 }

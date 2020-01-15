@@ -17,40 +17,40 @@ class CFormUserModel extends \Anax\HTMLForm\CFormModel
     {
         $this->create([], [
             'acronym' => [
-				'type' 		=> 'text',
-				'required' 	=> true,
-				'class' 	=> 'cform-textbox',
-				'validation'=> ['not_empty'],
-				'value' 	=> !empty($values['acronym']) ? $values['acronym'] : ''
-			],
-			'email' => [
-				'type'       => 'text',
-				'required'   => true,
-				'class' 	 => 'cform-textbox',
-				'validation' => ['not_empty', 'email_adress'],
-				'value' 	 => !empty($values['email']) ? $values['email'] : ''
-			],
-			'name' => [
-				'type' 		 => 'text',
-				'label' 	 => 'Your name:',
-				'required' 	 => true,
-				'class' 	 => 'cform-textbox',
-				'validation' => ['not_empty'],
-				'value' 	 => !empty($values['name']) ? $values['name'] : ''
-			],
-			'password' => [
-				'type' 		 => !empty($values['password']) ? 'hidden' : 'password',
-				'required' 	 => true,
-				'class' 	 => 'cform-textbox',
-				'value' 	 => !empty($values['password']) ? $values['password'] : ''
-			],
-			'submit' => [
-    			'type' 		    => 'submit',
-    			'class' 	    => 'cform-submit',
-    			'callback'      => $callback,
+                'type' 		=> 'text',
+                'required' 	=> true,
+                'class' 	=> 'cform-textbox',
+                'validation'=> ['not_empty'],
+                'value' 	=> !empty($values['acronym']) ? $values['acronym'] : ''
+            ],
+            'email' => [
+                'type'       => 'text',
+                'required'   => true,
+                'class' 	 => 'cform-textbox',
+                'validation' => ['not_empty', 'email_adress'],
+                'value' 	 => !empty($values['email']) ? $values['email'] : ''
+            ],
+            'name' => [
+                'type' 		 => 'text',
+                'label' 	 => 'Your name:',
+                'required' 	 => true,
+                'class' 	 => 'cform-textbox',
+                'validation' => ['not_empty'],
+                'value' 	 => !empty($values['name']) ? $values['name'] : ''
+            ],
+            'password' => [
+                'type' 		 => !empty($values['password']) ? 'hidden' : 'password',
+                'required' 	 => true,
+                'class' 	 => 'cform-textbox',
+                'value' 	 => !empty($values['password']) ? $values['password'] : ''
+            ],
+            'submit' => [
+                'type' 		    => 'submit',
+                'class' 	    => 'cform-submit',
+                'callback'      => $callback,
                 "callback-args" => [$scope],
-    			'value'		    => 'Submit user'
-			]
+                'value'		    => 'Submit user'
+            ]
         ]);
 
         // Check the status of the form.

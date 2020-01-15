@@ -21,26 +21,19 @@ class HTMLTable
         $table =  isset($data['class']) ? "<table class=\"{$data['class']}\">" : '<table>';
         $headers = true;
 
-        foreach($data as $item)
-        {
-            if(is_array($item))
-            {
+        foreach ($data as $item) {
+            if (is_array($item)) {
                 $table .= isset($item['class']) ? "<tr class=\"{$item['class']}\">" : '<tr>';
                 unset($item['class']);
 
-                if($headers)
-                {
-                    foreach($item as $index)
-                    {
+                if ($headers) {
+                    foreach ($item as $index) {
                         $table .= "<th>{$index}</th>";
                     }
 
                     $headers = false;
-                }
-                else
-                {
-                    foreach($item as $index)
-                    {
+                } else {
+                    foreach ($item as $index) {
                         $table .= "<td>{$index}</td>";
                     }
                 }

@@ -17,7 +17,7 @@ namespace Anax\Log;
  * See https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md
  * for the full interface specification.
  */
-class CLogger 
+class CLogger
 {
 
     /**
@@ -49,9 +49,9 @@ class CLogger
      * @param string $context as production, development or debug, default is development
      * @return $this
      */
-    public function setContext($context = 'development') {
-
-        switch($context) {
+    public function setContext($context = 'development')
+    {
+        switch ($context) {
             
             case 'production':
 
@@ -59,12 +59,12 @@ class CLogger
             
             case 'development':
                 error_reporting(-1);              // Report all type of errors
-                ini_set('display_errors', 1);     // Display all errors 
+                ini_set('display_errors', 1);     // Display all errors
                 ini_set('output_buffering', 0);   // Do not buffer output
 
                 set_exception_handler(function ($exception) {
-                    echo "Anax: Uncaught exception: <p>" . 
-                        $exception->getMessage() . "</p><pre>" . 
+                    echo "Anax: Uncaught exception: <p>" .
+                        $exception->getMessage() . "</p><pre>" .
                         $exception->getTraceAsString() . "</pre>";
                 });
                 break;
@@ -92,7 +92,8 @@ class CLogger
      * @param array $context
      * @return null
      */
-    public function log($level, $message, array $context = array()) {
+    public function log($level, $message, array $context = array())
+    {
         echo "Level: " . $level . "<br>" . "Message: " . $message . "<br>" . htmlentities(print_r($context, 1)) . "<br>";
     }
 
@@ -105,7 +106,8 @@ class CLogger
      * @param array $context
      * @return null
      */
-    public function emergency($message, array $context = array()) {
+    public function emergency($message, array $context = array())
+    {
         $this->log(self::EMERGENCY, $message, $context);
     }
 
@@ -121,7 +123,8 @@ class CLogger
      * @param array $context
      * @return null
      */
-    public function alert($message, array $context = array()) {
+    public function alert($message, array $context = array())
+    {
         $this->log(self::ALERT, $message, $context);
     }
 
@@ -136,7 +139,8 @@ class CLogger
      * @param array $context
      * @return null
      */
-    public function critical($message, array $context = array()) {
+    public function critical($message, array $context = array())
+    {
         $this->log(self::CRITICAL, $message, $context);
     }
 
@@ -150,7 +154,8 @@ class CLogger
      * @param array $context
      * @return null
      */
-    public function error($message, array $context = array()) {
+    public function error($message, array $context = array())
+    {
         $this->log(self::ERROR, $message, $context);
     }
 
@@ -166,7 +171,8 @@ class CLogger
      * @param array $context
      * @return null
      */
-    public function warning($message, array $context = array()) {
+    public function warning($message, array $context = array())
+    {
         $this->log(self::WARNING, $message, $context);
     }
 
@@ -179,7 +185,8 @@ class CLogger
      * @param array $context
      * @return null
      */
-    public function notice($message, array $context = array()) {
+    public function notice($message, array $context = array())
+    {
         $this->log(self::NOTICE, $message, $context);
     }
 
@@ -194,7 +201,8 @@ class CLogger
      * @param array $context
      * @return null
      */
-    public function info($message, array $context = array()) {
+    public function info($message, array $context = array())
+    {
         $this->log(self::INFO, $message, $context);
     }
 
@@ -207,10 +215,8 @@ class CLogger
      * @param array $context
      * @return null
      */
-    public function debug($message, array $context = array()) {
+    public function debug($message, array $context = array())
+    {
         $this->log(self::DEBUG, $message, $context);
     }
 }
-
-
-

@@ -30,8 +30,9 @@ class CFileContent
     {
         $target = $this->path . $file;
 
-        if (!is_readable($target))
+        if (!is_readable($target)) {
             throw new \Exception("No such content " . $target);
+        }
 
         return file_get_contents($target);
     }
@@ -47,8 +48,9 @@ class CFileContent
     */
     public function setBasePath($path)
     {
-        if (!is_dir($path))
+        if (!is_dir($path)) {
             throw new \Exception("Base path for file content is not a directory: " . $path);
+        }
 
         $this->path = rtrim($path, '/') . '/';
 

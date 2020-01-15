@@ -11,7 +11,7 @@ trait TSingleton
     * Properties
     *
     */
-    static private $instance = null;
+    private static $instance = null;
 
 
 
@@ -19,7 +19,7 @@ trait TSingleton
     * Create or get singleton instance of class.
     *
     */
-    static public function instance()
+    public static function instance()
     {
         return isset(static::$instance)
             ? self::$instance

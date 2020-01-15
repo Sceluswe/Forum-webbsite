@@ -273,7 +273,6 @@ EOD;
         $elements = array();
         reset($this->elements);
         while (list($key, $element) = each($this->elements)) {
-
             if (in_array($element['type'], array('submit', 'reset', 'button'))
                 && $options['use_buttonbar']
             ) {
@@ -292,7 +291,6 @@ EOD;
                     }
                 }
                 $html .= "\n</p>";
-
             } else {
 
                 // Just add the element
@@ -327,13 +325,10 @@ EOD;
 
         $html = null;
         if ($options['columns'] === 1) {
-
             foreach ($elements as $element) {
                 $html .= $element['html'];
             }
-
         } elseif ($options['columns'] === 2) {
-
             $buttonbar = null;
             $col1 = null;
             $col2 = null;
@@ -438,7 +433,7 @@ EOD;
             // Take care of arrays as values (multiple-checkbox)
             if (isset($val['values'])) {
                 $this[$key]['checked'] = $val['values'];
-                //$this[$key]['values']  = $val['values'];
+            //$this[$key]['values']  = $val['values'];
             } elseif (isset($val['value'])) {
                 $this[$key]['value'] = $val['value'];
             }
@@ -497,7 +492,6 @@ EOD;
                 // Read form data from session if the previous post failed during validation.
                 $this->InitElements($_SESSION[$failed]);
                 unset($_SESSION[$failed]);
-
             } elseif (isset($_SESSION[$remember])) {
 
                 // Read form data from session if some form elements should be remembered
@@ -505,7 +499,6 @@ EOD;
                     $this[$key]['value'] = $val['value'];
                 }
                 unset($_SESSION[$remember]);
-
             } elseif (isset($_SESSION[$save])) {
 
                 // Read form data from session,
@@ -535,7 +528,6 @@ EOD;
 
         $validates = true;
         foreach ($this->elements as $element) {
-
             $elementName = $element['name'];
             $elementType = $element['type'];
 
@@ -566,17 +558,14 @@ EOD;
 
                 // Do validation of form element
                 if (isset($element['validation'])) {
-
                     $element['validation-pass'] = $element->Validate($element['validation'], $this);
 
                     if ($element['validation-pass'] === false) {
-
                         $values[$elementName] = [
                             'value' => $element['value'],
                             'validation-messages' => $element['validation-messages']
                         ];
                         $validates = false;
-
                     }
                 }
 
@@ -593,20 +582,15 @@ EOD;
                 if (isset($element['callback'])
                     && $validates
                 ) {
-
                     if (isset($element['callback-args'])) {
-
                         $callbackStatus = call_user_func_array(
                             $element['callback'],
                             array_merge([$this], $element['callback-args'])
                         );
-
                     } else {
-
                         $callbackStatus = call_user_func($element['callback'], $this);
                     }
                 }
-
             } else {
 
                 // The form element has no value set
@@ -619,7 +603,6 @@ EOD;
                 if ($element['type'] === 'checkbox'
                     || $element['type'] === 'checkbox-multiple'
                 ) {
-
                     $element['checked'] = false;
                 }
 
@@ -627,11 +610,9 @@ EOD;
                 // Duplicate code, revise this section and move outside
                 // this if-statement?
                 if (isset($element['validation'])) {
-
                     $element['validation-pass'] = $element->Validate($element['validation'], $this);
 
                     if ($element['validation-pass'] === false) {
-
                         $values[$elementName] = [
                             'value' => $element['value'], 'validation-messages' => $element['validation-messages']
                         ];
@@ -646,9 +627,7 @@ EOD;
         if ($validates === false
             || $callbackStatus === false
         ) {
-
             $_SESSION[$this->session["failed"]] = $values;
-
         } elseif ($remember) {
 
             // Hmmm, why do I want to use this
@@ -675,7 +654,6 @@ EOD;
             } else {
                 throw new \Exception("CForm, success-method is not callable.");
             }
-
         } elseif ($ret === false && isset($callIfFail)) {
 
             // Use callback for fail, if defined

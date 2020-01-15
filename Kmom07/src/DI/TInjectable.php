@@ -49,10 +49,8 @@ trait TInjectable
         }
 
         try {
-
             $this->$service = $this->di->get($service);
             return $this->$service;
-
         } catch (\Exception $e) {
             throw new \Exception(
                 'In trait TInjectable used by class ' . __CLASS__ . '. You are trying to get
@@ -66,37 +64,29 @@ trait TInjectable
 
 
 
-   /**
-     * Magic method to get and create services as a method call.
-     * When created it is also stored as a parameter of this object.
-     *
-     * @param string $service   name of class property not existing.
-     * @param array  $arguments Additional arguments to sen to the method (NOT IMPLEMENTED).
-     *
-     * @return class as the service requested.
-     */
+    /**
+      * Magic method to get and create services as a method call.
+      * When created it is also stored as a parameter of this object.
+      *
+      * @param string $service   name of class property not existing.
+      * @param array  $arguments Additional arguments to sen to the method (NOT IMPLEMENTED).
+      *
+      * @return class as the service requested.
+      */
     public function __call($service, $arguments = [])
     {
-        if (!$this->di) 
-		{
-            throw new \Exception
-			(
+        if (!$this->di) {
+            throw new \Exception(
                 'In trait TInjectable used by class ' . __CLASS__ . '. You are trying to call a
                 method in $this->di, but $this->di is not set. Did you forget to call setDI()?'
             );
         }
 
-        try 
-		{
-
+        try {
             $this->$service = $this->di->get($service);
             return $this->$service;
-
-        } 
-		catch (\Exception $e) 
-		{
-            throw new \Exception
-			(
+        } catch (\Exception $e) {
+            throw new \Exception(
                 'In trait TInjectable used by class ' . __CLASS__ . '. You are trying to get a
                 method (service) "' . $service . '" from $this->di, but the service is not set
                 in $this->di. Did you misspell the service you are trying to reach or did you

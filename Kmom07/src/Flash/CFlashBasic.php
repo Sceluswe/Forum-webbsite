@@ -16,13 +16,13 @@ class CFlashBasic
 
 
 
-   /**
-     * Set a message.
-     *
-     * @param string a message.
-     *
-     * @return void
-     */
+    /**
+      * Set a message.
+      *
+      * @param string a message.
+      *
+      * @return void
+      */
     public function setMessage($message)
     {
         $this->message = $message;
@@ -30,12 +30,12 @@ class CFlashBasic
 
 
 
-   /**
-     * Get the message.
-     *
-     * @return void
-     *
-     */
+    /**
+      * Get the message.
+      *
+      * @return void
+      *
+      */
     public function getMessage()
     {
         return $this->message;

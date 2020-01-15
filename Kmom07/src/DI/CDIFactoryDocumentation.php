@@ -8,10 +8,10 @@ namespace Anax\DI;
  */
 class CDIFactoryDocumentation extends CDIFactoryDefault
 {
-   /**
-     * Construct.
-     *
-     */
+    /**
+      * Construct.
+      *
+      */
     public function __construct()
     {
         parent::__construct();

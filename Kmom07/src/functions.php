@@ -33,7 +33,9 @@ function dump($array)
 function mergesort(&$array, $cmp_function)
 {
     // Arrays of size < 2 require no action.
-    if (count($array) < 2) return;
+    if (count($array) < 2) {
+        return;
+    }
 
     // Split the array in half
     $halfway = count($array) / 2;
@@ -62,7 +64,11 @@ function mergesort(&$array, $cmp_function)
     }
 
     // Merge the remainder
-    while ($ptr1 < count($array1)) $array[] = $array1[$ptr1++];
-    while ($ptr2 < count($array2)) $array[] = $array2[$ptr2++];
+    while ($ptr1 < count($array1)) {
+        $array[] = $array1[$ptr1++];
+    }
+    while ($ptr2 < count($array2)) {
+        $array[] = $array2[$ptr2++];
+    }
     return;
 }
