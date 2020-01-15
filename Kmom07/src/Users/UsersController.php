@@ -381,19 +381,18 @@ class UsersController implements \Anax\DI\IInjectionAware
         $callback = function ($form, $scope) {
             $success = false;
 
-            // Get acronym from form and escape it and hash the password.
+            // Get acronym from form, escape it and hash the password.
             $acronym = strtolower($scope->escaper->escapeHTML($form->Value('acronym')));
             $password = md5($form->Value('password'));
 
             if ($scope->users->validateUser($acronym, $password)) {
-                $scope->users->findByAcronym($form->Value('acronym'));
+                $scope->users->findByAcronym($acronym);
 
                 if ($scope->users->update(['active' => gmdate('Y-m-d H:i:s')])) {
                     $scope->users->loginUser($acronym);
                     $success = true;
+                    $scope->utility->createRedirect($scope->redirect["profile"] . $scope->users->id);
                 }
-
-                $scope->utility->createRedirect($scope->redirect["profile"] . $scope->users->id);
             }
 
             return $success;
