@@ -1,6 +1,5 @@
-(function () {
-    if(localStorage.getItem("votePageScroll") !== null)
-    {
+(function() {
+    if (localStorage.getItem("votePageScroll") !== null) {
         var scroll = localStorage.getItem("votePageScroll");
         window.scrollTo(0, scroll);
         localStorage.setItem("votePageScroll", null);
