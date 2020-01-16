@@ -1,5 +1,7 @@
 -------- urgent & important
-Design: Fix the design of the number in the score of the question. It looks unaligned.
+Design: Fix the design of the number in the score of the question. It looks unaligned. Number was aligned and works well at +/-10k upvotes.
+Set a fixed size for the container of the rating so that it can always contain 100000 votes. Possibly reduce the size of
+the rating.
 Design: Display added tags below a posted question.
 Design: Fix the design when displaying a user profile. The lightblue box should be aligned to the left.
 Design: Make sure the size of a user box remains the same in the user menu, even if buttons are displayed or not.
@@ -15,7 +17,7 @@ Design: remove the "Smiteology" title and replace it with "Smite"
 Design: add green and red vote buttons, implement so that the buttons change color if a vote has been placed.
 
 -------- important
-double check if you need the 1* and -1* in ForomController.vote();
+double check if you need the 1* and -1* in ForumController.vote();
 
 User.php: Allow users to delete their own questions. Or just the admin?
 
@@ -28,6 +30,7 @@ Create a list of the files I've worked in for the Git README file.
 
 -------- Completed --------
 -------- 2019-12-12
+
 ForumController.php: On the homepage, when clicking the name of a top rated user it doesn't take you to the users profile
 as it should. FIX: template was missing the redirect variables.
 Find a way to save the state of the webpage or similiar in order to maintain the users position in the browser when the
