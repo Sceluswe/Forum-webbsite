@@ -1,24 +1,24 @@
-#content
-{
-	background: url(../img/grid_12_60_20.png)
+#content {
+    background: url(../img/grid_12_60_20.png)
 }
+
 #flash,
 #main {
-	background: grey;
+    background: grey;
 }
- 
+
 #featured-1,
 #featured-2,
 #featured-3,
 #triptych-1,
 #triptych-2,
 #triptych-3 {
-	background: grey;
+    background: grey;
 }
 
 #footer-col-1,
 #footer-col-2,
-#footer-col-3, 
+#footer-col-3,
 #footer-col-4 {
-	background: grey;
+    background: grey;
 }
