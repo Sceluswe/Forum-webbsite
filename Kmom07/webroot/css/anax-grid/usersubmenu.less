@@ -1,98 +1,89 @@
-.user
-{
-	background: #EDF5F7;
-	border: 1px solid #d2d2d2;
-	padding: 10px;
-	float: left;
-	display: inline;
-	margin: 24px;
-}
-.userbutton
-{
-	color: white;
-	background: #2D659A;
-	border: 0px;
-	padding: 5px 10px;
-	.border-radius(@radius:25px);
-	text-decoration: none;
+.user {
+    background: #EDF5F7;
+    border: 1px solid #d2d2d2;
+    padding: 10px;
+    float: left;
+    display: inline;
+    margin: 24px;
 }
 
-.userlist
-{
-	list-style-type: none;
-	padding: 0px;
-	margin: 0px;
+.userbutton {
+    color: white;
+    background: #2D659A;
+    border: 0;
+    padding: 5px 10px;
+    .border-radius(@radius:25px);
+    text-decoration: none;
 }
 
-.userlist li
-{
-	display: inline;
+.userlist {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 }
 
-.userbutton:hover
-{
-	text-decoration: underline;
+.userlist li {
+    display: inline;
+}
+
+.userbutton:hover {
+    text-decoration: underline;
 }
 
 nav.usersubmenu {
-	background: #d2d2d2;
-	text-align: center;
-	display: block;
+    background: #d2d2d2;
+    text-align: center;
+    display: block;
 }
 
-.usersubmenu ul
-{
-	border-bottom: 1px solid #B3B3B3;
-	margin-left: 0px;
+.usersubmenu ul {
+    border-bottom: 1px solid #B3B3B3;
+    margin-left: 0;
 }
 
 .usersubmenu li {
-	color: gray;
-	display: inline-block;
-	padding: 2px 10px;
+    color: gray;
+    display: inline-block;
+    padding: 2px 10px;
 }
 
 nav.usersubmenu li:hover {
-	color: black;
-	background: #c3c3c3;
+    color: black;
+    background: #c3c3c3;
 }
 
 nav.usersubmenu a {
-	color: inherit;
-	text-decoration: none;
-	font-size: 20px;
+    color: inherit;
+    text-decoration: none;
+    font-size: 20px;
 }
 
-input.form-submit
-{
-	border: none;
-	background: none;
-	font-size: 21px;
-	color: inherit;
+input.form-submit {
+    border: none;
+    background: none;
+    font-size: 21px;
+    color: inherit;
 }
-
 /* Extra small devices (phones, less than 767px) */
 @media (max-width: @bpMobile) {
-	nav.usersubmenu {
-		margin: -21px -42px 0 -42px;
-	}
-	.userlist li
-	{
-		display:inline-block;
-		margin-top: 10px;
-	}
+    nav.usersubmenu {
+        margin: -21px -42px 0;
+    }
+
+    .userlist li {
+        display: inline-block;
+        margin-top: 10px;
+    }
 }
- 
 /* Small devices (tablets, 768px and up) */
 @media (min-width: @bpTablets) {
-	nav.usersubmenu {
-		margin: -21px -46px 0 -46px;
-	}
+    nav.usersubmenu {
+        margin: -21px -46px 0;
+    }
 }
- 
 /* Medium devices (desktops, 992px and up) */
 @media (min-width: @bpDesktops) {
-	nav.usersubmenu {
-		margin: -21px -48px 0 -47px;
-	}
+    nav.usersubmenu {
+        margin: -21px -48px 0 -47px;
+    }
 }

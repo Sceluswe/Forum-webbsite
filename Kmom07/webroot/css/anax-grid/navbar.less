@@ -2,88 +2,77 @@
  * Based on http://dbwebb.se/coachen/en-navbar-med-drop-down-meny-i-ren-html-och-css
  * Changed to only style li-items instead of a.
  */
-#navbar 
-{
-	position: absolute;
-	margin-top: @marginTopNavbar;
-	margin-left: @marginLeftNavbar;
-	color: @colorNavbar;
-	font-size: @font-sizeNavbar;
-	font-family: @font-familyNavbar;
-}
- 
-.navbar ul 
-{
-	font-family: @font-familyNavbar;
-	text-align: center;
-	list-style: none; 
-	margin: 0;
-	padding:0;
-}
- 
-.navbar li 
-{
-	font-family: @font-familyNavbar;
-	background: @bgLink;
-	display: inline-block;
-	margin: 1px;
-	padding: 12px 15px 12px 15px;
-}
- 
-.navbar a 
-{
-	font-family: @font-familyNavbar;
-	display:inline-block;
-	text-decoration: none;
-	color: inherit;
-	white-space: nowrap;
+#navbar {
+    position: absolute;
+    margin-top: @marginTopNavbar;
+    margin-left: @marginLeftNavbar;
+    color: @colorNavbar;
+    font-size: @font-sizeNavbar;
+    font-family: @font-familyNavbar;
 }
 
-.navbar li:hover
-{
-	background-color: @bgHover;
-	padding: 12px 15px;
-} 
- 
-.navbar li.selected-parent, 
-.navbar li.selected 
-{
-	background-color: @bgSelected;
-	padding: 11px 15px;
-	margin: 2px;
+.navbar ul {
+    font-family: @font-familyNavbar;
+    text-align: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-.navbar ul ul 
-{
-  background-color: #fff; 
-  padding: 2px 6px 2px 0; 
-  position: absolute; 
-  left: -9999px; 
-  z-index: 2;
-  background-color: #eee;
-}
- 
-.navbar li li 
-{
-  width: 100%;
-  border-left: 4px solid transparent;  
-  padding: 30px;
+.navbar li {
+    font-family: @font-familyNavbar;
+    background: @bgLink;
+    display: inline-block;
+    margin: 1px;
+    padding: 12px 15px;
 }
 
-.navbar li:hover ul 
-{
-  left: 0;
-}
- 
-.navbar li li:hover 
-{
-  color: #666; 
-  border-color: #666;
+.navbar a {
+    font-family: @font-familyNavbar;
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+    white-space: nowrap;
 }
 
-.navbar li li.selected 
-{
-  color: #222; 
-  border: 3px solid #313131;
-  background-color: white;
+.navbar li:hover {
+    background-color: @bgHover;
+    padding: 12px 15px;
+}
+
+.navbar li.selected,
+.navbar li.selected-parent {
+    background-color: @bgSelected;
+    padding: 11px 15px;
+    margin: 2px;
+}
+
+.navbar ul ul {
+    background-color: #fff;
+    padding: 2px 6px 2px 0;
+    position: absolute;
+    left: -9999px;
+    z-index: 2;
+    background-color: #eee;
+}
+
+.navbar li li {
+    width: 100%;
+    border-left: 4px solid transparent;
+    padding: 30px;
+}
+
+.navbar li:hover ul {
+    left: 0;
+}
+
+.navbar li li:hover {
+    color: #666;
+    border-color: #666;
+}
+
+.navbar li li.selected {
+    color: #222;
+    border: 3px solid #313131;
+    background-color: white;
 }

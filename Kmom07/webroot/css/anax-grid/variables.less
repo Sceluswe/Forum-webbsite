@@ -1,14 +1,15 @@
-/** ------------------------------------------------------------------ 
+/** ------------------------------------------------------------------
  * Variables
  */
- 
 /*
 * Responsive breakpoints.
 */
-@bpMobile: 767px; /* Extra small devices (phones, less than 767px) */
-@bpTablets: 768px; /* Small devices (tablets, 768px and up) */
-@bpDesktops: 992px; /* Medium devices (desktops, 992px and up) */
- 
+@bpMobile: 767px;
+/* Extra small devices (phones, less than 767px) */
+@bpTablets: 768px;
+/* Small devices (tablets, 768px and up) */
+@bpDesktops: 992px;
+/* Medium devices (desktops, 992px and up) */
 /*
 * MY COLORS
 */
@@ -20,12 +21,10 @@
 */
 @bgBody: #EDF5F7; //#DCECF0;
 @colorBody: black;
-
 /*
 * Wrapper
 */
 @max-widthWrapper: 960px;
-
 /*
 * Header
 */
@@ -38,19 +37,16 @@
 @colorSloganHeader: white;
 @bgSlogan: @myBlue;
 @borderHeader: 1px solid #E8E8E8;
-
 /*
 * Navbar
 */
 @marginTopNavbar: 98px;
-@marginLeftNavbar: 12%; 
+@marginLeftNavbar: 12%;
 @bgSelected: @myLightBlue;
 @bgHover: @myLightBlue;
 @bgLink: @myBlue;
 @colorNavbar: white;
 @font-sizeNavbar: 20px;
-
-
 /*
 * Content
 */
@@ -59,7 +55,6 @@
 @borderContent: 1px solid #E8E8E8;
 @paddingContent: 20px 38px 20px 38px;
 @colorContent: black;
-
 /*
 * Footer
 */
@@ -68,29 +63,23 @@
 @borderFooter: 1px solid #E8E8E8;
 @paddingFooter: 10px;
 @colorFooter: black;
-
-/** ------------------------------------------------------------------ 
+/** ------------------------------------------------------------------
  * Grid
  */
 @column-width: 60;
 @gutter-width: 20;
 @columns: 12;
-
 // Utility variable — you should never need to modify this
 @gridsystem-width: (@column-width*@columns) + (@gutter-width*@columns) * 1px;
-
 // Set @total-width to 100% for a fluid layout
 @total-width: @gridsystem-width;
-
 @columnWidth: @column-width;
 @gutterWidth: @gutter-width;
-
 /*
 * Flash
 */
 @bgFlash: default;
 @colorFlash: default;
-
 /*
 * Featured
 */
@@ -100,13 +89,11 @@
 @colorFeatured1: default;
 @colorFeatured2: default;
 @colorFeatured3: default;
-
 /*
 * Main
 */
 @bgMain: default;
 @colorMain: default;
-
 /*
 * Triptych
 */
@@ -116,7 +103,6 @@
 @colorTriptych1: default;
 @colorTriptych2: default;
 @colorTriptych3: default;
-
 /*
 * Footer-col
 */
@@ -128,54 +114,44 @@
 @colorFooter2: default;
 @colorFooter3: default;
 @colorFooter4: default;
-
-
 /** --------------------------------------------------------------
  * Typography.
  *
  */
-
 /**
- * Font families to choose from. 
+ * Font families to choose from.
  */
 // Monospace
-@fontFamilyCourier:         "Courier New", Courier, monospace;
-@fontFamilyMonospace:       monospace;
-
+@fontFamilyCourier: "Courier New", Courier, monospace;
+@fontFamilyMonospace: monospace;
 // Serif
-@fontFamilyCambria:         Cambria, Georgia, Times, 'Times New Roman', serif;
-@fontFamilyTimes:           Times, 'Times New Roman', serif;
-@fontFamilyGaramond:        Garamond, Baskerville, "Baskerville Old Face", "Hoefler Text", Georgia, "Times New Roman", Times, serif;
-@fontFamilyRoboto:			'Roboto Condensed';
-
+@fontFamilyCambria: Cambria, Georgia, Times, 'Times New Roman', serif;
+@fontFamilyTimes: Times, 'Times New Roman', serif;
+@fontFamilyGaramond: Garamond, Baskerville, "Baskerville Old Face", "Hoefler Text", Georgia, "Times New Roman", Times, serif;
+@fontFamilyRoboto: 'Roboto Condensed';
 // Sans-serif
-@fontFamilyHelvetica:       Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
-@fontFamilyCalibri:         Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
-@fontFamilyMyriadPro:       MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', Helvetica, Arial, sans-serif;
-@fontFamilyHelveticaNeue:   "Helvetica Neue", Helvetica, Arial, sans-serif;
-@fontFamilyArial:           Arial, sans-serif;
-
-
+@fontFamilyHelvetica: Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+@fontFamilyCalibri: Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
+@fontFamilyMyriadPro: MyriadPro-Regular, 'Myriad Pro Regular', MyriadPro, 'Myriad Pro', Helvetica, Arial, sans-serif;
+@fontFamilyHelveticaNeue: "Helvetica Neue", Helvetica, Arial, sans-serif;
+@fontFamilyArial: Arial, sans-serif;
 /**
  * Default font-families
  */
-@fontTitleHeader:		@fontFamilyRoboto;
-@fontFamilyHeadings:	@fontFamilyRoboto;
-@font-familyNavbar: 	@fontFamilyRoboto;
-@fontFamilyBody:		@fontFamilyRoboto;
-@fontFamilyCode:		@fontFamilyRoboto;
-@fontFamilySiteTitle:	@fontFamilyRoboto;
-
-
+@fontTitleHeader: @fontFamilyRoboto;
+@fontFamilyHeadings: @fontFamilyRoboto;
+@font-familyNavbar: @fontFamilyRoboto;
+@fontFamilyBody: @fontFamilyRoboto;
+@fontFamilyCode: @fontFamilyRoboto;
+@fontFamilySiteTitle: @fontFamilyRoboto;
 /**
  * Magic number for vertical rythm
  */
 //@magicNumber: 24px; /* 16px - 100%/1.5 */
-@magicNumber: 22px; /* 16px - 100%/1.375 */
-
-
+@magicNumber: 22px;
+/* 16px - 100%/1.375 */
 /**
- * Headings calculation 
+ * Headings calculation
  *
  * 2.75em  * 16px   = 44 => line-height: 44 = 1
  * 2.375em * 16px   = 38 => line-height: 44/38 = 1.1579
@@ -190,75 +166,54 @@
  * 0.75em  * 16px   = 12 => line-height: 22/12 = 1.8333
  */
 @fontSizeBody: 16px;
-
 @fontSizeH1: 2.375em;
 @fontSizeH2: 1.875em;
 @fontSizeH3: 1.375em;
 @fontSizeH4: 1.25em;
 @fontSizeH5: 1em;
 @fontSizeH6: 1em;
-
 @fontSizeSmall: 0.875em;
-
 @fontSizeSiteTitle: 3em;
-
 @fontSizeSearchH2: 1.25em;
-
-
 /** --------------------------------------------------------------
  * General colors to colorize the site
  */
 @bgColorHtml: #fff;
-
-@colorBody:         #333;
-@colorBody2:        #444;
-@colorBodyLighter:  #666;
-@colorBodyLight:    #999;
-
+@colorBody: #333;
+@colorBody2: #444;
+@colorBodyLighter: #666;
+@colorBodyLight: #999;
 @colorBorderLight: #ccc;
-
 @bgColorLight: #f6f6f6;
-
 @colorSiteTitle: #333;
 @colorSiteTitleShadow: #ccc;
 @colorSiteSlogan: #333;
-
-@anchorColor:         #33b;
-@anchorColor2:        #448;
-@anchorColorHover:    #33f;
-@anchorColorActive:   #838;
-@anchorColorVisited:  #838;
-
-@anchorColorAnonymous:      @colorBody;
+@anchorColor: #33b;
+@anchorColor2: #448;
+@anchorColorHover: #33f;
+@anchorColorActive: #838;
+@anchorColorVisited: #838;
+@anchorColorAnonymous: @colorBody;
 @anchorColorAnonymousHover: #00c;
-
-@anchorTabBgColor:          lighten(@anchorColorHover, 35%);
-@anchorTabBgColorHover:     lighten(@anchorColorHover, 30%);
-@anchorTabBgColorActive:    lighten(@anchorColorHover, 35%);
-@anchorTabBgColorSelected:  @bgColorBody;
-
-@colorBorderTabElement:         #aaa;
-@colorBorderTabElementHover:    #777;
+@anchorTabBgColor: lighten(@anchorColorHover, 35%);
+@anchorTabBgColorHover: lighten(@anchorColorHover, 30%);
+@anchorTabBgColorActive: lighten(@anchorColorHover, 35%);
+@anchorTabBgColorSelected: @bgColorBody;
+@colorBorderTabElement: #aaa;
+@colorBorderTabElementHover: #777;
 @colorBorderTabElementSelected: #999;
-@colorBorderTabBottom:          #ccc;
-
-@colorMark:   @colorBody;
+@colorBorderTabBottom: #ccc;
+@colorMark: @colorBody;
 @bgColorMark: #eee;
-
-@colorTableHeaderBorder:    #333;
-@colorTableRowBorder:       #ddd;
-@colorTableRowBorderHover:  #aaa;
-@colorTableRowHover:        #222;
-@bgColorTableStripe:        @bgColorLight;
-
-@colorMenuItems:          #444;
-@colorMenuItemsHover:     #33f;
-@colorMenuItemsSelected:  #000;
-
-@colorSearchUrl:  #009933;
-
-
-
+@colorTableHeaderBorder: #333;
+@colorTableRowBorder: #ddd;
+@colorTableRowBorderHover: #aaa;
+@colorTableRowHover: #222;
+@bgColorTableStripe: @bgColorLight;
+@colorMenuItems: #444;
+@colorMenuItemsHover: #33f;
+@colorMenuItemsSelected: #000;
+@colorSearchUrl: #009933;
 /** --------------------------------------------------------------
  * Standard colors
  */

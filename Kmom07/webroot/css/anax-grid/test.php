@@ -34,7 +34,7 @@
 			<h1>Flash</h1>
 			<p>This is a test text that I use to test the text. This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text. This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text. This is a test text that I use to test the text.</p>
 		</div>
-		
+
 		<div id='wrap-featured'>
 			<div id='featured-1'>
 				<h1>Featured-1</h1>
@@ -49,12 +49,12 @@
 				<p>This is a test text that I use to test the text. This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.</p>
 			</div>
 		</div>
-		
+
 		<div id='main'>
 		<h1>Main</h1>
 		<p>This is a test text that I use to test the text. This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text. This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text. This is a test text that I use to test the text.</p>
 		</div>
-		
+
 		<div id='wrap-triptych'>
 			<div id='triptych-1'>
 				<h1>Triptych-1</h1>
@@ -69,7 +69,7 @@
 				<p>This is a test text that I use to test the text. This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text. This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text.This is a test text that I use to test the text. This is a test text that I use to test the text.</p>
 			</div>
 		</div>
-		
+
 		<div id='wrap-footer-col'>
 			<div id='footer-col-1'>
 				<h1>Footer-col-1</h1>
