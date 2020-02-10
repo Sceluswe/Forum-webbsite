@@ -1,5 +1,4 @@
 -------- urgent & important
-Design: Fix the design of the number in the score of the question. It looks unaligned. Number was aligned and works well at +/-10k upvotes.
 Set a fixed size for the container of the rating so that it can always contain 100000 votes. Possibly reduce the size of
 the rating.
 Design: Display added tags below a posted question.
@@ -29,6 +28,10 @@ Create a list of the files I've worked in for the Git README file.
 
 
 -------- Completed --------
+-------- 2020-02-10
+Design: Fix the design of the number in the score of the question. It looks unaligned.
+- Number was aligned and works well at +/-10k upvotes.
+
 -------- 2019-12-12
 
 ForumController.php: On the homepage, when clicking the name of a top rated user it doesn't take you to the users profile
